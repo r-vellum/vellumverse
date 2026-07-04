@@ -1,0 +1,35 @@
+Package: scriptorium
+Title: Easily Install and Load the 'Vellum' Graphics Ecosystem
+Version: 0.0.0.9000
+Authors@R:
+    person("David", "Schoch", , "david.schoch@cynkra.com", role = c("aut", "cre"))
+Description: The 'vellum' ecosystem is a set of packages for drawing in R
+    that share a scene model and a common design: 'vellum' (a low-level
+    graphics backend with a Rust engine), 'quill' (a pipe-first grammar of
+    graphics on top of it), and 'gloss' (client-side interactive HTML
+    widgets for the scenes they produce). 'scriptorium' is a meta-package
+    that installs and loads them together, in the spirit of the
+    'tidyverse'.
+License: MIT + file LICENSE
+URL: https://schochastics.github.io/scriptorium/,
+    https://github.com/schochastics/scriptorium
+BugReports: https://github.com/schochastics/scriptorium/issues
+Depends:
+    R (>= 4.2)
+Imports:
+    cli,
+    gloss,
+    quill,
+    rlang,
+    utils,
+    vellum
+Suggests:
+    testthat (>= 3.0.0)
+Remotes:
+    schochastics/gloss,
+    schochastics/quill,
+    schochastics/vellum
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0.9000
+Config/testthat/edition: 3

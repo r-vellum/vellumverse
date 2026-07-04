@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+*.Rcheck/
+*.tar.gz
+docs/
+
+# pkgdown renders these from the .Rmd; don't commit the artifacts
+vignettes/articles/figures/

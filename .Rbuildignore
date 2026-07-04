@@ -1,0 +1,11 @@
+^scriptorium\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^\.github$
+^_pkgdown\.yml$
+^pkgdown$
+^docs$
+^README\.Rmd$
+^\.vscode$
+^CLAUDE\.md$
+^vignettes/articles$
