@@ -9,3 +9,5 @@
 ^\.vscode$
 ^CLAUDE\.md$
 ^vignettes/articles$
+^vignettes/\.quarto$
+^vignettes/\.gitignore$

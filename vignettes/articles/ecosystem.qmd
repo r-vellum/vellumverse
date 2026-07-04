@@ -5,7 +5,8 @@ description: >
   to a grammar of graphics, to an interactive widget.
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 have_all <- all(vapply(
   c("vellum", "quill", "gloss"),
   requireNamespace, logical(1), quietly = TRUE
@@ -13,7 +14,6 @@ have_all <- all(vapply(
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "figures/ecosystem-",
   fig.retina = 2,
   out.width = "100%",
   eval = have_all
@@ -82,7 +82,8 @@ vplot(mtcars) |>
 
 Because the plot is a spec, you can inspect it without drawing anything:
 
-```{r quill-summary, eval = FALSE}
+```{r}
+#| eval: false
 summary(vplot(mtcars) |> mark_point(x = wt, y = mpg, color = hp))
 #> <PlotSpec> 32x11 (11 columns), page 6x4 in
 #>
@@ -97,7 +98,8 @@ compiles the scene, emits the SVG plus a per-element table, and returns an
 htmlwidget with hover tooltips, selection, brushing, and pan/zoom — no Shiny,
 no server.
 
-```{r gloss, eval = FALSE}
+```{r}
+#| eval: false
 df <- data.frame(wt = mtcars$wt, mpg = mtcars$mpg, model = rownames(mtcars))
 
 vplot(df) |>

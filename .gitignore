@@ -7,5 +7,7 @@
 *.tar.gz
 docs/
 
-# pkgdown renders these from the .Rmd; don't commit the artifacts
+# pkgdown/quarto render these from the .qmd; don't commit the artifacts
 vignettes/articles/figures/
+vignettes/articles/*_files/
+.quarto/
