@@ -78,7 +78,15 @@ articles:
 - title: Get started
   navbar: ~
   contents:
+  - articles/getting-started
   - articles/ecosystem
+  - articles/coming-from-ggplot2
+- title: Using the ecosystem
+  navbar: Using the ecosystem
+  contents:
+  - articles/one-scene-three-outputs
+  - articles/performance
+  - articles/extending-the-ecosystem
 - title: Background
   navbar: Background
   contents:
