@@ -28,8 +28,8 @@ template:
 home:
   title: The vellum graphics ecosystem
   description: >
-    scriptorium installs and loads the vellum graphics ecosystem for R —
-    vellum, quill, and gloss — in one step, the way the tidyverse bundles
+    scriptorium installs and loads the vellum graphics ecosystem for R
+    (vellum, quill, and gloss) in one step, the way the tidyverse bundles
     the data-science packages.
   sidebar:
     structure: [ecosystem, links, license, community, citation, authors, dev]
@@ -51,11 +51,11 @@ navbar:
     ecosystem:
       text: Packages
       menu:
-      - text: "vellum — low-level graphics backend"
+      - text: "vellum: low-level graphics backend"
         href: https://schochastics.github.io/vellum/
-      - text: "quill — grammar of graphics"
+      - text: "quill: grammar of graphics"
         href: https://schochastics.github.io/quill/
-      - text: "gloss — interactive widgets"
+      - text: "gloss: interactive widgets"
         href: https://schochastics.github.io/gloss/
     vellum:
       icon: fa-scroll

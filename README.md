@@ -11,13 +11,13 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 **scriptorium** installs and loads the *vellum* graphics ecosystem in
 one step, the way [tidyverse](https://www.tidyverse.org) does for data
-science. The name is the medieval *scriptorium* — the room where
+science. The name is the medieval *scriptorium*, the room where
 manuscripts were written and copied. Its packages carry the same
 metaphor:
 
 | package | role | analogy |
 |----|----|----|
-| [**vellum**](https://github.com/schochastics/vellum) | low-level graphics backend — a Rust scene graph, unit/layout engine, and PNG/SVG/PDF renderer | `grid` |
+| [**vellum**](https://github.com/schochastics/vellum) | low-level graphics backend, a Rust scene graph, unit/layout engine, and PNG/SVG/PDF renderer | `grid` |
 | [**quill**](https://github.com/schochastics/quill) | pipe-first grammar of graphics that compiles a plot spec into a vellum scene | `ggplot2` |
 | [**gloss**](https://github.com/schochastics/gloss) | client-side interactive HTML widgets for the scenes they produce | `plotly`/`htmlwidgets` |
 
