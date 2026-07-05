@@ -79,6 +79,11 @@ articles:
   navbar: ~
   contents:
   - articles/ecosystem
+- title: Background
+  navbar: Background
+  contents:
+  - articles/grid-critique
+  - articles/design-principles
 
 reference:
 - title: Attaching the ecosystem

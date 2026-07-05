@@ -1,0 +1,217 @@
+---
+title: "vellum's design principles"
+description: >
+  The architectural choices behind vellum (a retained scene graph, eager
+  metrics, an explicit layout pass, and a single render walk to many backends),
+  and the trade-offs each one accepts.
+---
+
+`vellum` occupies the same layer of the graphics stack as `grid`: primitives, a
+coordinate and viewport model, a unit system, a retained tree of graphical
+objects, inherited graphical parameters, and a layout engine. It is deliberately
+**not** a grammar of graphics: no data binding, scales, stats, geoms, facets,
+or themes. Those belong to a layer built on top (`quill`), exactly as `ggplot2`
+and `lattice` are built on `grid`.
+
+This article explains the choices that make `vellum` different from `grid`, and
+is a companion to [the critique of grid](grid-critique.html). That article ends
+on one observation, which is where this one begins.
+
+## The one constraint everything follows from
+
+Most of `grid`'s friction traces back to a single fact: a graphical object's
+size and content cannot be known until a device and a viewport exist at draw
+time. Text has no measurable width before a device is open; `native` units need
+a viewport scale; flexible (`null`) lengths need a layout context. That one
+constraint is what forces lazy units, the deferred multi-method grob-drawing
+protocol, and the replay of the whole display list on every resize.
+
+`vellum`'s central bet is that if you remove that constraint, most of the
+downstream complexity dissolves with it. The way to remove it is to make metrics
+available at construction time, which means controlling the measurement and
+rendering stack rather than deferring to whatever device happens to be current.
+
+## Do the work in Rust, keep R declarative
+
+There are two things "a grid-like framework with a Rust backend" could mean. One
+is to be a *graphics device*: let R's engine and `grid` stay in charge and have
+Rust only rasterize the primitives handed down to it. That is low-risk and the
+whole ecosystem renders through you for free, but it fixes none of the layout or
+unit problems, because `grid` is still doing that work upstream.
+
+The other is to reimplement the model itself in Rust (the scene graph, units,
+viewports, layout, and rendering) and expose a thin declarative R API.
+`vellum` takes this second path. The scene graph, unit resolution, layout, and
+rendering all live in Rust; R describes what to draw. A separate, optional
+grid-to-vellum translator (`as_vellum()` / `render_grid()`) gives the ecosystem
+reach of the first approach as a secondary mode, so existing `grid`, `ggplot2`,
+and `lattice` output can render through the same backend.
+
+Controlling the stack is what buys the properties the rest of these principles
+depend on: text measurable up front, layout solved ahead of drawing, and
+identical output across machines.
+
+## A retained, immutable scene graph
+
+The scene is a tree of inert data nodes. A node carries identity, a local
+transform, geometry, resolved style, and children, but no drawing code. Nodes
+are immutable values: "editing" a scene produces a new tree that shares
+structure with the old one, which keeps edits cheap and makes the scene trivial
+to inspect.
+
+```r
+library(vellum)
+
+scene <- vl_scene(width = 6, height = 4) |>
+  push(viewport(xscale = c(0, 10), yscale = c(0, 100))) |>
+  draw(rect_grob(name = "panel-bg", gp = gpar(fill = "grey95", col = NA))) |>
+  draw(lines_grob(x = unit(1:9, "native"),
+                  y = unit(c(10, 40, 35, 80, 60, 90, 55, 70, 30), "native"),
+                  gp = gpar(col = "steelblue", lwd = 2)))
+
+node_names(scene)                                    # inspect the tree
+scene <- edit_node(scene, "panel-bg", gp = gpar(fill = "grey90"))
+```
+
+This directly addresses the "missing middle layer" from the critique. Because
+the tree is retained R data, querying and editing a built scene by name is
+ordinary R, not surgery on an internal layout table. There is no `grid.force()`
+step to materialise a drawable form first; the built scene already *is* that
+form.
+
+## No stateful viewport stack
+
+`grid` navigates its regions through a mutable push/pop stack, so a drawing
+call's meaning depends on invisible current state. `vellum` threads context
+functionally instead: `push()` and `draw()` pass the scene along a pipeline, and
+you navigate by node name rather than by a global "current viewport". The
+viewport model, regions with their own coordinate systems, is kept, because it
+is one of `grid`'s best ideas; the mutable stack that made it fragile is not.
+A stateful convenience layer can still be built on top for interactive use, but
+it is not the foundation.
+
+## Eager metrics and an explicit layout pass
+
+Because text is measurable at construction, layout can be solved as an explicit,
+pure pass keyed on the device size and viewport scales, and the result cached.
+Resizing becomes relayout plus re-raster, rather than replaying interpreted R.
+This is the performance story and the predictability story at once: the same
+inputs always produce the same layout, and the layout is a value you can compute
+without drawing.
+
+## A small, principled unit set, and an honest trade-off
+
+`grid`'s unit system is powerful and sprawling. `vellum` keeps the power that
+matters and trims the set to a principled handful: normalized (`npc`),
+absolute (`mm`, `cm`, `in`, `pt`), user-scale (`native`), font-relative
+(`char`, `line`), object-relative (`strwidth`, `grobwidth`, …), and a proper
+flexible-length type for layout instead of a relative unit bolted onto the
+absolute one. Object-relative units resolve to millimetres at construction,
+using shaping metrics for text.
+
+The trade-off is deliberate and worth stating plainly, because it is the thing a
+`grid` user is most likely to trip over. A stored unit is flat `(value, code)`,
+not an arithmetic-expression tree. So `+` and `-` resolve at construction: they
+combine units of the same code, or two absolute units of any absolute code
+(`unit(10, "mm") + unit(1, "in")` becomes `35.4 mm`). The genuinely deferred
+case, mixing a normalized or native code with an absolute one such as
+`unit(1, "npc") - unit(2, "mm")`, is an error, because it cannot be reduced to a
+flat value without a device and viewport. `grid` supports that by deferring the
+sum to draw time; `vellum` declines to, because the flat representation is
+exactly what makes resolution cheap and re-runnable on resize. The cost is real:
+you compose such offsets at the viewport level, or pre-resolve to absolute units.
+This is a case where `vellum` trades a piece of `grid`'s convenience for the
+architecture that everything else rests on.
+
+## One extension mechanism instead of four
+
+Writing a custom `grid` grob can mean implementing several hooks
+(`makeContext()`, `makeContent()`, `drawDetails()`, `widthDetails()`) because
+different facts about the object become available at different times. When
+metrics are known up front, that machinery is unnecessary. A custom `vellum`
+element is a function that returns concrete child primitives once, at
+construction. There is one way to extend the system, not a protocol to learn.
+
+## Determinism and font fidelity
+
+Rendering runs in-process against a controlled rasterizer, so a scene produces
+identical pixels on every operating system and in CI. That makes output
+reproducible and snapshot-testable, a property that is awkward to guarantee
+when the result depends on whichever device is current.
+
+Text is the hard part, and fidelity here means *reusing R's font stack rather
+than reinventing it*. `vellum` resolves and shapes text through the same
+`systemfonts`/`textshaping` machinery that `ragg` and `svglite` use, so the font
+chosen and the glyph positions match the rest of the ecosystem; a Rust glyph
+library then supplies the outlines that get filled or embedded. Matching the
+ecosystem was a requirement, not a nice-to-have: output that drifts from
+`ggplot`-via-`ragg` would not be trustworthy.
+
+## One scene, many backends, and visible degradation
+
+Rendering is a visitor over the resolved scene behind a single trait, so PNG,
+SVG, and PDF share one walk over the same tree:
+
+```r
+render(scene, "plot.png")   # raster
+render(scene, "plot.svg")   # vector
+render(scene, "plot.pdf")   # vector
+```
+
+The critique notes that device differences leak into the result. `vellum` cannot
+abolish backend differences (a raster fast path and a vector format genuinely
+differ), but it adopts a principle for them: where a backend *cannot* honour
+something, the render raises one warning naming the gap, rather than silently
+producing different output. Unsupported features fail visibly. A few intrinsic
+fast-path trade-offs (marker sprite snapping at high densities, a quantised
+glyph-bitmap cache) are documented rather than warned, because they are
+deliberate speed trades, not failures.
+
+## Performance is part of the model
+
+Matching a mature C-backed system is not automatic just by being retained-mode;
+it has to be earned. `vellum` builds performance into the model: batched
+primitives so a thousand points are not a thousand heavyweight objects, a
+persistent glyph cache, a repaint-boundary sub-raster cache and an
+object-identity render cache so unchanged scenes and subtrees are reused rather
+than redrawn, and an aggregate-then-shade path (`datashade()`) that bins
+millions of points into a density raster the size of the output rather than
+drawing each one. The distinction that makes this work is
+between a *semantic* layer and its *optimized rendering representation*: a
+million-point scatter need not be a million objects.
+
+## What the retained model makes possible
+
+Some capabilities are not separate features so much as consequences of keeping
+the scene. Because the tree is retained and re-renderable, `vellum` can pick the
+topmost object under a point (`hit_test()`), something `grid` never offered
+beyond `grid.locator()`. For the same reason, nodes can carry semantic identity
+that survives into SVG output, which is useful for export, testing, and
+accessibility independent of any interactive layer. And because every node
+resolves to a known transform and bounding box, the engine has the data to draw
+its own layout (bounding boxes, viewport regions, clip chains) as a debugging
+overlay, and to explain why a given node ended up the size it did. Turning the
+resolved scene into a coordinate that a person can *see into* is the most direct
+answer to the critique's central complaint that introspection is archaeology.
+
+## What vellum deliberately does not do
+
+Scope discipline is a principle in its own right. `vellum` does not ship a
+grammar of graphics: no scales, geoms, or facets; that is `quill`'s job. It does
+not include a general constraint solver, because a flex solver plus measured
+tracks covers the layouts that actually arise, without a large opaque dependency.
+It does not implement a CSS-style selector engine, because cascading themes are a
+grammar concern. Each of these is a case where the more elaborate mechanism would
+sit at the wrong layer. Keeping the low-level layer small is what lets the grammar
+above it stay coherent.
+
+## The shape of the trade
+
+None of this is free. The Rust backend is a build dependency and a maintenance
+commitment. The flat unit representation gives up a genuine `grid` convenience.
+Reimplementing the model rather than wrapping the device means not inheriting the
+existing ecosystem automatically (hence the translator as a bridge). These are
+deliberate trades, made in service of one goal: keep the strengths the
+[critique](grid-critique.html) credits `grid` with (grobs, a real layout engine,
+nested coordinate systems, device independence) while removing the single
+constraint that made the rest of it hard.
