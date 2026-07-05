@@ -5,8 +5,7 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/schochastics/scriptorium/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/schochastics/scriptorium/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **scriptorium** installs and loads the *vellum* graphics ecosystem in
@@ -38,8 +37,8 @@ pak::pak("schochastics/scriptorium")
 
 ``` r
 library(scriptorium)
-#> ── Attaching packages ─────────────────────────────── scriptorium 0.0.0.9000 ──
-#> ✔ vellum 0.0.0.9001   ✔ quill 0.0.0.9000   ✔ gloss 0.0.0.9000
+#> ── Attaching packages ──────────────────────────────────── scriptorium 0.1.0 ──
+#> ✔ vellum 0.1.0   ✔ quill 0.1.0   ✔ gloss 0.1.0
 ```
 
 That single call attaches all three core packages, so you can go from a

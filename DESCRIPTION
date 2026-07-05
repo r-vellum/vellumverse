@@ -1,6 +1,6 @@
 Package: scriptorium
 Title: Easily Install and Load the 'Vellum' Graphics Ecosystem
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R:
     person("David", "Schoch", , "david.schoch@cynkra.com", role = c("aut", "cre"))
 Description: The 'vellum' ecosystem is a set of packages for drawing in R
@@ -18,11 +18,11 @@ Depends:
     R (>= 4.2)
 Imports:
     cli,
-    gloss,
-    quill,
+    gloss (>= 0.1.0),
+    quill (>= 0.1.0),
     rlang,
     utils,
-    vellum
+    vellum (>= 0.1.0)
 Suggests:
     testthat (>= 3.0.0)
 Remotes:

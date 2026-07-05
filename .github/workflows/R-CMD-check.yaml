@@ -1,12 +1,16 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
-# scriptorium is a meta-package: it pulls in vellum (a Rust/extendr package)
+# scriptorium is a meta-package: it pulls in `vellum` (a Rust/extendr package)
 # via the `Remotes:` entries, so the `setup-rust-toolchain` step provides the
-# compiler needed to build vellum from source. Everything else is the standard
+# compiler needed to build vellum from source; everything else is the standard
 # r-lib R-CMD-check flow.
 on:
   push:
     branches: [main, master]
   pull_request:
+  # The ecosystem is version-locked and co-released: a nightly run catches a
+  # cross-layer break in `vellum`'s `main` before it bricks a release.
+  schedule:
+    - cron: "0 4 * * *"
   workflow_dispatch:
 
 name: R-CMD-check.yaml
@@ -24,7 +28,11 @@ jobs:
       matrix:
         config:
           - {os: macos-latest,   r: 'release'}
+          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'oldrel-1'}
+          # Windows is deferred: `vellum`'s Rust toolchain needs the GNU target
+          # wired to Rtools, which is finicky on CI. Add once that is proven.
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -33,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Rust compiler for building vellum (its SystemRequirements: Cargo, rustc).
+      # Rust compiler for building `vellum` (SystemRequirements: Cargo, rustc).
       - uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - uses: r-lib/actions/setup-pandoc@v2
@@ -41,6 +49,7 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2

@@ -1,6 +1,9 @@
-# scriptorium 0.0.0.9000
+# scriptorium 0.1.0
 
-* Added a `NEWS.md` file to track changes to the package.
-* First version. `library(scriptorium)` attaches the core of the vellum
-  graphics ecosystem (vellum, quill, and gloss) and reports which
-  versions were loaded.
+First release.
+
+* `library(scriptorium)` attaches the core of the vellum graphics ecosystem
+  (vellum, quill, and gloss) in one step and reports which versions were loaded.
+* `scriptorium_packages()` lists the bundled packages and
+  `scriptorium_conflicts()` surfaces functions masked across the ecosystem.
+* Set `options(scriptorium.quiet = TRUE)` to attach without the startup banner.
