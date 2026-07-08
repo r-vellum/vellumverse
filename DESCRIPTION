@@ -18,11 +18,11 @@ Depends:
     R (>= 4.2)
 Imports:
     cli,
-    gloss (>= 0.1.0),
-    quill (>= 0.1.0),
+    gloss (>= 0.2.0.9000),
+    quill (>= 0.2.1.9000),
     rlang,
     utils,
-    vellum (>= 0.1.0)
+    vellum (>= 0.1.1.9000)
 Suggests:
     testthat (>= 3.0.0)
 Remotes:
