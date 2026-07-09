@@ -134,7 +134,7 @@ working across them is more trial-and-error than it needs to be.
 
 ## Styling is fragmented
 
-Controlling appearance means meeting several styling systems: `gpar()` in
+Controlling appearance means meeting several styling systems: `vl_gpar()` in
 `grid`, themes in `ggplot2`, base graphics parameters, device-specific font
 handling, and, for HTML output, CSS. Each is reasonable on its own. Together
 they mean that setting something as ordinary as a consistent font or line width

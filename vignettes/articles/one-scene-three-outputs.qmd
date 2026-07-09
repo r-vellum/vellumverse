@@ -140,7 +140,7 @@ The same three-way rendering exists one layer down, without the grammar. A
 ```{r}
 #| eval: false
 s <- vl_scene(4, 3) |>
-  draw(circle_grob(r = 0.3, gp = gpar(fill = "tomato", col = NA)))
+  draw(circle_grob(r = 0.3, gp = vl_gpar(fill = "tomato", col = NA)))
 
 render(s, "out.png")   # raster   (tiny-skia)
 render(s, "out.svg")   # vector   (hand-rolled SVG)

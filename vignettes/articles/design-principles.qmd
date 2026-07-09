@@ -63,14 +63,14 @@ to inspect.
 library(vellum)
 
 scene <- vl_scene(width = 6, height = 4) |>
-  push(viewport(xscale = c(0, 10), yscale = c(0, 100))) |>
-  draw(rect_grob(name = "panel-bg", gp = gpar(fill = "grey95", col = NA))) |>
-  draw(lines_grob(x = unit(1:9, "native"),
-                  y = unit(c(10, 40, 35, 80, 60, 90, 55, 70, 30), "native"),
-                  gp = gpar(col = "steelblue", lwd = 2)))
+  push(vl_viewport(xscale = c(0, 10), yscale = c(0, 100))) |>
+  draw(rect_grob(name = "panel-bg", gp = vl_gpar(fill = "grey95", col = NA))) |>
+  draw(lines_grob(x = vl_unit(1:9, "native"),
+                  y = vl_unit(c(10, 40, 35, 80, 60, 90, 55, 70, 30), "native"),
+                  gp = vl_gpar(col = "steelblue", lwd = 2)))
 
 node_names(scene)                                    # inspect the tree
-scene <- edit_node(scene, "panel-bg", gp = gpar(fill = "grey90"))
+scene <- edit_node(scene, "panel-bg", gp = vl_gpar(fill = "grey90"))
 ```
 
 This addresses the "missing middle layer" from the critique. Because
@@ -113,9 +113,9 @@ The trade-off is deliberate and worth stating plainly, because it is the thing a
 `grid` user is most likely to trip over. A stored unit is flat `(value, code)`,
 not an arithmetic-expression tree. So `+` and `-` resolve at construction: they
 combine units of the same code, or two absolute units of any absolute code
-(`unit(10, "mm") + unit(1, "in")` becomes `35.4 mm`). The deferred
+(`vl_unit(10, "mm") + vl_unit(1, "in")` becomes `35.4 mm`). The deferred
 case, mixing a normalized or native code with an absolute one such as
-`unit(1, "npc") - unit(2, "mm")`, is an error, because it cannot be reduced to a
+`vl_unit(1, "npc") - vl_unit(2, "mm")`, is an error, because it cannot be reduced to a
 flat value without a device and viewport. `grid` supports that by deferring the
 sum to draw time; `vellum` declines to, because the flat representation is
 exactly what makes resolution cheap and re-runnable on resize. The cost is real:

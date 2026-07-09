@@ -88,7 +88,7 @@ x <- rnorm(n)
 y <- x * 0.5 + rnorm(n)
 
 vl_scene(6, 4.5, bg = "white") |>
-  push(viewport(xscale = range(x), yscale = range(y))) |>
+  push(vl_viewport(xscale = range(x), yscale = range(y))) |>
   draw(datashade(x, y, width = 450, height = 300,
                  colors = c("#fde0dd", "#7a0177")))
 ```
@@ -153,7 +153,7 @@ vl_clear_render_cache() # drop cached render state
 ```
 
 For scenes with an expensive sub-tree that is drawn repeatedly, a viewport
-can cache its rendered content with `viewport(..., cache = TRUE)`, so the work
+can cache its rendered content with `vl_viewport(..., cache = TRUE)`, so the work
 is done once and reused.
 
 ## Summary

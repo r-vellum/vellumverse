@@ -1,3 +1,7 @@
+# vellumverse (development version)
+
+* Adopted vellum's renamed `vl_*` graphics primitives (grid collision fix).
+
 # vellumverse 0.1.0
 
 First release.

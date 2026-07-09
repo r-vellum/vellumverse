@@ -48,9 +48,9 @@ primitives into a reusable unit that still chains in a pipe:
 # a labelled marker: a filled circle with text centred on it
 marker <- function(scene, x, y, label, fill = "#6b4f2c") {
   scene |>
-    draw(circle_grob(x = x, y = y, r = 0.06, gp = gpar(fill = fill, col = NA))) |>
+    draw(circle_grob(x = x, y = y, r = 0.06, gp = vl_gpar(fill = fill, col = NA))) |>
     draw(text_grob(label, x = x, y = y,
-                   gp = gpar(col = "white", fontface = "bold", fontsize = 12)))
+                   gp = vl_gpar(col = "white", fontface = "bold", fontsize = 12)))
 }
 
 vl_scene(4, 2, bg = "white") |>
@@ -112,11 +112,11 @@ interactive without touching `vellumwidget` at all**, just by attaching `key` an
 #| eval: false
 # a hand-built scene whose points are hoverable and selectable
 s <- vl_scene(4, 3, bg = "white") |>
-  push(viewport(xscale = c(0, 10), yscale = c(0, 10))) |>
+  push(vl_viewport(xscale = c(0, 10), yscale = c(0, 10))) |>
   draw(points_grob(
-    x = unit(c(2, 5, 8), "native"),
-    y = unit(c(3, 7, 4), "native"),
-    gp = gpar(fill = "#6b4f2c"),
+    x = vl_unit(c(2, 5, 8), "native"),
+    y = vl_unit(c(3, 7, 4), "native"),
+    gp = vl_gpar(fill = "#6b4f2c"),
     key = c("a", "b", "c"),                     # identity for selection
     meta = list(tooltip = c("Alpha", "Beta", "Gamma"))
   ))
@@ -149,9 +149,9 @@ my_plot <- function(data) structure(list(data = data), class = "my_plot")
 # teach the ecosystem how to compile it into a vellum scene
 method(as_vellum_scene, new_S3_class("my_plot")) <- function(x, ...) {
   vl_scene(4, 3, bg = "white") |>
-    push(viewport(xscale = range(x$data$x), yscale = range(x$data$y))) |>
-    draw(points_grob(unit(x$data$x, "native"), unit(x$data$y, "native"),
-                     gp = gpar(fill = "#6b4f2c")))
+    push(vl_viewport(xscale = range(x$data$x), yscale = range(x$data$y))) |>
+    draw(points_grob(vl_unit(x$data$x, "native"), vl_unit(x$data$y, "native"),
+                     gp = vl_gpar(fill = "#6b4f2c")))
 }
 
 p <- my_plot(data.frame(x = 1:10, y = (1:10)^2))
