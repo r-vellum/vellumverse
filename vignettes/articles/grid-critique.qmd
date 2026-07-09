@@ -35,7 +35,7 @@ in `ggplot2`'s rendered output rests on this.
 **The unit system.** `grid` can express a length in centimetres, in a fraction
 of the current region, as the width of a string, as the width of another grob,
 or in data-native coordinates, and mix them. Being able to say "make this
-margin as wide as the widest axis label" is genuinely powerful, and no simpler
+margin as wide as the widest axis label" is powerful, and no simpler
 model would capture it.
 
 **Device independence.** A `grid` scene targets an abstract device, so the same
@@ -84,8 +84,8 @@ popViewport()
 ```
 
 The meaning of a drawing call depends on the current state of that stack. If the
-stack is not what you assumed, the call quietly targets the wrong region or
-fails in a way that is hard to trace back to its cause. This is the usual cost
+stack is not what you assumed, the call targets the wrong region without
+complaint, or fails in a way that is hard to trace back to its cause. This is the usual cost
 of stateful APIs: correctness depends on invisible context, and that context is
 easy to get wrong in code that builds plots programmatically. The model itself,
 regions with their own coordinate systems, is sound; it is the *stateful* way of
@@ -93,7 +93,7 @@ navigating it that creates fragility.
 
 ## Units: powerful, and hard to reason about
 
-The same unit system that is a genuine strength is also a common source of
+The same unit system that is a strength is also a common source of
 confusion. Unit expressions can mix absolute, relative, text-derived, and
 grob-derived measurements, and many of those values are not knowable until
 layout or device-rendering time. That is inherent to the problem (a string has
@@ -129,7 +129,7 @@ advance.
 Underneath, several distinct coordinate spaces coexist (data, panel, plot,
 page, physical device), but they are implicit. You generally learn which one you
 are in by trying something and seeing where it lands. The spaces are real and
-well-defined; they are just not surfaced as first-class, named concepts, so
+well-defined; they are not surfaced as first-class, named concepts, so
 working across them is more trial-and-error than it needs to be.
 
 ## Styling is fragmented

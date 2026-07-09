@@ -31,8 +31,8 @@ choice made at the end.
 
 ## The seam
 
-A `vellumplot` plot is a spec. It is compiled into a `vellum` scene — a concrete,
-laid-out tree of drawing primitives — through a single generic,
+A `vellumplot` plot is a spec. It is compiled into a `vellum` scene (a concrete,
+laid-out tree of drawing primitives) through a single generic,
 `as_vellum_scene()`. Everything downstream consumes that scene:
 
 - `vellum`'s `render()` writes the scene to a file, choosing raster or vector
@@ -53,7 +53,7 @@ p <- vplot(df) |>
   labs(title = "Fuel economy")
 ```
 
-Nothing has been drawn. `p` is a description — you can inspect it, pass it
+Nothing has been drawn. `p` is a description. You can inspect it, pass it
 around, store it, and decide its fate later:
 
 ```{r}
@@ -66,10 +66,10 @@ summary(p)
 ```
 
 Notice that `tooltip` and `data_id` are already on the mark. They mean
-nothing to a static render and everything to the widget — carrying them in
+nothing to a static render and everything to the widget. Carrying them in
 the spec from the start is what lets one object serve both.
 
-## Output 1 — raster
+## Output 1: raster
 
 Printing the spec draws it into the active device; that is what the chunk
 below does, and it is the same path a raster file takes.
@@ -86,10 +86,10 @@ render_plot(p, "fuel.png")          # tiny-skia raster
 render_plot(p, "fuel.png", dpi = 300)  # override the authored resolution
 ```
 
-## Output 2 — vector
+## Output 2: vector
 
 The identical spec, sent to a vector extension, is rendered through a
-different backend — a hand-rolled SVG writer, or krilla for PDF — with no
+different backend (a hand-rolled SVG writer, or krilla for PDF) with no
 change to the plot code:
 
 ```{r}
@@ -99,14 +99,14 @@ render_plot(p, "fuel.pdf")   # vector PDF
 ```
 
 Because the layout is computed once and then walked for each backend, the
-raster and vector versions are the same plot, not two approximations of it —
-the point positions, text metrics, and legend placement are identical.
+raster and vector versions are the same plot, not two approximations of it.
+The point positions, text metrics, and legend placement are identical.
 
-## Output 3 — interactive widget
+## Output 3: interactive widget
 
 The same `p`, handed to `as_widget()`, compiles to the same scene and then
 emits an SVG plus a per-element table, wired up with hover, selection,
-brushing, and pan/zoom — client-side, no Shiny:
+brushing, and pan/zoom, client-side with no Shiny:
 
 ```{r}
 #| eval: false
@@ -119,15 +119,15 @@ reads. Three layers agreeing on one contract: `vellumplot` declares the channels
 
 ## Why this matters
 
-The payoff is not just fewer keystrokes. Because there is one spec and one
+The payoff is more than fewer keystrokes. Because there is one spec and one
 compiled scene:
 
 - **The outputs cannot drift.** A raster figure and its interactive
   counterpart are guaranteed to show the same plot, because they *are* the
   same scene.
 - **The decision is deferred.** You can write analysis code that returns a
-  spec and let the calling context — a Quarto chunk, a Shiny app, a batch
-  job writing PDFs — decide how to realise it.
+  spec and let the calling context (a Quarto chunk, a Shiny app, a batch
+  job writing PDFs) decide how to realise it.
 - **Bare `vellum` scenes get the same treatment.** `as_widget()` and
   `render()` accept a hand-built `vellum` scene too, so a bespoke visual made
   with grobs travels the same three roads as a grammar plot.
@@ -154,6 +154,6 @@ destinations are the same.
 
 ## See also
 
-- [The vellum ecosystem](ecosystem.html) — the layers and how they connect.
-- [Performance and big data](performance.html) — what compiling once buys you
+- [The vellum ecosystem](ecosystem.html): the layers and how they connect.
+- [Performance and big data](performance.html): what compiling once buys you
   when the data is large.

@@ -27,7 +27,7 @@ grammar is the same idea. Four things are different, and once they click the
 rest is a matter of renaming.
 
 Throughout, the `ggplot2` code is shown for reference and the `vellumplot`
-equivalent is the one actually rendered.
+equivalent is the one rendered.
 
 ## The four differences
 
@@ -199,7 +199,7 @@ vplot(mtcars) |>
 
 **Make it interactive for free.** The same spec, handed to `as_widget()`,
 becomes an HTML widget. The interactive channels (`tooltip`, `data_id`) are
-just more mark arguments:
+more mark arguments:
 
 ```{r}
 #| eval: false
@@ -220,7 +220,7 @@ A few `ggplot2` habits do not carry over, on purpose:
 - `+` chaining and its operator methods are gone; everything is a function
   in a pipe.
 - Saving is `render_plot()`, not `ggsave()`, and one spec renders to PNG,
-  SVG, and PDF from the same object — see [one scene, three
+  SVG, and PDF from the same object. See [one scene, three
   outputs](one-scene-three-outputs.html).
 
 For the exhaustive list of marks, scales, coords, and themes, see the

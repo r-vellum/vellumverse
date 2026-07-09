@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 This is the short path from a data frame to a finished plot. The
 [ecosystem article](ecosystem.html) explains *why* the pieces are split the
-way they are; here we just use them.
+way they are; here we use them.
 
 ## Install and attach
 
@@ -49,7 +49,7 @@ primitives (from `vellum`), and `as_widget()` (from `vellumwidget`).
 ## Your first plot
 
 Every plot starts with `vplot()` on a data frame, then adds a *mark*. A mark
-maps columns to visual channels — position, colour, size — and the arguments
+maps columns to visual channels (position, colour, size), and the arguments
 are ordinary column names, evaluated in the data:
 
 ```{r first}
@@ -125,7 +125,7 @@ vplot(mtcars) |>
 ## Save to a file
 
 `render_plot()` writes the plot to disk. The format follows the file
-extension — raster for `.png`, vector for `.svg` and `.pdf`:
+extension, raster for `.png`, vector for `.svg` and `.pdf`:
 
 ```{r}
 #| eval: false
@@ -142,7 +142,7 @@ convenience.
 ## Make it interactive
 
 Hand the same pipeline to `as_widget()` and it becomes a self-contained
-HTML widget — hover tooltips, click selection, brushing, and pan/zoom, with
+HTML widget: hover tooltips, click selection, brushing, and pan/zoom, with
 no Shiny and no server. The interactive bits are declared on the mark:
 `tooltip` is what a point shows on hover, `data_id` is its identity for
 selection.
@@ -162,9 +162,9 @@ into a widget, without rewriting it for each destination.
 
 ## Where to go next
 
-- [Coming from ggplot2](coming-from-ggplot2.html) — a translation table if
+- [Coming from ggplot2](coming-from-ggplot2.html): a translation table if
   you already think in `geom_*` and `aes()`.
-- [The vellum ecosystem](ecosystem.html) — how the three layers divide the
+- [The vellum ecosystem](ecosystem.html): how the three layers divide the
   work.
 - Each package's own site has the full reference:
   [vellumplot](https://r-vellum.github.io/vellumplot/) for every mark, scale, and
