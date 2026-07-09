@@ -1,0 +1,16 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  articles/coming-from-ggplot2: coming-from-ggplot2.html
+  articles/design-principles: design-principles.html
+  articles/ecosystem: ecosystem.html
+  articles/extending-the-ecosystem: extending-the-ecosystem.html
+  articles/getting-started: getting-started.html
+  articles/grid-critique: grid-critique.html
+  articles/one-scene-three-outputs: one-scene-three-outputs.html
+  articles/performance: performance.html
+last_built: 2026-07-09T14:42Z
+urls:
+  reference: https://r-vellum.github.io/vellumverse/reference
+  article: https://r-vellum.github.io/vellumverse/articles
