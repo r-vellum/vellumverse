@@ -34,8 +34,7 @@ boundaries between them.
 
 ## Three layers, one scene
 
-The metaphor is a medieval **vellumverse**, the room where manuscripts were
-written. The parchment, the pen, and the annotation each have a name:
+The parchment, the pen, and the annotation each have a name:
 
 | layer | package | what it is | the tidyverse analogue |
 |---|---|---|---|

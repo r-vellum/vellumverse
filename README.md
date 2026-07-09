@@ -10,9 +10,7 @@
 
 **vellumverse** installs and loads the *vellum* graphics ecosystem in
 one step, the way [tidyverse](https://www.tidyverse.org) does for data
-science. The name is the medieval *vellumverse*, the room where
-manuscripts were written and copied. Its packages carry the same
-metaphor:
+science. Its packages carry a shared metaphor:
 
 | package | role | analogy |
 |----|----|----|
