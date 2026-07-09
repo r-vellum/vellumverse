@@ -143,13 +143,13 @@ needs to be.
 ## Styling is fragmented
 
 Controlling appearance means meeting several styling systems:
-[`gpar()`](https://rdrr.io/pkg/vellum/man/gpar.html) in `grid`, themes
-in `ggplot2`, base graphics parameters, device-specific font handling,
-and, for HTML output, CSS. Each is reasonable on its own. Together they
-mean that setting something as ordinary as a consistent font or line
-width across a composed figure can require understanding more than one
-model. There is no single cascading style layer that spans plot types
-and composition.
+[`vl_gpar()`](https://r-vellum.github.io/vellum/reference/vl_gpar.html)
+in `grid`, themes in `ggplot2`, base graphics parameters,
+device-specific font handling, and, for HTML output, CSS. Each is
+reasonable on its own. Together they mean that setting something as
+ordinary as a consistent font or line width across a composed figure can
+require understanding more than one model. There is no single cascading
+style layer that spans plot types and composition.
 
 ## Performance scales with the object tree
 

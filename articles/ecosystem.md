@@ -49,11 +49,11 @@ in Rust, and the same scene renders to raster or vector.
 vl_scene(width = 4, height = 2.4, bg = "white") |>
   draw(rect_grob(
     width = 0.9, height = 0.8,
-    gp = gpar(fill = linear_gradient(c("#6b4f2c", "#c9a86a")), col = NA)
+    gp = vl_gpar(fill = linear_gradient(c("#6b4f2c", "#c9a86a")), col = NA)
   )) |>
   draw(text_grob(
     "vellum", x = 0.5, y = 0.5,
-    gp = gpar(fontsize = 44, col = "white", fontface = "bold")
+    gp = vl_gpar(fontsize = 44, col = "white", fontface = "bold")
   ))
 ```
 
@@ -114,8 +114,8 @@ layers agreeing on one contract.
 
 - [vellum](https://r-vellum.github.io/vellum/): grobs, units, viewports,
   the paint model,
-  [`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html), and
-  grid interop.
+  [`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html),
+  and grid interop.
 - [vellumplot](https://r-vellum.github.io/vellumplot/): the full mark,
   scale, facet, coord, and theme reference.
 - [vellumwidget](https://r-vellum.github.io/vellumwidget/): interaction

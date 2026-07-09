@@ -13,15 +13,17 @@ ordinary R functions: nothing to register, nothing to teach the
 renderer.
 
 The first is a **grob factory**: a function that returns a single grob.
-[`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html) is
-exactly this: it returns one `raster_grob`, and a function that returns
-a grob is a first-class primitive that drops straight into
-[`draw()`](https://rdrr.io/pkg/vellum/man/vl_scene.html), inherits
-graphical parameters from its viewport, and renders to every backend.
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
+is exactly this: it returns one `raster_grob`, and a function that
+returns a grob is a first-class primitive that drops straight into
+[`draw()`](https://r-vellum.github.io/vellum/reference/vl_scene.html),
+inherits graphical parameters from its viewport, and renders to every
+backend.
 
 The second, for drawing that is more than one primitive, is a **scene
 helper**: a function that takes a scene, draws into it, and returns the
-scene. Because [`draw()`](https://rdrr.io/pkg/vellum/man/vl_scene.html)
+scene. Because
+[`draw()`](https://r-vellum.github.io/vellum/reference/vl_scene.html)
 takes one grob at a time, this is how you compose several primitives
 into a reusable unit that still chains in a pipe:
 
@@ -30,9 +32,9 @@ into a reusable unit that still chains in a pipe:
 # a labelled marker: a filled circle with text centred on it
 marker <- function(scene, x, y, label, fill = "#6b4f2c") {
   scene |>
-    draw(circle_grob(x = x, y = y, r = 0.06, gp = gpar(fill = fill, col = NA))) |>
+    draw(circle_grob(x = x, y = y, r = 0.06, gp = vl_gpar(fill = fill, col = NA))) |>
     draw(text_grob(label, x = x, y = y,
-                   gp = gpar(col = "white", fontface = "bold", fontsize = 12)))
+                   gp = vl_gpar(col = "white", fontface = "bold", fontsize = 12)))
 }
 
 vl_scene(4, 2, bg = "white") |>
@@ -44,10 +46,10 @@ vl_scene(4, 2, bg = "white") |>
 ![](extending-the-ecosystem_files/figure-html/composite-1.png)
 
 Scene-in, scene-out means your helper composes with
-[`draw()`](https://rdrr.io/pkg/vellum/man/vl_scene.html),
-[`push()`](https://rdrr.io/pkg/vellum/man/vl_scene.html), and
-[`pop()`](https://rdrr.io/pkg/vellum/man/vl_scene.html) like any
-built-in verb.
+[`draw()`](https://r-vellum.github.io/vellum/reference/vl_scene.html),
+[`push()`](https://r-vellum.github.io/vellum/reference/vl_scene.html),
+and [`pop()`](https://r-vellum.github.io/vellum/reference/vl_scene.html)
+like any built-in verb.
 
 ## 2. Custom themes: restyle without new machinery
 
@@ -94,7 +96,7 @@ the scene:
 - Those are compiled onto the `vellum` grobs as their `key` (identity)
   and `meta` (the rest).
 - `vellumwidget` reads them back out of the compiled scene (via
-  [`scene_model()`](https://rdrr.io/pkg/vellum/man/scene_model.html))
+  [`scene_model()`](https://r-vellum.github.io/vellum/reference/scene_model.html))
   and wires up the widget.
 
 The practical consequence: **you can make a bespoke `vellum` scene
@@ -105,11 +107,11 @@ interactive without touching `vellumwidget` at all**, just by attaching
 
 # a hand-built scene whose points are hoverable and selectable
 s <- vl_scene(4, 3, bg = "white") |>
-  push(viewport(xscale = c(0, 10), yscale = c(0, 10))) |>
+  push(vl_viewport(xscale = c(0, 10), yscale = c(0, 10))) |>
   draw(points_grob(
-    x = unit(c(2, 5, 8), "native"),
-    y = unit(c(3, 7, 4), "native"),
-    gp = gpar(fill = "#6b4f2c"),
+    x = vl_unit(c(2, 5, 8), "native"),
+    y = vl_unit(c(3, 7, 4), "native"),
+    gp = vl_gpar(fill = "#6b4f2c"),
     key = c("a", "b", "c"),                     # identity for selection
     meta = list(tooltip = c("Alpha", "Beta", "Gamma"))
   ))
@@ -125,10 +127,11 @@ Because the contract lives in the scene, a mark you invent in
 ## 4. Teach the ecosystem about your object
 
 The deepest seam is
-[`as_vellum_scene()`](https://rdrr.io/pkg/vellum/man/as_vellum_scene.html),
+[`as_vellum_scene()`](https://r-vellum.github.io/vellum/reference/as_vellum_scene.html),
 the S7 generic that every consumer calls to turn *something* into a
 renderable scene. `vellumplot` registers a method for its plot spec;
-that is how [`render()`](https://rdrr.io/pkg/vellum/man/vl_scene.html)
+that is how
+[`render()`](https://r-vellum.github.io/vellum/reference/vl_scene.html)
 and `as_widget()` accept a `vellumplot` plot at all. If you have your
 own object (a model, a spatial structure, a domain-specific plot type),
 you can register a method that compiles it into a `vellum` scene, and
@@ -145,9 +148,9 @@ my_plot <- function(data) structure(list(data = data), class = "my_plot")
 # teach the ecosystem how to compile it into a vellum scene
 method(as_vellum_scene, new_S3_class("my_plot")) <- function(x, ...) {
   vl_scene(4, 3, bg = "white") |>
-    push(viewport(xscale = range(x$data$x), yscale = range(x$data$y))) |>
-    draw(points_grob(unit(x$data$x, "native"), unit(x$data$y, "native"),
-                     gp = gpar(fill = "#6b4f2c")))
+    push(vl_viewport(xscale = range(x$data$x), yscale = range(x$data$y))) |>
+    draw(points_grob(vl_unit(x$data$x, "native"), vl_unit(x$data$y, "native"),
+                     gp = vl_gpar(fill = "#6b4f2c")))
 }
 
 p <- my_plot(data.frame(x = 1:10, y = (1:10)^2))
@@ -157,7 +160,7 @@ as_widget(p)              # works: vellumwidget compiles via the same seam
 ```
 
 Registering that one method is what makes
-[`render()`](https://rdrr.io/pkg/vellum/man/vl_scene.html),
+[`render()`](https://r-vellum.github.io/vellum/reference/vl_scene.html),
 `render_plot()`, and `as_widget()` all accept your object; they never
 see `my_plot`, only the scene it compiles to.
 
@@ -170,7 +173,7 @@ The four seams line up with the four layers of reuse:
 | a piece of drawing | a function returning grobs | `vellum` |
 | a look | a function applying `theme()`/`set_theme()` | `vellumplot` |
 | interactivity | `key`/`meta` on grobs; `tooltip`/`data_id` on marks | the scene contract |
-| a whole new plot type | an [`as_vellum_scene()`](https://rdrr.io/pkg/vellum/man/as_vellum_scene.html) method | the compiler seam |
+| a whole new plot type | an [`as_vellum_scene()`](https://r-vellum.github.io/vellum/reference/as_vellum_scene.html) method | the compiler seam |
 
 Each is independent: a composite grob needs no theme, a theme needs no
 custom object, and a custom object gets rendering and interactivity for

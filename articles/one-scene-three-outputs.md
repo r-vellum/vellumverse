@@ -11,17 +11,18 @@ describe the plot once; where it ends up is a choice made at the end.
 
 A `vellumplot` plot is a spec. It is compiled into a `vellum` scene (a
 concrete, laid-out tree of drawing primitives) through a single generic,
-[`as_vellum_scene()`](https://rdrr.io/pkg/vellum/man/as_vellum_scene.html).
+[`as_vellum_scene()`](https://r-vellum.github.io/vellum/reference/as_vellum_scene.html).
 Everything downstream consumes that scene:
 
-- `vellum`’s [`render()`](https://rdrr.io/pkg/vellum/man/vl_scene.html)
+- `vellum`’s
+  [`render()`](https://r-vellum.github.io/vellum/reference/vl_scene.html)
   writes the scene to a file, choosing raster or vector from the
   extension.
 - `vellumwidget`’s `as_widget()` turns the same scene into an HTML
   widget.
 
 Both call
-[`as_vellum_scene()`](https://rdrr.io/pkg/vellum/man/as_vellum_scene.html)
+[`as_vellum_scene()`](https://r-vellum.github.io/vellum/reference/as_vellum_scene.html)
 under the hood. That one seam is why the same object can go three places
 without being rewritten.
 
@@ -118,9 +119,9 @@ one compiled scene:
   a spec and let the calling context (a Quarto chunk, a Shiny app, a
   batch job writing PDFs) decide how to realise it.
 - **Bare `vellum` scenes get the same treatment.** `as_widget()` and
-  [`render()`](https://rdrr.io/pkg/vellum/man/vl_scene.html) accept a
-  hand-built `vellum` scene too, so a bespoke visual made with grobs
-  travels the same three roads as a grammar plot.
+  [`render()`](https://r-vellum.github.io/vellum/reference/vl_scene.html)
+  accept a hand-built `vellum` scene too, so a bespoke visual made with
+  grobs travels the same three roads as a grammar plot.
 
 ## Going lower: a bare vellum scene
 
@@ -130,7 +131,7 @@ A `vellum` scene renders to all three formats directly:
 ``` r
 
 s <- vl_scene(4, 3) |>
-  draw(circle_grob(r = 0.3, gp = gpar(fill = "tomato", col = NA)))
+  draw(circle_grob(r = 0.3, gp = vl_gpar(fill = "tomato", col = NA)))
 
 render(s, "out.png")   # raster   (tiny-skia)
 render(s, "out.svg")   # vector   (hand-rolled SVG)

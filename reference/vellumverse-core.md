@@ -7,14 +7,14 @@ attaches the three core packages:
 
 ## Details
 
-- [vellum](https://rdrr.io/pkg/vellum/man/vellum-package.html), the
-  low-level graphics backend (a Rust scene graph, unit/layout engine,
-  and multi-backend renderer).
+- [vellum](https://r-vellum.github.io/vellum/reference/vellum-package.html),
+  the low-level graphics backend (a Rust scene graph, unit/layout
+  engine, and multi-backend renderer).
 
-- [vellumplot](https://rdrr.io/pkg/vellumplot/man/vellumplot-package.html),
+- [vellumplot](https://r-vellum.github.io/vellumplot/reference/vellumplot-package.html),
   a pipe-first grammar of graphics that compiles an inspectable plot
   spec into a vellum scene.
 
-- [vellumwidget](https://rdrr.io/pkg/vellumwidget/man/vellumwidget-package.html),
+- [vellumwidget](https://r-vellum.github.io/vellumwidget/reference/vellumwidget-package.html),
   client-side interactive HTML widgets for the scenes that vellum and
   vellumplot produce.

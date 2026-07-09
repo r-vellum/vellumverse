@@ -43,9 +43,10 @@ units, viewports, layout, and rendering) and expose a thin declarative R
 API. `vellum` takes this second path. The scene graph, unit resolution,
 layout, and rendering all live in Rust; R describes what to draw. A
 separate, optional grid-to-vellum translator
-([`as_vellum()`](https://rdrr.io/pkg/vellum/man/as_vellum.html) /
-[`render_grid()`](https://rdrr.io/pkg/vellum/man/as_vellum.html)) gives
-the ecosystem reach of the first approach as a secondary mode, so
+([`as_vellum()`](https://r-vellum.github.io/vellum/reference/as_vellum.html)
+/
+[`render_grid()`](https://r-vellum.github.io/vellum/reference/as_vellum.html))
+gives the ecosystem reach of the first approach as a secondary mode, so
 existing `grid`, `ggplot2`, and `lattice` output can render through the
 same backend.
 
@@ -66,14 +67,14 @@ makes the scene trivial to inspect.
 library(vellum)
 
 scene <- vl_scene(width = 6, height = 4) |>
-  push(viewport(xscale = c(0, 10), yscale = c(0, 100))) |>
-  draw(rect_grob(name = "panel-bg", gp = gpar(fill = "grey95", col = NA))) |>
-  draw(lines_grob(x = unit(1:9, "native"),
-                  y = unit(c(10, 40, 35, 80, 60, 90, 55, 70, 30), "native"),
-                  gp = gpar(col = "steelblue", lwd = 2)))
+  push(vl_viewport(xscale = c(0, 10), yscale = c(0, 100))) |>
+  draw(rect_grob(name = "panel-bg", gp = vl_gpar(fill = "grey95", col = NA))) |>
+  draw(lines_grob(x = vl_unit(1:9, "native"),
+                  y = vl_unit(c(10, 40, 35, 80, 60, 90, 55, 70, 30), "native"),
+                  gp = vl_gpar(col = "steelblue", lwd = 2)))
 
 node_names(scene)                                    # inspect the tree
-scene <- edit_node(scene, "panel-bg", gp = gpar(fill = "grey90"))
+scene <- edit_node(scene, "panel-bg", gp = vl_gpar(fill = "grey90"))
 ```
 
 This addresses the “missing middle layer” from the critique. Because the
@@ -87,14 +88,15 @@ scene already *is* that form.
 `grid` navigates its regions through a mutable push/pop stack, so a
 drawing call’s meaning depends on invisible current state. `vellum`
 threads context functionally instead:
-[`push()`](https://rdrr.io/pkg/vellum/man/vl_scene.html) and
-[`draw()`](https://rdrr.io/pkg/vellum/man/vl_scene.html) pass the scene
-along a pipeline, and you navigate by node name rather than by a global
-“current viewport”. The viewport model, regions with their own
-coordinate systems, is kept, because it is one of `grid`’s best ideas;
-the mutable stack that made it fragile is not. A stateful convenience
-layer can still be built on top for interactive use, but it is not the
-foundation.
+[`push()`](https://r-vellum.github.io/vellum/reference/vl_scene.html)
+and
+[`draw()`](https://r-vellum.github.io/vellum/reference/vl_scene.html)
+pass the scene along a pipeline, and you navigate by node name rather
+than by a global “current viewport”. The viewport model, regions with
+their own coordinate systems, is kept, because it is one of `grid`’s
+best ideas; the mutable stack that made it fragile is not. A stateful
+convenience layer can still be built on top for interactive use, but it
+is not the foundation.
 
 ## Eager metrics and an explicit layout pass
 
@@ -119,16 +121,17 @@ The trade-off is deliberate and worth stating plainly, because it is the
 thing a `grid` user is most likely to trip over. A stored unit is flat
 `(value, code)`, not an arithmetic-expression tree. So `+` and `-`
 resolve at construction: they combine units of the same code, or two
-absolute units of any absolute code (`unit(10, "mm") + unit(1, "in")`
-becomes `35.4 mm`). The deferred case, mixing a normalized or native
-code with an absolute one such as `unit(1, "npc") - unit(2, "mm")`, is
-an error, because it cannot be reduced to a flat value without a device
-and viewport. `grid` supports that by deferring the sum to draw time;
-`vellum` declines to, because the flat representation is exactly what
-makes resolution cheap and re-runnable on resize. The cost is real: you
-compose such offsets at the viewport level, or pre-resolve to absolute
-units. This is a case where `vellum` trades a piece of `grid`’s
-convenience for the architecture that everything else rests on.
+absolute units of any absolute code
+(`vl_unit(10, "mm") + vl_unit(1, "in")` becomes `35.4 mm`). The deferred
+case, mixing a normalized or native code with an absolute one such as
+`vl_unit(1, "npc") - vl_unit(2, "mm")`, is an error, because it cannot
+be reduced to a flat value without a device and viewport. `grid`
+supports that by deferring the sum to draw time; `vellum` declines to,
+because the flat representation is exactly what makes resolution cheap
+and re-runnable on resize. The cost is real: you compose such offsets at
+the viewport level, or pre-resolve to absolute units. This is a case
+where `vellum` trades a piece of `grid`’s convenience for the
+architecture that everything else rests on.
 
 ## One extension mechanism instead of four
 
@@ -187,18 +190,18 @@ batched primitives so a thousand points are not a thousand heavyweight
 objects, a persistent glyph cache, a repaint-boundary sub-raster cache
 and an object-identity render cache so unchanged scenes and subtrees are
 reused rather than redrawn, and an aggregate-then-shade path
-([`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html)) that
-bins millions of points into a density raster the size of the output
-rather than drawing each one. The distinction that makes this work is
-between a *semantic* layer and its *optimized rendering representation*:
-a million-point scatter need not be a million objects.
+([`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html))
+that bins millions of points into a density raster the size of the
+output rather than drawing each one. The distinction that makes this
+work is between a *semantic* layer and its *optimized rendering
+representation*: a million-point scatter need not be a million objects.
 
 ## What the retained model makes possible
 
 Some capabilities are not separate features so much as consequences of
 keeping the scene. Because the tree is retained and re-renderable,
 `vellum` can pick the topmost object under a point
-([`hit_test()`](https://rdrr.io/pkg/vellum/man/hit_test.html)),
+([`hit_test()`](https://r-vellum.github.io/vellum/reference/hit_test.html)),
 something `grid` never offered beyond `grid.locator()`. For the same
 reason, nodes can carry semantic identity that survives into SVG output,
 which is useful for export, testing, and accessibility independent of

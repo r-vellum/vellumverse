@@ -5,7 +5,7 @@ drawing one graphical object per data point. The vellum ecosystem
 attacks both. The scene graph, layout, and rendering run in a Rust
 engine rather than in R, and for the case where the data has more points
 than the screen has pixels,
-[`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html)
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
 aggregates the data into an image *before* anything is drawn.
 
 ## Where the time goes, and doesn’t
@@ -23,18 +23,19 @@ That handles moderately large plots well. But no amount of engine speed
 helps if the plot asks the renderer to draw two million individual
 circles into an SVG: the file alone would be enormous, and most of those
 marks would land on the same pixel. That is the problem
-[`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html) solves.
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
+solves.
 
 ## datashade: aggregate, then draw
 
-[`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html) bins
-points into a grid the size of the output image, counts how many land in
-each cell, and colours the cells by density. It returns a single raster,
-one image, instead of millions of marks. The binning is a one-pass
-aggregation in Rust, so the cost scales with the number of *pixels*, not
-the number of *points*. Ten thousand points and ten million points cost
-almost the same to draw, because the output is the same-sized image
-either way.
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
+bins points into a grid the size of the output image, counts how many
+land in each cell, and colours the cells by density. It returns a single
+raster, one image, instead of millions of marks. The binning is a
+one-pass aggregation in Rust, so the cost scales with the number of
+*pixels*, not the number of *points*. Ten thousand points and ten
+million points cost almost the same to draw, because the output is the
+same-sized image either way.
 
 ### The grammar-level way
 
@@ -65,9 +66,9 @@ structure.
 ### The backend-level way
 
 The same aggregation is available in `vellum` as
-[`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html), which
-returns a `raster_grob` you place in a scene yourself. Use this when you
-are building a bespoke visual rather than a grammar plot:
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html),
+which returns a `raster_grob` you place in a scene yourself. Use this
+when you are building a bespoke visual rather than a grammar plot:
 
 ``` r
 
@@ -77,14 +78,15 @@ x <- rnorm(n)
 y <- x * 0.5 + rnorm(n)
 
 vl_scene(6, 4.5, bg = "white") |>
-  push(viewport(xscale = range(x), yscale = range(y))) |>
+  push(vl_viewport(xscale = range(x), yscale = range(y))) |>
   draw(datashade(x, y, width = 450, height = 300,
                  colors = c("#fde0dd", "#7a0177")))
 ```
 
 ![](performance_files/figure-html/datashade-vellum-1.png)
 
-Because [`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html)
+Because
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
 bins over `xlim × ylim` (defaulting to the data range), you draw it
 inside a viewport whose `xscale`/`yscale` match those limits so the
 image lines up with axes you add around it.
@@ -117,11 +119,11 @@ vplot(df) |>
 The rule of thumb is the pixel count. If your scatter has more points
 than the plot has pixels, tens of thousands and up, overplotting means
 most marks are invisible anyway, and
-[`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html) shows the
-density they were hiding while rendering in constant time. Below that, a
-plain `mark_point()` is fine and keeps every point individually
-addressable (which matters for interactivity; a datashaded image is one
-raster, not a thousand hoverable points).
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
+shows the density they were hiding while rendering in constant time.
+Below that, a plain `mark_point()` is fine and keeps every point
+individually addressable (which matters for interactivity; a datashaded
+image is one raster, not a thousand hoverable points).
 
 ## Choosing an output format at scale
 
@@ -147,15 +149,16 @@ vl_clear_render_cache() # drop cached render state
 
 For scenes with an expensive sub-tree that is drawn repeatedly, a
 viewport can cache its rendered content with
-`viewport(..., cache = TRUE)`, so the work is done once and reused.
+`vl_viewport(..., cache = TRUE)`, so the work is done once and reused.
 
 ## Summary
 
 - The engine (scene graph, layout, render) runs in Rust, so per-plot R
   overhead is building the spec.
-- [`datashade()`](https://rdrr.io/pkg/vellum/man/datashade.html) /
-  `mark_datashade()` render arbitrarily many points in time proportional
-  to the image size, by aggregating to a density raster before drawing.
+- [`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
+  / `mark_datashade()` render arbitrarily many points in time
+  proportional to the image size, by aggregating to a density raster
+  before drawing.
 - `how` and `colors` shape how density reads; `weight` gives weighted
   densities.
 - For large data, prefer raster output or datashade before going to

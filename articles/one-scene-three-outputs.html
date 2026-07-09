@@ -112,14 +112,14 @@
     <p>Most plotting workflows re-specify the plot for each destination: one code path for the PNG in a report, another for the vector figure a journal wants, a third library entirely if the plot needs to be interactive on the web. The vellum ecosystem is built so that the <em>specification</em> and the <em>destination</em> are separate concerns. You describe the plot once; where it ends up is a choice made at the end.</p>
 <section class="level2"><h2 id="the-seam">The seam<a class="anchor" aria-label="anchor" href="#the-seam"></a>
 </h2>
-<p>A <code>vellumplot</code> plot is a spec. It is compiled into a <code>vellum</code> scene (a concrete, laid-out tree of drawing primitives) through a single generic, <code><a href="https://rdrr.io/pkg/vellum/man/as_vellum_scene.html" class="external-link">as_vellum_scene()</a></code>. Everything downstream consumes that scene:</p>
+<p>A <code>vellumplot</code> plot is a spec. It is compiled into a <code>vellum</code> scene (a concrete, laid-out tree of drawing primitives) through a single generic, <code><a href="https://r-vellum.github.io/vellum/reference/as_vellum_scene.html" class="external-link">as_vellum_scene()</a></code>. Everything downstream consumes that scene:</p>
 <ul>
 <li>
-<code>vellum</code>’s <code><a href="https://rdrr.io/pkg/vellum/man/vl_scene.html" class="external-link">render()</a></code> writes the scene to a file, choosing raster or vector from the extension.</li>
+<code>vellum</code>’s <code><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">render()</a></code> writes the scene to a file, choosing raster or vector from the extension.</li>
 <li>
 <code>vellumwidget</code>’s <code>as_widget()</code> turns the same scene into an HTML widget.</li>
 </ul>
-<p>Both call <code><a href="https://rdrr.io/pkg/vellum/man/as_vellum_scene.html" class="external-link">as_vellum_scene()</a></code> under the hood. That one seam is why the same object can go three places without being rewritten.</p>
+<p>Both call <code><a href="https://r-vellum.github.io/vellum/reference/as_vellum_scene.html" class="external-link">as_vellum_scene()</a></code> under the hood. That one seam is why the same object can go three places without being rewritten.</p>
 </section><section class="level2"><h2 id="build-the-spec-once">Build the spec once<a class="anchor" aria-label="anchor" href="#build-the-spec-once"></a>
 </h2>
 <div class="cell">
@@ -186,18 +186,18 @@
 <li>
 <strong>The decision is deferred.</strong> You can write analysis code that returns a spec and let the calling context (a Quarto chunk, a Shiny app, a batch job writing PDFs) decide how to realise it.</li>
 <li>
-<strong>Bare <code>vellum</code> scenes get the same treatment.</strong> <code>as_widget()</code> and <code><a href="https://rdrr.io/pkg/vellum/man/vl_scene.html" class="external-link">render()</a></code> accept a hand-built <code>vellum</code> scene too, so a bespoke visual made with grobs travels the same three roads as a grammar plot.</li>
+<strong>Bare <code>vellum</code> scenes get the same treatment.</strong> <code>as_widget()</code> and <code><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">render()</a></code> accept a hand-built <code>vellum</code> scene too, so a bespoke visual made with grobs travels the same three roads as a grammar plot.</li>
 </ul></section><section class="level2"><h2 id="going-lower-a-bare-vellum-scene">Going lower: a bare vellum scene<a class="anchor" aria-label="anchor" href="#going-lower-a-bare-vellum-scene"></a>
 </h2>
 <p>The same three-way rendering exists one layer down, without the grammar. A <code>vellum</code> scene renders to all three formats directly:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/vellum/man/vl_scene.html" class="external-link">vl_scene</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/vellum/man/vl_scene.html" class="external-link">draw</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/vellum/man/grob.html" class="external-link">circle_grob</a></span><span class="op">(</span>r <span class="op">=</span> <span class="fl">0.3</span>, gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/vellum/man/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"tomato"</span>, col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">vl_scene</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">draw</a></span><span class="op">(</span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/grob.html" class="external-link">circle_grob</a></span><span class="op">(</span>r <span class="op">=</span> <span class="fl">0.3</span>, gp <span class="op">=</span> <span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_gpar.html" class="external-link">vl_gpar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"tomato"</span>, col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/vellum/man/vl_scene.html" class="external-link">render</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"out.png"</span><span class="op">)</span>   <span class="co"># raster   (tiny-skia)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/vellum/man/vl_scene.html" class="external-link">render</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"out.svg"</span><span class="op">)</span>   <span class="co"># vector   (hand-rolled SVG)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/vellum/man/vl_scene.html" class="external-link">render</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"out.pdf"</span><span class="op">)</span>   <span class="co"># vector   (krilla)</span></span>
+<span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">render</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"out.png"</span><span class="op">)</span>   <span class="co"># raster   (tiny-skia)</span></span>
+<span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">render</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"out.svg"</span><span class="op">)</span>   <span class="co"># vector   (hand-rolled SVG)</span></span>
+<span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">render</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"out.pdf"</span><span class="op">)</span>   <span class="co"># vector   (krilla)</span></span>
 <span><span class="fu">as_widget</span><span class="op">(</span><span class="va">s</span><span class="op">)</span>           <span class="co"># interactive widget</span></span></code></pre></div>
 </div>
 <p>The grammar in <code>vellumplot</code> is, in the end, a convenient way to produce one of these scenes. Whether the scene came from <code>vplot()</code> or from raw grobs, the destinations are the same.</p>
