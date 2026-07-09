@@ -45,9 +45,12 @@ home:
 
 navbar:
   structure:
-    left: [ecosystem, articles, reference, news]
+    left: [ecosystem, articles, gallery, reference, news]
     right: [search, vellum, vellumplot, vellumwidget, github]
   components:
+    gallery:
+      text: Gallery
+      href: https://r-vellum.github.io/vellumgallery/
     ecosystem:
       text: Packages
       menu:
