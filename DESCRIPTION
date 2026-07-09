@@ -1,34 +1,34 @@
-Package: scriptorium
+Package: vellumverse
 Title: Easily Install and Load the 'Vellum' Graphics Ecosystem
 Version: 0.1.0.9000
 Authors@R:
     person("David", "Schoch", , "david.schoch@cynkra.com", role = c("aut", "cre"))
 Description: The 'vellum' ecosystem is a set of packages for drawing in R
     that share a scene model and a common design: 'vellum' (a low-level
-    graphics backend with a Rust engine), 'quill' (a pipe-first grammar of
-    graphics on top of it), and 'gloss' (client-side interactive HTML
-    widgets for the scenes they produce). 'scriptorium' is a meta-package
+    graphics backend with a Rust engine), 'vellumplot' (a pipe-first grammar of
+    graphics on top of it), and 'vellumwidget' (client-side interactive HTML
+    widgets for the scenes they produce). 'vellumverse' is a meta-package
     that installs and loads them together, in the spirit of the
     'tidyverse'.
 License: MIT + file LICENSE
-URL: https://schochastics.github.io/scriptorium/,
-    https://github.com/schochastics/scriptorium
-BugReports: https://github.com/schochastics/scriptorium/issues
+URL: https://r-vellum.github.io/vellumverse/,
+    https://github.com/r-vellum/vellumverse
+BugReports: https://github.com/r-vellum/vellumverse/issues
 Depends:
     R (>= 4.2)
 Imports:
     cli,
-    gloss (>= 0.2.0.9000),
-    quill (>= 0.2.1.9000),
+    vellumwidget (>= 0.2.0.9000),
+    vellumplot (>= 0.2.1.9000),
     rlang,
     utils,
     vellum (>= 0.1.1.9000)
 Suggests:
     testthat (>= 3.0.0)
 Remotes:
-    schochastics/gloss,
-    schochastics/quill,
-    schochastics/vellum
+    r-vellum/vellumwidget,
+    r-vellum/vellumplot,
+    r-vellum/vellum
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0.9000

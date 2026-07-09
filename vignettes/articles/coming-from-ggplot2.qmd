@@ -8,7 +8,7 @@ description: >
 ```{r}
 #| include: false
 have_all <- all(vapply(
-  c("vellum", "quill", "gloss"),
+  c("vellum", "vellumplot", "vellumwidget"),
   requireNamespace, logical(1), quietly = TRUE
 ))
 knitr::opts_chunk$set(
@@ -18,20 +18,20 @@ knitr::opts_chunk$set(
   out.width = "100%",
   eval = have_all
 )
-if (have_all) suppressMessages(library(scriptorium))
+if (have_all) suppressMessages(library(vellumverse))
 ```
 
-If you already think in `ggplot2`, `quill` will feel familiar: data in,
+If you already think in `ggplot2`, `vellumplot` will feel familiar: data in,
 aesthetics mapped to marks, scales and facets and themes layered on top. The
 grammar is the same idea. Four things are different, and once they click the
 rest is a matter of renaming.
 
-Throughout, the `ggplot2` code is shown for reference and the `quill`
+Throughout, the `ggplot2` code is shown for reference and the `vellumplot`
 equivalent is the one actually rendered.
 
 ## The four differences
 
-**1. `|>`, not `+`.** Layers are joined with the base pipe. A `quill` plot is
+**1. `|>`, not `+`.** Layers are joined with the base pipe. A `vellumplot` plot is
 an ordinary pipeline, so the first argument of every verb is the plot.
 
 **2. No `aes()`.** Aesthetics are named arguments on the mark itself. A bare
@@ -42,13 +42,13 @@ is a channel with a legend; `color = "red"` paints everything red.
 `geom_point()` is `mark_point()`, `geom_smooth()` is `mark_smooth()`, and so
 on.
 
-**4. A plot is a spec, not a picture.** `quill` builds an inspectable
+**4. A plot is a spec, not a picture.** `vellumplot` builds an inspectable
 specification and compiles it only when printed, saved, or made interactive.
 `summary()` shows you the spec without drawing it.
 
 ## Translation table
 
-| ggplot2 | quill |
+| ggplot2 | vellumplot |
 |---|---|
 | `ggplot(df, aes(x, y))` | `vplot(df)` then `mark_*(x = x, y = y)` |
 | `aes(color = z)` | `color = z` on the mark |
@@ -71,7 +71,7 @@ specification and compiles it only when printed, saved, or made interactive.
 | `labs(title = )` | `labs(title = )` |
 | `ggsave("p.png")` | `render_plot(p, "p.png")` |
 
-Note that spelling: `quill` uses American `color` as the primary aesthetic
+Note that spelling: `vellumplot` uses American `color` as the primary aesthetic
 name (with `colour`/`fill` accepted where it makes sense).
 
 ## Scatter with a colour scale
@@ -85,7 +85,7 @@ ggplot(mtcars, aes(wt, mpg, color = hp)) +
 ```
 
 ```r
-# quill
+# vellumplot
 vplot(mtcars) |>
   mark_point(x = wt, y = mpg, color = hp) |>
   scale_color_continuous()
@@ -102,7 +102,7 @@ vplot(mtcars) |>
 ## Points with a fitted line
 
 The layering translates one-to-one; the `+` becomes a `|>` and each geom
-becomes a mark. Note that `quill` marks carry their own encodings rather than
+becomes a mark. Note that `vellumplot` marks carry their own encodings rather than
 inheriting a top-level `aes()`.
 
 ::: {layout-ncol=2}
@@ -114,7 +114,7 @@ ggplot(mtcars, aes(wt, mpg)) +
 ```
 
 ```r
-# quill
+# vellumplot
 vplot(mtcars) |>
   mark_point(x = wt, y = mpg) |>
   mark_smooth(x = wt, y = mpg, method = "lm")
@@ -143,7 +143,7 @@ ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
 ```
 
 ```r
-# quill
+# vellumplot
 vplot(mtcars) |>
   mark_point(x = wt, y = mpg, color = factor(cyl)) |>
   facet_wrap(~cyl) |>
@@ -171,7 +171,7 @@ ggplot(mpg, aes(class, fill = class)) +
 ```
 
 ```r
-# quill
+# vellumplot
 vplot(mpg) |>
   mark_bar(x = class, fill = class) |>
   scale_fill_manual(values = c("#6b4f2c", "#8a7350")) |>
@@ -224,4 +224,4 @@ A few `ggplot2` habits do not carry over, on purpose:
   outputs](one-scene-three-outputs.html).
 
 For the exhaustive list of marks, scales, coords, and themes, see the
-[quill reference](https://schochastics.github.io/quill/).
+[vellumplot reference](https://r-vellum.github.io/vellumplot/).

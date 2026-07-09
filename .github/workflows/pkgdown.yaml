@@ -1,5 +1,5 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
-# Builds the scriptorium pkgdown site — the docs hub for the vellum ecosystem —
+# Builds the vellumverse pkgdown site — the docs hub for the vellum ecosystem —
 # and deploys it to GitHub Pages. vellum is compiled from source, so a Rust
 # toolchain is set up before dependencies are installed.
 # pkgdown CI is disabled while this repo is private: an automatic Pages deploy

@@ -1,5 +1,5 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
-# scriptorium is a meta-package: it pulls in `vellum` (a Rust/extendr package)
+# vellumverse is a meta-package: it pulls in `vellum` (a Rust/extendr package)
 # via the `Remotes:` entries, so the `setup-rust-toolchain` step provides the
 # compiler needed to build vellum from source; everything else is the standard
 # r-lib R-CMD-check flow.

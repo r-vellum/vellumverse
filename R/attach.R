@@ -1,22 +1,22 @@
 #' The core of the vellum ecosystem
 #'
-#' `scriptorium` bundles the packages that make up the *vellum* graphics
+#' `vellumverse` bundles the packages that make up the *vellum* graphics
 #' ecosystem so they can be installed and loaded in one step, the way
-#' `tidyverse` bundles the data-science packages. Attaching `scriptorium`
+#' `tidyverse` bundles the data-science packages. Attaching `vellumverse`
 #' attaches the three core packages:
 #'
 #' - [vellum][vellum::vellum-package], the low-level graphics backend (a
 #'   Rust scene graph, unit/layout engine, and multi-backend renderer).
-#' - [quill][quill::quill-package], a pipe-first grammar of graphics that
+#' - [vellumplot][vellumplot::vellumplot-package], a pipe-first grammar of graphics that
 #'   compiles an inspectable plot spec into a vellum scene.
-#' - [gloss][gloss::gloss-package], client-side interactive HTML widgets for
-#'   the scenes that vellum and quill produce.
+#' - [vellumwidget][vellumwidget::vellumwidget-package], client-side interactive HTML widgets for
+#'   the scenes that vellum and vellumplot produce.
 #'
 #' @keywords internal
-#' @name scriptorium-core
+#' @name vellumverse-core
 NULL
 
-core <- c("vellum", "quill", "gloss")
+core <- c("vellum", "vellumplot", "vellumwidget")
 
 core_unloaded <- function() {
   search <- paste0("package:", core)
@@ -30,14 +30,14 @@ same_library <- function(pkg) {
   library(pkg, lib.loc = loc, character.only = TRUE, warn.conflicts = FALSE)
 }
 
-scriptorium_attach <- function() {
+vellumverse_attach <- function() {
   to_load <- core_unloaded()
   if (length(to_load) == 0) {
     return(invisible())
   }
 
   cli::cli_inform(
-    scriptorium_attach_message(to_load),
+    vellumverse_attach_message(to_load),
     class = "packageStartupMessage"
   )
 
@@ -50,18 +50,18 @@ scriptorium_attach <- function() {
 
 #' List the core vellum-ecosystem packages
 #'
-#' `scriptorium_packages()` returns the names of the packages that
-#' `library(scriptorium)` attaches.
+#' `vellumverse_packages()` returns the names of the packages that
+#' `library(vellumverse)` attaches.
 #'
-#' @param include_self Whether to include `scriptorium` itself in the list.
+#' @param include_self Whether to include `vellumverse` itself in the list.
 #' @return A character vector of package names.
 #' @export
 #' @examples
-#' scriptorium_packages()
-scriptorium_packages <- function(include_self = TRUE) {
+#' vellumverse_packages()
+vellumverse_packages <- function(include_self = TRUE) {
   names <- core
   if (include_self) {
-    names <- c(names, "scriptorium")
+    names <- c(names, "vellumverse")
   }
   names
 }

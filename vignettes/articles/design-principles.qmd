@@ -10,7 +10,7 @@ description: >
 coordinate and viewport model, a unit system, a retained tree of graphical
 objects, inherited graphical parameters, and a layout engine. It is deliberately
 **not** a grammar of graphics: no data binding, scales, stats, geoms, facets,
-or themes. Those belong to a layer built on top (`quill`), exactly as `ggplot2`
+or themes. Those belong to a layer built on top (`vellumplot`), exactly as `ggplot2`
 and `lattice` are built on `grid`.
 
 This article explains the choices that make `vellum` different from `grid`, and
@@ -197,7 +197,7 @@ answer to the critique's central complaint that introspection is archaeology.
 ## What vellum deliberately does not do
 
 Scope discipline is a principle in its own right. `vellum` does not ship a
-grammar of graphics: no scales, geoms, or facets; that is `quill`'s job. It does
+grammar of graphics: no scales, geoms, or facets; that is `vellumplot`'s job. It does
 not include a general constraint solver, because a flex solver plus measured
 tracks covers the layouts that actually arise, without a large opaque dependency.
 It does not implement a CSS-style selector engine, because cascading themes are a

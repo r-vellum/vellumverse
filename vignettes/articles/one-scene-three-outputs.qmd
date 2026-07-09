@@ -9,7 +9,7 @@ description: >
 ```{r}
 #| include: false
 have_all <- all(vapply(
-  c("vellum", "quill", "gloss"),
+  c("vellum", "vellumplot", "vellumwidget"),
   requireNamespace, logical(1), quietly = TRUE
 ))
 knitr::opts_chunk$set(
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
   out.width = "100%",
   eval = have_all
 )
-if (have_all) suppressMessages(library(scriptorium))
+if (have_all) suppressMessages(library(vellumverse))
 ```
 
 Most plotting workflows re-specify the plot for each destination: one code
@@ -31,13 +31,13 @@ choice made at the end.
 
 ## The seam
 
-A `quill` plot is a spec. It is compiled into a `vellum` scene — a concrete,
+A `vellumplot` plot is a spec. It is compiled into a `vellum` scene — a concrete,
 laid-out tree of drawing primitives — through a single generic,
 `as_vellum_scene()`. Everything downstream consumes that scene:
 
 - `vellum`'s `render()` writes the scene to a file, choosing raster or vector
   from the extension.
-- `gloss`'s `as_widget()` turns the same scene into an HTML widget.
+- `vellumwidget`'s `as_widget()` turns the same scene into an HTML widget.
 
 Both call `as_vellum_scene()` under the hood. That one seam is why the same
 object can go three places without being rewritten.
@@ -114,8 +114,8 @@ as_widget(p)
 ```
 
 The `tooltip` and `data_id` you declared back in the spec are what the widget
-reads. Three layers agreeing on one contract: `quill` declares the channels,
-`vellum` carries them through the scene, `gloss` acts on them.
+reads. Three layers agreeing on one contract: `vellumplot` declares the channels,
+`vellum` carries them through the scene, `vellumwidget` acts on them.
 
 ## Why this matters
 
@@ -148,7 +148,7 @@ render(s, "out.pdf")   # vector   (krilla)
 as_widget(s)           # interactive widget
 ```
 
-The grammar in `quill` is, in the end, a convenient way to produce one of
+The grammar in `vellumplot` is, in the end, a convenient way to produce one of
 these scenes. Whether the scene came from `vplot()` or from raw grobs, the
 destinations are the same.
 

@@ -9,7 +9,7 @@ description: >
 ```{r}
 #| include: false
 have_all <- all(vapply(
-  c("vellum", "quill", "gloss"),
+  c("vellum", "vellumplot", "vellumwidget"),
   requireNamespace, logical(1), quietly = TRUE
 ))
 knitr::opts_chunk$set(
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
   out.width = "100%",
   eval = have_all
 )
-if (have_all) suppressMessages(library(scriptorium))
+if (have_all) suppressMessages(library(vellumverse))
 ```
 
 The ecosystem is layered so that each layer exposes a seam the next one
@@ -65,7 +65,7 @@ Scene-in, scene-out means your helper composes with `draw()`, `push()`, and
 ## 2. Custom themes: restyle without new machinery
 
 At the grammar layer, a theme is a function that sets styling on a plot spec.
-`quill` gives you `theme()` for individual elements and `set_theme()` for the
+`vellumplot` gives you `theme()` for individual elements and `set_theme()` for the
 common surfaces, built from `element_text()`, `element_line()`, and
 `element_rect()`. A reusable theme is a function that applies them:
 
@@ -95,17 +95,17 @@ else and can be shared as a one-function package.
 
 This is the seam that ties all three layers together, and the most useful one
 to understand if you build tools on top. Interactivity is not a feature of
-`gloss` alone; it is a *contract* carried through the scene:
+`vellumwidget` alone; it is a *contract* carried through the scene:
 
-- A `quill` mark declares the reserved channels `tooltip`, `data_id`,
+- A `vellumplot` mark declares the reserved channels `tooltip`, `data_id`,
   `hover_group`, `hover_color`, and `selected_color`.
 - Those are compiled onto the `vellum` grobs as their `key` (identity) and
   `meta` (the rest).
-- `gloss` reads them back out of the compiled scene — via `scene_model()` —
+- `vellumwidget` reads them back out of the compiled scene — via `scene_model()` —
   and wires up the widget.
 
 The practical consequence: **you can make a bespoke `vellum` scene
-interactive without touching `gloss` at all**, just by attaching `key` and
+interactive without touching `vellumwidget` at all**, just by attaching `key` and
 `meta` to your grobs. Every primitive grob accepts them.
 
 ```{r}
@@ -121,19 +121,19 @@ s <- vl_scene(4, 3, bg = "white") |>
     meta = list(tooltip = c("Alpha", "Beta", "Gamma"))
   ))
 
-as_widget(s)   # tooltips and selection work, no quill involved
+as_widget(s)   # tooltips and selection work, no vellumplot involved
 ```
 
-Because the contract lives in the scene, a mark you invent in `quill` that
-sets `tooltip`/`data_id` becomes interactive in `gloss` automatically, and a
+Because the contract lives in the scene, a mark you invent in `vellumplot` that
+sets `tooltip`/`data_id` becomes interactive in `vellumwidget` automatically, and a
 grob you build in `vellum` that sets `key`/`meta` does too. Neither end has
 to know about the other.
 
 ## 4. Teach the ecosystem about your object
 
 The deepest seam is `as_vellum_scene()`, the S7 generic that every consumer
-calls to turn *something* into a renderable scene. `quill` registers a method
-for its plot spec; that is how `render()` and `as_widget()` accept a `quill`
+calls to turn *something* into a renderable scene. `vellumplot` registers a method
+for its plot spec; that is how `render()` and `as_widget()` accept a `vellumplot`
 plot at all. If you have your own object — a model, a spatial structure, a
 domain-specific plot type — you can register a method that compiles it into a
 `vellum` scene, and from that moment it renders and becomes interactive
@@ -157,7 +157,7 @@ method(as_vellum_scene, new_S3_class("my_plot")) <- function(x, ...) {
 p <- my_plot(data.frame(x = 1:10, y = (1:10)^2))
 
 render(p, "custom.png")   # works: render() compiles via as_vellum_scene()
-as_widget(p)              # works: gloss compiles via the same seam
+as_widget(p)              # works: vellumwidget compiles via the same seam
 ```
 
 Registering that one method is what makes `render()`, `render_plot()`, and
@@ -171,7 +171,7 @@ The four seams line up with the four layers of reuse:
 | you want to reuse | the seam | where it lives |
 |---|---|---|
 | a piece of drawing | a function returning grobs | `vellum` |
-| a look | a function applying `theme()`/`set_theme()` | `quill` |
+| a look | a function applying `theme()`/`set_theme()` | `vellumplot` |
 | interactivity | `key`/`meta` on grobs; `tooltip`/`data_id` on marks | the scene contract |
 | a whole new plot type | an `as_vellum_scene()` method | the compiler seam |
 

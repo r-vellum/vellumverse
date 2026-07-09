@@ -2,13 +2,13 @@
 title: "Getting started"
 description: >
   From a data frame to a rendered plot to an interactive widget, in one
-  pipeline, using the whole vellum ecosystem through scriptorium.
+  pipeline, using the whole vellum ecosystem through vellumverse.
 ---
 
 ```{r}
 #| include: false
 have_all <- all(vapply(
-  c("vellum", "quill", "gloss"),
+  c("vellum", "vellumplot", "vellumwidget"),
   requireNamespace, logical(1), quietly = TRUE
 ))
 knitr::opts_chunk$set(
@@ -32,19 +32,19 @@ toolchain (`cargo`/`rustc`) on your machine alongside R. With that in place:
 ```{r}
 #| eval: false
 # install.packages("pak")
-pak::pak("schochastics/scriptorium")
+pak::pak("r-vellum/vellumverse")
 ```
 
-`scriptorium` is a meta-package. Attaching it attaches the three packages
+`vellumverse` is a meta-package. Attaching it attaches the three packages
 that do the real work, so a single call puts the whole grammar on your
 search path:
 
 ```{r setup}
-library(scriptorium)
+library(vellumverse)
 ```
 
-You now have `vplot()` and the marks (from `quill`), the scene and rendering
-primitives (from `vellum`), and `as_widget()` (from `gloss`).
+You now have `vplot()` and the marks (from `vellumplot`), the scene and rendering
+primitives (from `vellum`), and `as_widget()` (from `vellumwidget`).
 
 ## Your first plot
 
@@ -107,7 +107,7 @@ vplot(mtcars) |>
 
 ## Inspect without drawing
 
-A `quill` plot is a *spec*: an object describing the plot, not a picture.
+A `vellumplot` plot is a *spec*: an object describing the plot, not a picture.
 Nothing is drawn until you print or render it, so you can examine what you
 have built with `summary()`:
 
@@ -167,7 +167,7 @@ into a widget, without rewriting it for each destination.
 - [The vellum ecosystem](ecosystem.html) — how the three layers divide the
   work.
 - Each package's own site has the full reference:
-  [quill](https://schochastics.github.io/quill/) for every mark, scale, and
-  theme; [vellum](https://schochastics.github.io/vellum/) for the drawing
-  primitives; [gloss](https://schochastics.github.io/gloss/) for interaction
+  [vellumplot](https://r-vellum.github.io/vellumplot/) for every mark, scale, and
+  theme; [vellum](https://r-vellum.github.io/vellum/) for the drawing
+  primitives; [vellumwidget](https://r-vellum.github.io/vellumwidget/) for interaction
   options.

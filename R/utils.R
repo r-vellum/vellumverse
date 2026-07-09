@@ -1,5 +1,5 @@
 # Small base-R stand-ins for the handful of purrr helpers used by
-# scriptorium_conflicts(), so the meta-package stays dependency-light.
+# vellumverse_conflicts(), so the meta-package stays dependency-light.
 
 purrr_set_names <- function(x) {
   stats::setNames(x, x)

@@ -1,14 +1,14 @@
 ---
 title: "The vellum ecosystem"
 description: >
-  How vellum, quill, and gloss fit together, from a low-level scene graph,
+  How vellum, vellumplot, and vellumwidget fit together, from a low-level scene graph,
   to a grammar of graphics, to an interactive widget.
 ---
 
 ```{r}
 #| include: false
 have_all <- all(vapply(
-  c("vellum", "quill", "gloss"),
+  c("vellum", "vellumplot", "vellumwidget"),
   requireNamespace, logical(1), quietly = TRUE
 ))
 knitr::opts_chunk$set(
@@ -20,12 +20,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-`scriptorium` is a meta-package: it holds no plotting code of its own. Its
+`vellumverse` is a meta-package: it holds no plotting code of its own. Its
 job is to install and attach the three packages that make up the *vellum*
 graphics ecosystem, so that
 
 ```{r setup}
-library(scriptorium)
+library(vellumverse)
 ```
 
 puts all of them on your search path at once. Each one owns a distinct layer
@@ -34,18 +34,18 @@ boundaries between them.
 
 ## Three layers, one scene
 
-The metaphor is a medieval **scriptorium**, the room where manuscripts were
+The metaphor is a medieval **vellumverse**, the room where manuscripts were
 written. The parchment, the pen, and the annotation each have a name:
 
 | layer | package | what it is | the tidyverse analogue |
 |---|---|---|---|
 | backend | **vellum** | a retained scene graph, unit/layout engine, and PNG/SVG/PDF renderer, with a Rust engine | `grid` |
-| grammar | **quill** | a pipe-first grammar of graphics that *compiles* a plot spec into a vellum scene | `ggplot2` |
-| interaction | **gloss** | turns a vellum scene into a self-contained interactive HTML widget | `htmlwidgets` |
+| grammar | **vellumplot** | a pipe-first grammar of graphics that *compiles* a plot spec into a vellum scene | `ggplot2` |
+| interaction | **vellumwidget** | turns a vellum scene into a self-contained interactive HTML widget | `htmlwidgets` |
 
-The important word is **compiles**. A `quill` plot is not drawn as you build
+The important word is **compiles**. A `vellumplot` plot is not drawn as you build
 it; it is an inspectable specification that is turned into a `vellum` scene
-only when it is printed, rendered, or handed to `gloss`. Everything below is
+only when it is printed, rendered, or handed to `vellumwidget`. Everything below is
 therefore one scene passing down the stack.
 
 ## vellum: the parchment
@@ -67,14 +67,14 @@ vl_scene(width = 4, height = 2.4, bg = "white") |>
 ```
 
 You would reach for `vellum` directly to build a bespoke visual, or as the
-target of a higher-level tool, which is exactly what `quill` is.
+target of a higher-level tool, which is exactly what `vellumplot` is.
 
-## quill: the pen
+## vellumplot: the pen
 
-`quill` gives you the grammar: data in, marks and scales declared with tidy
+`vellumplot` gives you the grammar: data in, marks and scales declared with tidy
 evaluation, everything trained and laid out for you.
 
-```{r quill}
+```{r vellumplot}
 vplot(mtcars) |>
   mark_point(x = wt, y = mpg, color = hp) |>
   scale_color_continuous()
@@ -91,9 +91,9 @@ summary(vplot(mtcars) |> mark_point(x = wt, y = mpg, color = hp))
 #> • mark_point(x = wt, y = mpg, color = hp)
 ```
 
-## gloss: the annotation
+## vellumwidget: the annotation
 
-`gloss` is terminal: hand it a `quill` plot (or a bare `vellum` scene) and it
+`vellumwidget` is terminal: hand it a `vellumplot` plot (or a bare `vellum` scene) and it
 compiles the scene, emits the SVG plus a per-element table, and returns an
 htmlwidget with hover tooltips, selection, brushing, and pan/zoom, with no
 Shiny and no server.
@@ -107,17 +107,17 @@ vplot(df) |>
   as_widget()
 ```
 
-The `tooltip` and `data_id` arguments are declared in `quill`, read by
-`gloss`, and carried through the `vellum` scene: the three layers agreeing
+The `tooltip` and `data_id` arguments are declared in `vellumplot`, read by
+`vellumwidget`, and carried through the `vellum` scene: the three layers agreeing
 on one contract.
 
 ## Where each package's docs live
 
-`scriptorium` is the front door; each package documents itself in full:
+`vellumverse` is the front door; each package documents itself in full:
 
-- [vellum](https://schochastics.github.io/vellum/): grobs, units, viewports,
+- [vellum](https://r-vellum.github.io/vellum/): grobs, units, viewports,
   the paint model, `datashade()`, and grid interop.
-- [quill](https://schochastics.github.io/quill/): the full mark, scale,
+- [vellumplot](https://r-vellum.github.io/vellumplot/): the full mark, scale,
   facet, coord, and theme reference.
-- [gloss](https://schochastics.github.io/gloss/): interaction options,
+- [vellumwidget](https://r-vellum.github.io/vellumwidget/): interaction options,
   linked views, and crosstalk interop.

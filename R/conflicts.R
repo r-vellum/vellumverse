@@ -1,25 +1,25 @@
 #' Conflicts between the vellum ecosystem and other packages
 #'
-#' `scriptorium_conflicts()` lists every function exported by a core
+#' `vellumverse_conflicts()` lists every function exported by a core
 #' vellum-ecosystem package that is masked by, or masks, a function of the
 #' same name attached elsewhere on the search path. It is the equivalent of
 #' `tidyverse::tidyverse_conflicts()`, and is also reported automatically
-#' when `scriptorium` is attached.
+#' when `vellumverse` is attached.
 #'
-#' @return An S3 object of class `"scriptorium_conflicts"`, a named list
+#' @return An S3 object of class `"vellumverse_conflicts"`, a named list
 #'   mapping each conflicted function to the packages that export it (in
 #'   search-path order). Has a print method.
 #' @export
 #' @examples
-#' scriptorium_conflicts()
-scriptorium_conflicts <- function() {
+#' vellumverse_conflicts()
+vellumverse_conflicts <- function() {
   envs <- grep("^package:", search(), value = TRUE)
   envs <- purrr_set_names(envs)
   objs <- invert(lapply(envs, ls_env))
 
   conflicts <- purrr_keep(objs, function(x) length(x) > 1)
 
-  pkgs <- paste0("package:", scriptorium_packages())
+  pkgs <- paste0("package:", vellumverse_packages())
   conflict_funs <- purrr_keep(conflicts, function(pkgs_with) {
     any(pkgs_with %in% pkgs)
   })
@@ -29,18 +29,18 @@ scriptorium_conflicts <- function() {
 
   structure(
     stats::setNames(conflict_funs, vapply(conflict_funs, function(x) x$name, character(1))),
-    class = "scriptorium_conflicts"
+    class = "vellumverse_conflicts"
   )
 }
 
-scriptorium_conflict_message <- function(x) {
+vellumverse_conflict_message <- function(x) {
   if (length(x) == 0) {
     return(NULL)
   }
 
   header <- cli::rule(
     left = cli::style_bold("Conflicts"),
-    right = "scriptorium_conflicts()"
+    right = "vellumverse_conflicts()"
   )
 
   pkgs <- lapply(x, function(conflict) conflict$pkgs)
@@ -78,8 +78,8 @@ confirm_conflict <- function(name, conflicts) {
 }
 
 #' @export
-print.scriptorium_conflicts <- function(x, ..., startup = FALSE) {
-  msg <- scriptorium_conflict_message(x)
+print.vellumverse_conflicts <- function(x, ..., startup = FALSE) {
+  msg <- vellumverse_conflict_message(x)
   if (is.null(msg)) {
     cli::cli_inform("{cli::col_green(cli::symbol$tick)} No conflicts.")
   } else {

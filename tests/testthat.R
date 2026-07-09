@@ -1,4 +1,4 @@
 library(testthat)
-library(scriptorium)
+library(vellumverse)
 
-test_check("scriptorium")
+test_check("vellumverse")

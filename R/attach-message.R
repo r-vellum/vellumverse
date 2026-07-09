@@ -1,11 +1,11 @@
-scriptorium_attach_message <- function(to_load) {
+vellumverse_attach_message <- function(to_load) {
   if (length(to_load) == 0) {
     return(NULL)
   }
 
   header <- cli::rule(
     left = cli::style_bold("Attaching packages"),
-    right = paste0("scriptorium ", package_version_string("scriptorium"))
+    right = paste0("vellumverse ", package_version_string("vellumverse"))
   )
 
   versions <- vapply(to_load, function(pkg) {
