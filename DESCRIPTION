@@ -18,11 +18,11 @@ Depends:
     R (>= 4.2)
 Imports:
     cli,
-    vellumwidget (>= 0.2.0.9000),
-    vellumplot (>= 0.2.1.9000),
+    vellumwidget (>= 0.3.0.9000),
+    vellumplot (>= 0.3.0.9000),
     rlang,
     utils,
-    vellum (>= 0.1.1.9000)
+    vellum (>= 0.2.0.9000)
 Suggests:
     testthat (>= 3.0.0)
 Remotes:
