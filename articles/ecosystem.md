@@ -7,10 +7,10 @@ Its job is to install and attach the three packages that make up the
 ``` r
 
 library(vellumverse)
-#> ── Attaching packages ──────────────────────────────── vellumverse 0.1.0.9000
+#> ── Attaching packages ───────────────────────────────────── vellumverse 0.2.0
 #> ──
-#> ✔ vellum 0.1.1.9000 ✔ vellumplot 0.2.1.9000
-#> ✔ vellumwidget 0.2.0.9000
+#> ✔ vellum 0.2.0.9000 ✔ vellumplot 0.3.0.9000
+#> ✔ vellumwidget 0.3.0.9000
 #> ── Conflicts ──────────────────────────────────────── vellumverse_conflicts() ──
 #> ✖ vellumplot::linear_gradient masks vellum
 #> ✖ vellumplot::md              masks vellum
