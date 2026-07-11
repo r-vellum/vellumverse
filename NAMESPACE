@@ -3,4 +3,3 @@
 S3method(print,vellumverse_conflicts)
 export(vellumverse_conflicts)
 export(vellumverse_packages)
-importFrom(rlang,"%||%")

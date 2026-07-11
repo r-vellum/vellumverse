@@ -78,7 +78,7 @@ confirm_conflict <- function(name, conflicts) {
 }
 
 #' @export
-print.vellumverse_conflicts <- function(x, ..., startup = FALSE) {
+print.vellumverse_conflicts <- function(x, ...) {
   msg <- vellumverse_conflict_message(x)
   if (is.null(msg)) {
     cli::cli_inform("{cli::col_green(cli::symbol$tick)} No conflicts.")
