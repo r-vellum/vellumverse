@@ -12,7 +12,8 @@ Description: The 'vellum' ecosystem is a set of packages for drawing in R
     'tidyverse'.
 License: MIT + file LICENSE
 URL: https://r-vellum.github.io/vellumverse/,
-    https://github.com/r-vellum/vellumverse
+    https://github.com/r-vellum/vellumverse,
+    https://schochastics.r-universe.dev/vellumverse
 BugReports: https://github.com/r-vellum/vellumverse/issues
 Depends:
     R (>= 4.2)
