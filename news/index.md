@@ -1,5 +1,7 @@
 # Changelog
 
+## vellumverse (development version)
+
 ## vellumverse 0.2.1
 
 - Maintenance release. Declared the `stats` dependency (used when
