@@ -1,6 +1,13 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.2.1
+
+- Maintenance release. Declared the `stats` dependency (used when
+  reporting ecosystem conflicts), dropped the unused `rlang` dependency
+  to keep the meta-package dependency-light, and removed a dead
+  `startup` argument from the
+  [`vellumverse_conflicts()`](https://r-vellum.github.io/vellumverse/reference/vellumverse_conflicts.md)
+  print method.
 
 ## vellumverse 0.2.0
 
