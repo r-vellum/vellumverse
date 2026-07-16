@@ -1,4 +1,7 @@
-# vellumverse (development version)
+# vellumverse 0.3.0
+
+* Bumped the pinned ecosystem versions to the latest releases: vellum
+  (>= 0.4.0), vellumplot (>= 0.5.0), and vellumwidget (>= 0.5.0).
 
 # vellumverse 0.2.1
 
