@@ -58,9 +58,11 @@ drawing, and identical output across machines.
 
 The scene is a tree of inert data nodes. A node carries identity, a
 local transform, geometry, resolved style, and children, but no drawing
-code. Nodes are immutable values: “editing” a scene produces a new tree
-that shares structure with the old one, which keeps edits cheap and
-makes the scene trivial to inspect.
+code. Nodes are immutable values: “editing” a scene produces a new tree,
+and only the nodes on the path to the edit are rebuilt, so the cost is
+the depth of the tree rather than its size. Untouched subtrees are
+shared by reference and keep their internal identity, which is what the
+repaint-boundary cache keys on when deciding what it can reuse.
 
 ``` r
 
@@ -77,11 +79,15 @@ node_names(scene)                                    # inspect the tree
 scene <- edit_node(scene, "panel-bg", gp = vl_gpar(fill = "grey90"))
 ```
 
-This addresses the “missing middle layer” from the critique. Because the
-tree is retained R data, querying and editing a built scene by name is
-ordinary R, not surgery on an internal layout table. There is no
-`grid.force()` step to materialise a drawable form first; the built
-scene already *is* that form.
+This speaks to the “missing middle layer” from the critique, though the
+difference from `grid` is narrower here than elsewhere and worth stating
+precisely. `grid` also lets you list, read, and rewrite a scene
+(`grid.ls()`, `grid.get()`, `grid.edit()`, `editGrob()`), so
+addressability is not the new thing. What differs is *what you are
+addressing*: a value you built and still hold, rather than state that
+lives on a device and has to be recovered (`grid.grab()`) or
+materialised (`grid.force()`) before it can be walked. An edit returns a
+new scene; nothing was drawn, so nothing has to be undrawn.
 
 ## No stateful viewport stack
 
@@ -107,6 +113,31 @@ replaying interpreted R. This is the performance story and the
 predictability story at once: the same inputs always produce the same
 layout, and the layout is a value you can compute without drawing.
 
+“Measurable at construction” is meant literally, and it is the one claim
+in this article worth checking yourself:
+
+``` r
+
+vl_strwidth("Population growth", unit = "mm")
+#> 33.8832
+dev.cur()
+#> null device
+```
+
+No device was opened, and the answer lands within a hundredth of a
+millimetre of what [`png()`](https://rdrr.io/r/grDevices/png.html)
+reports for the same string, because it comes from the same
+`systemfonts`/`textshaping` stack. Compare the critique’s numbers for
+the same measurement taken *through* devices (33.889 / 33.608 / 34.925
+mm): the point is not that one number is better, it is that there is one
+number, available before anything is drawn, so layout can be a
+computation rather than a negotiation.
+
+The same property is what makes
+[`why_size()`](https://r-vellum.github.io/vellum/reference/why_size.html)
+possible: a named viewport’s resolved width can be reported, with what
+determined it, before a page exists.
+
 ## A small, principled unit set, and an honest trade-off
 
 `grid`’s unit system is powerful and sprawling. `vellum` keeps the power
@@ -117,21 +148,36 @@ font-relative (`char`, `line`), object-relative (`strwidth`,
 a relative unit bolted onto the absolute one. Object-relative units
 resolve to millimetres at construction, using shaping metrics for text.
 
-The trade-off is deliberate and worth stating plainly, because it is the
-thing a `grid` user is most likely to trip over. A stored unit is flat
-`(value, code)`, not an arithmetic-expression tree. So `+` and `-`
-resolve at construction: they combine units of the same code, or two
-absolute units of any absolute code
-(`vl_unit(10, "mm") + vl_unit(1, "in")` becomes `35.4 mm`). The deferred
-case, mixing a normalized or native code with an absolute one such as
-`vl_unit(1, "npc") - vl_unit(2, "mm")`, is an error, because it cannot
-be reduced to a flat value without a device and viewport. `grid`
-supports that by deferring the sum to draw time; `vellum` declines to,
-because the flat representation is exactly what makes resolution cheap
-and re-runnable on resize. The cost is real: you compose such offsets at
-the viewport level, or pre-resolve to absolute units. This is a case
-where `vellum` trades a piece of `grid`’s convenience for the
-architecture that everything else rests on.
+The representation is the point, and it is worth being concrete. A
+stored unit is a three-field record, not an arithmetic-expression tree:
+
+``` r
+
+unclass(vl_unit(1, "native") + vl_unit(2, "mm"))
+#> $value  1     # the position, in its base coordinate system
+#> $unit   1     # the base code: npc / native / mm / in / pt / null
+#> $offset 2     # an absolute displacement, in millimetres
+```
+
+So `+` and `-` reduce as far as they can, at construction. Two units of
+the same code combine. Two absolute units resolve to millimetres
+(`vl_unit(10, "mm") + vl_unit(1, "in")` becomes `35.4 mm`). A *position*
+base plus an absolute becomes a **compound** unit that keeps the base
+and carries the absolute part in `offset`, printing as `1native+2mm`; it
+resolves in the backend as `base_px + offset_mm/25.4*dpi`, so the offset
+is exactly 2 mm at any scale, aspect, or resolution. Scaling with `*`
+scales the base and the offset together.
+
+The honest trade-off is narrower than it used to be, but it is real: two
+*different* position bases in one unit
+(`vl_unit(1, "npc") + vl_unit(1, "native")`) cannot reduce to a single
+record, so it is an error rather than a promise. `grid` accepts it,
+because deferring means never having to reduce anything. `vellum`
+declines, because the flat record is exactly what makes resolution cheap
+and re-runnable on resize, and what lets the backend treat a coordinate
+as two numbers and a code rather than a tree to walk. When you need that
+combination, put the normalized part in the viewport and the data part
+in the coordinate, or pre-resolve to absolute units.
 
 ## One extension mechanism instead of four
 
@@ -199,17 +245,22 @@ representation*: a million-point scatter need not be a million objects.
 ## What the retained model makes possible
 
 Some capabilities are not separate features so much as consequences of
-keeping the scene. Because the tree is retained and re-renderable,
-`vellum` can pick the topmost object under a point
+keeping the scene *and* its resolved geometry. `vellum` can pick the
+topmost object under a point
 ([`hit_test()`](https://r-vellum.github.io/vellum/reference/hit_test.html)),
-something `grid` never offered beyond `grid.locator()`. For the same
-reason, nodes can carry semantic identity that survives into SVG output,
-which is useful for export, testing, and accessibility independent of
-any interactive layer. And because every node resolves to a known
-transform and bounding box, the engine has the data to draw its own
-layout (bounding boxes, viewport regions, clip chains) as a debugging
-overlay, and to explain why a given node ended up the size it did.
-Turning the resolved scene into a coordinate that a person can *see
+which `grid` never offered beyond `grid.locator()`’s single interactive
+click. The pick is a colour pick-buffer compiled by the same transform,
+clip, and paint-order code that drew the scene, so it cannot disagree
+with the picture; a picker assembled from outside the engine
+(`grobPoints()` plus a point-in-polygon test would get you there) is a
+second geometry implementation to keep in step with the first. For the
+same reason, nodes can carry semantic identity that survives into SVG
+output, which is useful for export, testing, and accessibility
+independent of any interactive layer. And because every node resolves to
+a known transform and bounding box, the engine has the data to draw its
+own layout (bounding boxes, viewport regions, clip chains) as a
+debugging overlay, and to explain why a given node ended up the size it
+did. Turning the resolved scene into a coordinate that a person can *see
 into* is the most direct answer to the critique’s central complaint that
 introspection is archaeology.
 
@@ -228,11 +279,11 @@ lets the grammar above it stay coherent.
 ## The shape of the trade
 
 None of this is free. The Rust backend is a build dependency and a
-maintenance commitment. The flat unit representation gives up a `grid`
-convenience. Reimplementing the model rather than wrapping the device
-means not inheriting the existing ecosystem automatically (hence the
-translator as a bridge). These are deliberate trades, made in service of
-one goal: keep the strengths the
+maintenance commitment. The flat unit representation gives up one `grid`
+convenience (two position bases in a single unit). Reimplementing the
+model rather than wrapping the device means not inheriting the existing
+ecosystem automatically (hence the translator as a bridge). These are
+deliberate trades, made in service of one goal: keep the strengths the
 [critique](https://r-vellum.github.io/vellumverse/articles/grid-critique.md)
 credits `grid` with (grobs, a real layout engine, nested coordinate
 systems, device independence) while removing the single constraint that
