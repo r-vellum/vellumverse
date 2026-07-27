@@ -193,6 +193,30 @@ ordinary as a consistent font or line width across a composed figure can
 require understanding more than one model. There is no single cascading
 style layer that spans plot types and composition.
 
+This is the one complaint on this page that applies squarely to `vellum`
+as well, so it should not be filed as a `grid` problem. Styling in the
+vellum ecosystem means meeting
+[`vl_gpar()`](https://r-vellum.github.io/vellum/reference/vl_gpar.html)
+at the primitive level,
+[`style()`](https://r-vellum.github.io/vellum/reference/style.html) for
+a reusable named bundle of those parameters, `theme()` plus the
+`element_*()` family and the `theme_*()` presets at the grammar level,
+and `tooltip_style` and friends (which are CSS) once a scene becomes an
+interactive widget. Four layers, and the same question (“make this
+figure use one font”) still lands in more than one of them.
+
+There is a defence, and it is worth separating from an excuse. The
+layers are at least ordered rather than parallel:
+[`vl_gpar()`](https://r-vellum.github.io/vellum/reference/vl_gpar.html)
+inherits down the scene tree, a `style` *is* a `gpar` with a name so it
+inherits by the same rule, and a theme is meant to compile into those
+styles rather than set fields ad hoc on every element. So the mechanism
+is one inheritance rule applied at three altitudes, not three unrelated
+systems. But “cascading style that spans plot types and composition” is
+a description of an intention here, not of something finished, and CSS
+at the widget boundary is a genuine fourth model that no amount of
+tidiness below it removes.
+
 ## Performance scales with the object tree
 
 Many `ggplot2` plots produce a large number of grobs, and the cost of
@@ -281,6 +305,16 @@ only thing that knew which fonts existed and how wide they were; a
 graphics layer that insisted on measuring text itself would have had to
 own a font stack, which was not a reasonable thing for a library in base
 R to do.
+
+It is also worth marking which complaints on this page are *not*
+downstream of that constraint, because those are the ones `vellum` does
+not get to claim credit for solving. Fragmented styling is one (see
+above: the ecosystem adds layers of its own). Composition being an
+after-the-fact operation on a layout table is another: that is a scope
+decision about where plot composition belongs, and it is answered at the
+grammar layer or not at all. And part of the performance complaint is
+R’s copy semantics rather than any design, which is why a retained-mode
+design in R has to be careful whatever era it was written in.
 
 That observation is also the starting point for [vellum’s design
 principles](https://r-vellum.github.io/vellumverse/articles/design-principles.md),
