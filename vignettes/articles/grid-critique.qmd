@@ -14,6 +14,14 @@ That foundation has held up for two decades, which is itself the strongest
 argument in its favour. This article looks at both sides: what `grid` got
 right, and the recurring friction that the packages layered on top of it expose.
 
+One thing to set aside at the start, since it is the most common way this
+comparison is got wrong: `grid` is a *retained* system. It keeps its scene as
+grobs you can hold, list, and rewrite, and being "immediate mode" is a property
+of base graphics, not of `grid`. Nothing below argues that `grid` forgets what it
+drew. The friction lies elsewhere, and by the end of this article it will have
+narrowed to a single question: *when does a length stop being an expression and
+become a number?*
+
 ## What grid gets right
 
 It helps to be concrete about the strengths, because they are substantial and
@@ -73,6 +81,18 @@ flags.
 That descent is the recurring theme. When a plot doesn't do exactly what you
 want, the fix often lives a layer or two below where you were working.
 
+To be clear about what `grid` does provide here, because it is easy to
+understate: the scene is genuinely inspectable and editable. `grid.ls()` lists a
+drawn plot's display list, `grid.get()` reads a node by name, `grid.edit()`
+rewrites one in place, and `editGrob()` derives a modified copy of a `gTree`
+without touching the original. Whole packages (`ggedit`, `gginnards`) are built
+on that, and most `ggplot2` fixes circulating on Stack Overflow are exactly
+`ggplotGrob(p)`, find the cell, edit it, redraw. The complaint is not that
+`grid` hides its scene. It is that the names, paths, and cells you have to work
+with are the *engine's* vocabulary rather than the vocabulary you were thinking
+in, and that you generally have to re-render to find out whether the edit did
+what you meant.
+
 ## Viewports are stateful
 
 The viewport model is powerful, but the API is built around a mutable stack:
@@ -96,11 +116,28 @@ navigating it that creates fragility.
 The same unit system that is a strength is also a common source of
 confusion. Unit expressions can mix absolute, relative, text-derived, and
 grob-derived measurements, and many of those values are not knowable until
-layout or device-rendering time. That is inherent to the problem (a string has
-no width until a font and device exist), but it means questions like "why is
-this panel this width?" or "which measurement forced this margin?" are difficult
-to answer from the outside. The power and the opacity come from the same place:
-lengths that resolve late.
+layout or device-rendering time.
+
+It is worth seeing what a unit actually *is*, because it explains the rest. Unit
+arithmetic is not evaluated; it is recorded:
+
+```r
+u <- unit(1, "npc") - unit(2, "mm")
+u
+#> sum(1npc, -2mm)
+```
+
+That object is a small expression tree, and it becomes a number only when a
+device and a viewport exist to answer it. The same `u` resolves to 139.111 mm at
+the root of a 400×300 `png()` and to 68.556 mm inside `viewport(width = 0.5)`.
+Both answers are correct: a unit is a *question* about a context, not a length.
+
+That is inherent to the problem (a string has no width until a font and a device
+exist, and `native` has no meaning without a scale), but it means questions like
+"why is this panel this width?" or "which measurement forced this margin?" are
+difficult to answer from the outside, because the answer only exists during a
+draw that has already finished. The power and the opacity come from the same
+place: lengths that resolve late.
 
 ## Composition happens after the fact
 
@@ -134,7 +171,7 @@ working across them is more trial-and-error than it needs to be.
 
 ## Styling is fragmented
 
-Controlling appearance means meeting several styling systems: `vl_gpar()` in
+Controlling appearance means meeting several styling systems: `gpar()` in
 `grid`, themes in `ggplot2`, base graphics parameters, device-specific font
 handling, and, for HTML output, CSS. Each is reasonable on its own. Together
 they mean that setting something as ordinary as a consistent font or line width
@@ -147,19 +184,36 @@ Many `ggplot2` plots produce a large number of grobs, and the cost of building,
 laying out, and drawing them is not always dominated by data size; sometimes it
 is the object count and tree depth. Because `grid` lives in interpreted R and
 replays its display list on resize, a complex figure can feel heavy in a way
-that is about tree overhead rather than the data. This is a consequence of the
-era and the language it was written in as much as of the design; it is a real
-cost nonetheless.
+that is about tree overhead rather than the data.
+
+Part of this is R rather than `grid`. Any tree of R objects is subject to R's
+copy semantics, and `duplicate()` is recursive for lists: deriving a variant of a
+large tree by writing into it copies the untouched siblings too, which turns a
+one-node edit into work proportional to the whole scene. That is a trap for any
+retained-mode design in R, not a flaw peculiar to `grid` — `vellum` shipped with
+the same bug in `edit_node()` and had to be taught to *construct* new nodes
+rather than assign into old ones. Worth naming, because it is easy to mistake for
+a design difference when it is a language one.
+
+The rest is the era and the language it was written in as much as the design; a
+real cost nonetheless.
 
 ## Devices leak into the result
 
 Output depends on the target device (screen, PDF, `cairo`, `ragg`, `quartz`,
 and so on), and font metrics, antialiasing, text shaping, and rasterization can
-differ between them. Some variation is unavoidable when different backends
-render the same scene. But the assumptions a given render made (which fonts
-were resolved, which metrics were used, what was rasterized) are hard to
-inspect, which makes reproducing a figure exactly across machines harder than
-one would like.
+differ between them. This is measurable in one line: the same string at the same
+nominal font size measures 33.889 mm under `png()`, 33.608 mm under `pdf()`, and
+34.925 mm under `svg()`, because each device resolves and measures fonts its own
+way.
+
+Some variation is unavoidable when different backends render the same scene, and
+a 4% spread in a label width is small. But it is a *layout* input, so it
+propagates: a margin sized to the widest label, and everything positioned
+relative to it, differs slightly between the PNG in your report and the PDF for
+the journal. And the assumptions a given render made (which fonts were resolved,
+which metrics were used, what was rasterized) are hard to inspect, which makes
+reproducing a figure exactly across machines harder than one would like.
 
 ## What ggplot2 inherited
 
@@ -189,9 +243,18 @@ The friction is concentrated in a specific place, the interface between the
 expressive high-level APIs and the low-level machinery, and much of it traces
 to a single fact: in `grid`, a grob's size and content cannot be known until a
 device and a viewport exist at draw time. That one constraint is what makes units
-resolve late, what motivates the deferred grob-drawing protocol, and what forces
-the display-list replay. Most of the individual complaints above are downstream
-of it.
+resolve late (hence `sum(1npc, -2mm)` rather than a length), what motivates the
+draw-time grob protocol (`makeContext()` / `makeContent()` / `widthDetails()`,
+so a grob can finish deciding what it is once a context exists), and what forces
+the display-list replay on resize. It is also why resolved geometry is not
+something you can ask for afterwards: it exists during the draw and is gone when
+the draw ends, which is why `grid.locator()` (one interactive click) is the only
+door back out. Most of the individual complaints above are downstream of it.
+
+And it was the right call for its time. In 2000 the device *was* the only thing
+that knew which fonts existed and how wide they were; a graphics layer that
+insisted on measuring text itself would have had to own a font stack, which was
+not a reasonable thing for a library in base R to do.
 
 That observation is also the starting point for [vellum's design
 principles](design-principles.html), which describe one set of choices a
