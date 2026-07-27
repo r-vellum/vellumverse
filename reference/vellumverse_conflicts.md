@@ -27,4 +27,5 @@ vellumverse_conflicts()
 #> ✖ vellumplot::md              masks vellum
 #> ✖ vellumplot::radial_gradient masks vellum
 #> ✖ vellumplot::sketch          masks vellum
+#> ✖ vellumplot::vl_pattern      masks vellum
 ```

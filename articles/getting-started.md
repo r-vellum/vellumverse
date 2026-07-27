@@ -24,15 +24,16 @@ on your search path:
 ``` r
 
 library(vellumverse)
-#> ── Attaching packages ──────────────────────────────── vellumverse 0.3.1.9000
+#> ── Attaching packages ───────────────────────────────────── vellumverse 0.3.2
 #> ──
-#> ✔ vellum 0.5.0.9000 ✔ vellumplot 0.6.0.9000
-#> ✔ vellumwidget 0.6.0.9000
+#> ✔ vellum 0.5.1.9000 ✔ vellumplot 0.8.0.9000
+#> ✔ vellumwidget 0.7.0.9000
 #> ── Conflicts ──────────────────────────────────────── vellumverse_conflicts() ──
 #> ✖ vellumplot::linear_gradient masks vellum
 #> ✖ vellumplot::md              masks vellum
 #> ✖ vellumplot::radial_gradient masks vellum
 #> ✖ vellumplot::sketch          masks vellum
+#> ✖ vellumplot::vl_pattern      masks vellum
 ```
 
 You now have `vplot()` and the marks (from `vellumplot`), the scene and
