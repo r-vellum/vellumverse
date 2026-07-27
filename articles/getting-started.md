@@ -24,7 +24,7 @@ on your search path:
 ``` r
 
 library(vellumverse)
-#> ── Attaching packages ───────────────────────────────────── vellumverse 0.3.2
+#> ── Attaching packages ──────────────────────────────── vellumverse 0.3.2.9000
 #> ──
 #> ✔ vellum 0.5.1.9000 ✔ vellumplot 0.8.0.9000
 #> ✔ vellumwidget 0.7.0.9000
