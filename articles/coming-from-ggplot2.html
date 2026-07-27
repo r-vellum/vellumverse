@@ -336,8 +336,8 @@
 </div>
 </section><section class="level2"><h2 id="what-you-gain">What you gain<a class="anchor" aria-label="anchor" href="#what-you-gain"></a>
 </h2>
-<p>Two things <code>ggplot2</code> cannot easily do fall out of the spec-first design.</p>
-<p><strong>Inspect a plot before drawing it.</strong> Because the plot is data, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> prints its structure:</p>
+<p>Two things fall out of the spec-first design.</p>
+<p><strong>Inspect a plot before drawing it.</strong> Because the plot is data, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> prints its structure. <code>ggplot2</code> has a <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method as well, so the difference is not the function but how far it goes: because <code>vellum</code> measures text and solves layout without a device, the compiled spec can also report where every element lands before anything renders.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">vplot</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -348,7 +348,7 @@
 <span><span class="co">#&gt; ── layers</span></span>
 <span><span class="co">#&gt; • mark_point(x = wt, y = mpg, color = hp)</span></span></code></pre></div>
 </div>
-<p><strong>Make it interactive for free.</strong> The same spec, handed to <code>as_widget()</code>, becomes an HTML widget. The interactive channels (<code>tooltip</code>, <code>data_id</code>) are more mark arguments:</p>
+<p><strong>Make it interactive without a second plot.</strong> The same spec, handed to <code>as_widget()</code>, becomes an HTML widget, and the interactive channels (<code>tooltip</code>, <code>data_id</code>) are just more mark arguments. <code>ggiraph</code> and <code>plotly</code> get you to a client-side widget from <code>ggplot2</code> too; the difference is that there are no <code>*_interactive()</code> twins of the marks to swap in, and the widget renders the same compiled scene as the static figure rather than redrawing the plot in another engine:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>wt <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, mpg <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>

@@ -147,10 +147,15 @@ vplot(mpg) |>
 
 ## What you gain
 
-Two things `ggplot2` cannot easily do fall out of the spec-first design.
+Two things fall out of the spec-first design.
 
 **Inspect a plot before drawing it.** Because the plot is data,
-[`summary()`](https://rdrr.io/r/base/summary.html) prints its structure:
+[`summary()`](https://rdrr.io/r/base/summary.html) prints its structure.
+`ggplot2` has a [`summary()`](https://rdrr.io/r/base/summary.html)
+method as well, so the difference is not the function but how far it
+goes: because `vellum` measures text and solves layout without a device,
+the compiled spec can also report where every element lands before
+anything renders.
 
 ``` r
 
@@ -163,9 +168,13 @@ vplot(mtcars) |>
 #> • mark_point(x = wt, y = mpg, color = hp)
 ```
 
-**Make it interactive for free.** The same spec, handed to
-`as_widget()`, becomes an HTML widget. The interactive channels
-(`tooltip`, `data_id`) are more mark arguments:
+**Make it interactive without a second plot.** The same spec, handed to
+`as_widget()`, becomes an HTML widget, and the interactive channels
+(`tooltip`, `data_id`) are just more mark arguments. `ggiraph` and
+`plotly` get you to a client-side widget from `ggplot2` too; the
+difference is that there are no `*_interactive()` twins of the marks to
+swap in, and the widget renders the same compiled scene as the static
+figure rather than redrawing the plot in another engine:
 
 ``` r
 
