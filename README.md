@@ -18,8 +18,24 @@ science. Its packages carry a shared metaphor:
 | [**vellumplot**](https://github.com/r-vellum/vellumplot) | pipe-first grammar of graphics that compiles a plot spec into a vellum scene | `ggplot2` |
 | [**vellumwidget**](https://github.com/r-vellum/vellumwidget) | client-side interactive HTML widgets for the scenes they produce | `plotly`/`htmlwidgets` |
 
-`vellum` is the parchment, `vellumplot` is the pen, and `vellumwidget` is the
-annotation revealed on the page.
+`vellum` is the parchment, `vellumplot` is the pen, and `vellumwidget`
+is the annotation revealed on the page.
+
+The three share one seam, and it is what makes them worth using
+together. `vellum` measures text and solves layout without a device, so
+a compiled scene can report where every element landed: `scene_model()`
+gives one row per drawn element with its data key and resolved
+device-pixel box. `vellumplot` compiles a plot spec into such a scene,
+and `vellumwidget` hosts that same scene in a browser, reading the table
+instead of re-drawing anything. So one specification yields a static
+figure, a vector file, and an interactive widget that cannot disagree
+about geometry, because there is a single solved layout behind all
+three.
+
+For the longer argument, see [a critical appraisal of
+grid](https://r-vellum.github.io/vellumverse/articles/grid-critique.html)
+and [vellum’s design
+principles](https://r-vellum.github.io/vellumverse/articles/design-principles.html).
 
 ## Installation
 
@@ -55,8 +71,8 @@ vplot(df) |>                                     # vellumplot: grammar of graphi
 ```
 
 `vplot()`, `mark_point()`, and the scales come from **vellumplot**;
-`as_widget()` comes from **vellumwidget**; both compile down to a **vellum**
-scene.
+`as_widget()` comes from **vellumwidget**; both compile down to a
+**vellum** scene.
 
 ## Helpers
 
