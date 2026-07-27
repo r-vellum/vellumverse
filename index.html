@@ -137,6 +137,8 @@
 </tbody>
 </table>
 <p><code>vellum</code> is the parchment, <code>vellumplot</code> is the pen, and <code>vellumwidget</code> is the annotation revealed on the page.</p>
+<p>The three share one seam, and it is what makes them worth using together. <code>vellum</code> measures text and solves layout without a device, so a compiled scene can report where every element landed: <code>scene_model()</code> gives one row per drawn element with its data key and resolved device-pixel box. <code>vellumplot</code> compiles a plot spec into such a scene, and <code>vellumwidget</code> hosts that same scene in a browser, reading the table instead of re-drawing anything. So one specification yields a static figure, a vector file, and an interactive widget that cannot disagree about geometry, because there is a single solved layout behind all three.</p>
+<p>For the longer argument, see <a href="https://r-vellum.github.io/vellumverse/articles/grid-critique.html">a critical appraisal of grid</a> and <a href="https://r-vellum.github.io/vellumverse/articles/design-principles.html">vellum’s design principles</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>

@@ -29,7 +29,7 @@ The parchment, the pen, and the annotation each have a name:
 
 | layer | package | what it is | the tidyverse analogue |
 |----|----|----|----|
-| backend | **vellum** | a retained scene graph, unit/layout engine, and PNG/SVG/PDF renderer, with a Rust engine | `grid` |
+| backend | **vellum** | a scene graph, unit/layout engine, and PNG/SVG/PDF renderer that also reports the geometry it resolved | `grid` |
 | grammar | **vellumplot** | a pipe-first grammar of graphics that *compiles* a plot spec into a vellum scene | `ggplot2` |
 | interaction | **vellumwidget** | turns a vellum scene into a self-contained interactive HTML widget | `htmlwidgets` |
 
@@ -42,8 +42,16 @@ stack.
 ## vellum: the parchment
 
 `vellum` is the foundation. You describe a scene with a small
-declarative API and render it; the scene graph, layout, and drawing run
-in Rust, and the same scene renders to raster or vector.
+declarative API and render it. Because it measures text and solves
+layout in process rather than asking a device, one solved scene draws to
+raster or vector with the same geometry — and, once solved, it can tell
+you that geometry:
+[`scene_model()`](https://r-vellum.github.io/vellum/reference/scene_model.html)
+returns a row per drawn element with its data key and device-pixel box,
+and
+[`hit_test()`](https://r-vellum.github.io/vellum/reference/hit_test.html)
+says which node is under a point. That read-back is what the layer above
+the grammar is built on.
 
 ``` r
 

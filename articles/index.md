@@ -33,8 +33,9 @@
 - [Performance and big
   data](https://r-vellum.github.io/vellumverse/articles/performance.md):
 
-  Why the ecosystem stays fast as data grows, and how datashade renders
-  millions of points by aggregating before it draws.
+  What the compile-once design does and does not buy you, and how
+  datashade draws millions of points by aggregating before it draws
+  anything.
 
 - [Extending the
   ecosystem](https://r-vellum.github.io/vellumverse/articles/extending-the-ecosystem.md):

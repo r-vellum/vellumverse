@@ -1,12 +1,17 @@
 # Performance and big data
 
-Two things make plotting slow at scale: computing the layout, and
-drawing one graphical object per data point. The vellum ecosystem
-attacks both. The scene graph, layout, and rendering run in a Rust
-engine rather than in R, and for the case where the data has more points
-than the screen has pixels,
-[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
-aggregates the data into an image *before* anything is drawn.
+Two things make plotting slow at scale: solving the layout, and drawing
+one mark per data point. This article is about the second, which is
+where the large wins are, and it is honest about the first.
+
+Moving the scene graph, layout, and rendering into a compiled engine
+helps, but it is an ordinary constant-factor improvement, not the reason
+to choose this stack — `grid` on a modern machine is not slow for a
+normal plot either. The change in *kind* comes from
+[`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html):
+when the data has more points than the output has pixels, it aggregates
+into an image before anything is drawn, so cost stops tracking the row
+count altogether.
 
 ## Where the time goes, and doesn’t
 
@@ -146,8 +151,8 @@ than you expect:
 
 ``` r
 
-why_size(s)             # explain what is driving a scene's rendered size
-vl_clear_render_cache() # drop cached render state
+why_size(s, "panel")    # a named node's resolved size, and what determined it
+vl_clear_render_cache() # drop cached compile/raster state
 ```
 
 For scenes with an expensive sub-tree that is drawn repeatedly, a
@@ -156,8 +161,9 @@ viewport can cache its rendered content with
 
 ## Summary
 
-- The engine (scene graph, layout, render) runs in Rust, so per-plot R
-  overhead is building the spec.
+- The engine (scene graph, layout, render) runs in compiled code, so the
+  R-side cost of a plot is building the spec. Useful, but a constant
+  factor.
 - [`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html)
   / `mark_datashade()` render arbitrarily many points in time
   proportional to the image size, by aggregating to a density raster

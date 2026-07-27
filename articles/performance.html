@@ -110,7 +110,8 @@
 
 
 
-    <p>Two things make plotting slow at scale: computing the layout, and drawing one graphical object per data point. The vellum ecosystem attacks both. The scene graph, layout, and rendering run in a Rust engine rather than in R, and for the case where the data has more points than the screen has pixels, <code><a href="https://r-vellum.github.io/vellum/reference/datashade.html" class="external-link">datashade()</a></code> aggregates the data into an image <em>before</em> anything is drawn.</p>
+    <p>Two things make plotting slow at scale: solving the layout, and drawing one mark per data point. This article is about the second, which is where the large wins are, and it is honest about the first.</p>
+<p>Moving the scene graph, layout, and rendering into a compiled engine helps, but it is an ordinary constant-factor improvement, not the reason to choose this stack — <code>grid</code> on a modern machine is not slow for a normal plot either. The change in <em>kind</em> comes from <code><a href="https://r-vellum.github.io/vellum/reference/datashade.html" class="external-link">datashade()</a></code>: when the data has more points than the output has pixels, it aggregates into an image before anything is drawn, so cost stops tracking the row count altogether.</p>
 <section class="level2"><h2 id="where-the-time-goes-and-doesnt">Where the time goes, and doesn’t<a class="anchor" aria-label="anchor" href="#where-the-time-goes-and-doesnt"></a>
 </h2>
 <p>In a <code>grid</code>-based stack, a plot’s display list is replayed on every resize, text has to be measured against whatever device is current, and every unit in the tree re-resolves each time. (Point marks themselves are not one grob per point: <code>ggplot2</code> emits one <code>pointsGrob</code> with vectors, as it should. The per-point cost is in the engine’s draw loop and in whatever the device does with each symbol.) <code>vellum</code> moves that work down into Rust: metrics are available at construction time, layout is a single explicit pass, and one render walk emits the chosen backend. The consequence for performance is that the R-side cost of a plot is building the spec, which is cheap; the drawing cost is paid once, in compiled code.</p>
@@ -194,14 +195,14 @@
 <p><code>vellum</code> ships a couple of tools for when a plot is larger or slower than you expect:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/why_size.html" class="external-link">why_size</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>             <span class="co"># explain what is driving a scene's rendered size</span></span>
-<span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_clear_render_cache.html" class="external-link">vl_clear_render_cache</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># drop cached render state</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/why_size.html" class="external-link">why_size</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"panel"</span><span class="op">)</span>    <span class="co"># a named node's resolved size, and what determined it</span></span>
+<span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_clear_render_cache.html" class="external-link">vl_clear_render_cache</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># drop cached compile/raster state</span></span></code></pre></div>
 </div>
 <p>For scenes with an expensive sub-tree that is drawn repeatedly, a viewport can cache its rendered content with <code>vl_viewport(..., cache = TRUE)</code>, so the work is done once and reused.</p>
 </section><section class="level2"><h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
 <ul>
-<li>The engine (scene graph, layout, render) runs in Rust, so per-plot R overhead is building the spec.</li>
+<li>The engine (scene graph, layout, render) runs in compiled code, so the R-side cost of a plot is building the spec. Useful, but a constant factor.</li>
 <li>
 <code><a href="https://r-vellum.github.io/vellum/reference/datashade.html" class="external-link">datashade()</a></code> / <code>mark_datashade()</code> render arbitrarily many points in time proportional to the image size, by aggregating to a density raster before drawing.</li>
 <li>

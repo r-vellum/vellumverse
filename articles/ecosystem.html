@@ -146,7 +146,7 @@
 <tr class="odd">
 <td>backend</td>
 <td><strong>vellum</strong></td>
-<td>a retained scene graph, unit/layout engine, and PNG/SVG/PDF renderer, with a Rust engine</td>
+<td>a scene graph, unit/layout engine, and PNG/SVG/PDF renderer that also reports the geometry it resolved</td>
 <td><code>grid</code></td>
 </tr>
 <tr class="even">
@@ -166,7 +166,7 @@
 <p>The important word is <strong>compiles</strong>. A <code>vellumplot</code> plot is not drawn as you build it; it is an inspectable specification that is turned into a <code>vellum</code> scene only when it is printed, rendered, or handed to <code>vellumwidget</code>. Everything below is therefore one scene passing down the stack.</p>
 </section><section class="level2"><h2 id="vellum-the-parchment">vellum: the parchment<a class="anchor" aria-label="anchor" href="#vellum-the-parchment"></a>
 </h2>
-<p><code>vellum</code> is the foundation. You describe a scene with a small declarative API and render it; the scene graph, layout, and drawing run in Rust, and the same scene renders to raster or vector.</p>
+<p><code>vellum</code> is the foundation. You describe a scene with a small declarative API and render it. Because it measures text and solves layout in process rather than asking a device, one solved scene draws to raster or vector with the same geometry — and, once solved, it can tell you that geometry: <code><a href="https://r-vellum.github.io/vellum/reference/scene_model.html" class="external-link">scene_model()</a></code> returns a row per drawn element with its data key and device-pixel box, and <code><a href="https://r-vellum.github.io/vellum/reference/hit_test.html" class="external-link">hit_test()</a></code> says which node is under a point. That read-back is what the layer above the grammar is built on.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_scene.html" class="external-link">vl_scene</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">4</span>, height <span class="op">=</span> <span class="fl">2.4</span>, bg <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
