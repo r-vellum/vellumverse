@@ -25,7 +25,9 @@ vellumverse_conflicts()
 #> ── Conflicts ──────────────────────────────────────── vellumverse_conflicts() ──
 #> ✖ vellumplot::linear_gradient masks vellum
 #> ✖ vellumplot::md              masks vellum
+#> ✖ vellumplot::pdf_pages       masks vellum
 #> ✖ vellumplot::radial_gradient masks vellum
+#> ✖ vellumplot::render_all      masks vellum
 #> ✖ vellumplot::sketch          masks vellum
 #> ✖ vellumplot::vl_pattern      masks vellum
 ```
