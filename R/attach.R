@@ -30,16 +30,18 @@ same_library <- function(pkg) {
   library(pkg, lib.loc = loc, character.only = TRUE, warn.conflicts = FALSE)
 }
 
-vellumverse_attach <- function() {
+vellumverse_attach <- function(quiet = FALSE) {
   to_load <- core_unloaded()
   if (length(to_load) == 0) {
     return(invisible())
   }
 
-  cli::cli_inform(
-    vellumverse_attach_message(to_load),
-    class = "packageStartupMessage"
-  )
+  if (!quiet) {
+    cli::cli_inform(
+      vellumverse_attach_message(to_load),
+      class = "packageStartupMessage"
+    )
+  }
 
   suppressPackageStartupMessages(
     lapply(to_load, same_library)

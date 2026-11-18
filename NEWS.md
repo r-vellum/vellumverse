@@ -1,5 +1,12 @@
 # vellumverse (development version)
 
+* **`options(vellumverse.quiet = TRUE)` no longer stops the core packages from
+  being attached.** The option returned from the attach hook before anything
+  was loaded, so `library(vellumverse)` put only vellumverse itself on the
+  search path. As in tidyverse, the option now only silences the startup
+  banner and the conflict report; vellum, vellumplot and vellumwidget are
+  attached either way.
+
 # vellumverse 0.3.3
 
 * Bumped the pinned ecosystem versions to the latest releases: vellum
