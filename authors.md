@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/r-vellum/vellumverse/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/r-vellum/vellumverse/blob/v0.3.4/DESCRIPTION)
 
 Schoch D (2026). *vellumverse: Easily Install and Load the 'Vellum'
 Graphics Ecosystem*. R package version 0.3.4,
