@@ -1,5 +1,7 @@
 # Changelog
 
+## vellumverse (development version)
+
 ## vellumverse 0.3.5
 
 - Bumped the pinned vellumplot version to the latest release (\>=
