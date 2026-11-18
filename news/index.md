@@ -1,6 +1,11 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.5
+
+- Bumped the pinned vellumplot version to the latest release (\>=
+  0.11.0), which brings the `group` aesthetic, dodge/stack for every
+  mark, and ggplot2 `color`/`fill` semantics on box plots, violins and
+  ridgelines.
 
 ## vellumverse 0.3.4
 
