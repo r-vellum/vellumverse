@@ -25,7 +25,8 @@ Imports:
     utils,
     vellum (>= 0.6.6)
 Suggests:
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Remotes:
     r-vellum/vellumwidget,
     r-vellum/vellumplot,
