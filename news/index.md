@@ -1,6 +1,12 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.6
+
+- Bumped the pinned versions to the latest releases: vellum (\>= 0.7.2),
+  vellumplot (\>= 0.11.1) and vellumwidget (\>= 0.9.1). Every geometry
+  query and the widget now pick what is actually drawn (a polygon’s hole
+  is no longer a hit, offset and capped lines are picked where they are
+  drawn), and PNG, SVG and PDF agree on dashes and pattern strokes.
 
 ## vellumverse 0.3.5
 
