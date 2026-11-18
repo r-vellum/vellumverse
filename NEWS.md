@@ -1,4 +1,7 @@
-# vellumverse (development version)
+# vellumverse 0.3.4
+
+* Bumped the pinned ecosystem versions to the latest releases: vellum
+  (>= 0.7.1), vellumplot (>= 0.10.0), and vellumwidget (>= 0.9.0).
 
 * **`options(vellumverse.quiet = TRUE)` no longer stops the core packages from
   being attached.** The option returned from the attach hook before anything
