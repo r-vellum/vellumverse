@@ -6,9 +6,15 @@
 #' `tidyverse::tidyverse_conflicts()`, and is also reported automatically
 #' when `vellumverse` is attached.
 #'
-#' @return An S3 object of class `"vellumverse_conflicts"`, a named list
-#'   mapping each conflicted function to the packages that export it (in
-#'   search-path order). Has a print method.
+#' Overlaps *within* the ecosystem (a vellumplot function masking a vellum
+#' function of the same name that does something different, such as
+#' `pdf_pages()`) are by design: they are summarised on a single line rather
+#' than listed as conflicts. Identical re-exports are not reported at all.
+#'
+#' @return An S3 object of class `"vellumverse_conflicts"`, a named list with
+#'   one entry per conflicted function: its `name`, the `pkgs` that export it
+#'   (in search-path order), and `family`, `TRUE` when every one of those
+#'   packages belongs to the vellum ecosystem. Has a print method.
 #' @export
 #' @examples
 #' vellumverse_conflicts()
@@ -38,25 +44,55 @@ vellumverse_conflict_message <- function(x) {
     return(NULL)
   }
 
-  header <- cli::rule(
-    left = cli::style_bold("Conflicts"),
-    right = "vellumverse_conflicts()"
+  family <- vapply(x, function(conflict) isTRUE(conflict$family), logical(1))
+  external <- x[!family]
+
+  lines <- NULL
+  if (length(external)) {
+    header <- cli::rule(
+      left = cli::style_bold("Conflicts"),
+      right = "vellumverse_conflicts()"
+    )
+
+    pkgs <- lapply(external, function(conflict) conflict$pkgs)
+    others <- lapply(pkgs, function(p) p[-1])
+    winner <- vapply(pkgs, function(p) p[[1]], character(1))
+    funs <- format(vapply(external, function(conflict) conflict$name, character(1)))
+    pkg_names <- vapply(others, function(p) {
+      paste0(cli::col_blue(p), collapse = ", ")
+    }, character(1))
+
+    lines <- c(
+      header,
+      paste0(
+        cli::col_red(cli::symbol$cross), " ",
+        cli::col_blue(winner), "::", funs, " masks ", pkg_names
+      )
+    )
+  }
+
+  c(lines, family_conflict_line(x[family]))
+}
+
+# One line summarising the overlaps inside the ecosystem (e.g. vellumplot's
+# pdf_pages() masking vellum's), which are by design and not worth a line each.
+family_conflict_line <- function(x) {
+  if (length(x) == 0) {
+    return(NULL)
+  }
+  winners <- vapply(x, function(conflict) conflict$pkgs[[1]], character(1))
+  masked <- unique(unlist(lapply(x, function(conflict) conflict$pkgs[-1])))
+  funs <- paste0(
+    cli::col_blue(winners), "::",
+    vapply(x, function(conflict) conflict$name, character(1)), "()"
   )
-
-  pkgs <- lapply(x, function(conflict) conflict$pkgs)
-  others <- lapply(pkgs, function(p) p[-1])
-  winner <- vapply(pkgs, function(p) p[[1]], character(1))
-  funs <- format(vapply(x, function(conflict) conflict$name, character(1)))
-  pkg_names <- vapply(others, function(p) {
-    paste0(cli::col_blue(p), collapse = ", ")
-  }, character(1))
-
-  lines <- paste0(
-    cli::col_red(cli::symbol$cross), " ",
-    cli::col_blue(winner), "::", funs, " masks ", pkg_names
+  paste0(
+    cli::col_cyan(cli::symbol$info), " ",
+    "Within the family, ", paste(funs, collapse = ", "),
+    " mask", if (length(x) == 1) "s" else "", " ",
+    paste(cli::col_blue(masked), collapse = ", "), "'s version",
+    if (length(x) == 1) "" else "s", " (by design)."
   )
-
-  c(header, lines)
 }
 
 confirm_conflict <- function(name, conflicts) {
@@ -74,7 +110,12 @@ confirm_conflict <- function(name, conflicts) {
     return(NULL)
   }
 
-  list(name = name, pkgs = gsub("^package:", "", pkgs))
+  pkgs <- gsub("^package:", "", pkgs)
+  list(
+    name = name,
+    pkgs = pkgs,
+    family = all(pkgs %in% vellumverse_packages())
+  )
 }
 
 #' @export

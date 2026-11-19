@@ -182,8 +182,8 @@ This is the one complaint on this page that applies squarely to `vellum` as well
 so it should not be filed as a `grid` problem. Styling in the vellum ecosystem
 means meeting `vl_gpar()` at the primitive level, `style()` for a reusable named
 bundle of those parameters, `theme()` plus the `element_*()` family and the
-`theme_*()` presets at the grammar level, and `tooltip_style` and friends (which
-are CSS) once a scene becomes an interactive widget. Four layers, and the same
+`theme_*()` presets at the grammar level, and `tooltip_options(style =)` and
+friends (which are CSS) once a scene becomes an interactive widget. Four layers, and the same
 question ("make this figure use one font") still lands in more than one of them.
 
 There is a defence, and it is worth separating from an excuse. The layers are at
