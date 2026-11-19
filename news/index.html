@@ -64,7 +64,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="vellumverse-development-version">vellumverse (development version)<a class="anchor" aria-label="anchor" href="#vellumverse-development-version"></a></h2>
-</div>
+<ul><li>
+<code><a href="https://r-vellum.github.io/vellumverse/">library(vellumverse)</a></code> no longer reports a block of conflicts inside the family. vellumplot now re-exports vellum’s <code><a href="https://r-vellum.github.io/vellum/reference/md.html" class="external-link">md()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/vl_pattern.html" class="external-link">vl_pattern()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/sketch.html" class="external-link">sketch()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/gradients.html" class="external-link">linear_gradient()</a></code> and <code><a href="https://r-vellum.github.io/vellum/reference/gradients.html" class="external-link">radial_gradient()</a></code> rather than wrapping them, so those are identical and not reported at all. The two that genuinely differ, vellumplot’s <code><a href="https://r-vellum.github.io/vellum/reference/pdf_pages.html" class="external-link">pdf_pages()</a></code> and <code><a href="https://r-vellum.github.io/vellum/reference/render_all.html" class="external-link">render_all()</a></code>, are summarised on one line. Conflicts with packages outside the family are listed as before. <code><a href="../reference/vellumverse_conflicts.html">vellumverse_conflicts()</a></code> entries gain a <code>family</code> flag (VV-2).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.7" id="vellumverse-037">vellumverse 0.3.7<a class="anchor" aria-label="anchor" href="#vellumverse-037"></a></h2>
 <ul><li>Bumped the pinned versions to the latest releases: vellum (&gt;= 0.8.0), vellumplot (&gt;= 0.12.0) and vellumwidget (&gt;= 0.10.0).

@@ -2,6 +2,25 @@
 
 ## vellumverse (development version)
 
+- [`library(vellumverse)`](https://r-vellum.github.io/vellumverse/) no
+  longer reports a block of conflicts inside the family. vellumplot now
+  re-exports vellum’s
+  [`md()`](https://r-vellum.github.io/vellum/reference/md.html),
+  [`vl_pattern()`](https://r-vellum.github.io/vellum/reference/vl_pattern.html),
+  [`sketch()`](https://r-vellum.github.io/vellum/reference/sketch.html),
+  [`linear_gradient()`](https://r-vellum.github.io/vellum/reference/gradients.html)
+  and
+  [`radial_gradient()`](https://r-vellum.github.io/vellum/reference/gradients.html)
+  rather than wrapping them, so those are identical and not reported at
+  all. The two that genuinely differ, vellumplot’s
+  [`pdf_pages()`](https://r-vellum.github.io/vellum/reference/pdf_pages.html)
+  and
+  [`render_all()`](https://r-vellum.github.io/vellum/reference/render_all.html),
+  are summarised on one line. Conflicts with packages outside the family
+  are listed as before.
+  [`vellumverse_conflicts()`](https://r-vellum.github.io/vellumverse/reference/vellumverse_conflicts.md)
+  entries gain a `family` flag (VV-2).
+
 ## vellumverse 0.3.7
 
 - Bumped the pinned versions to the latest releases: vellum (\>= 0.8.0),

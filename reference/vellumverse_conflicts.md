@@ -14,20 +14,22 @@ vellumverse_conflicts()
 
 ## Value
 
-An S3 object of class `"vellumverse_conflicts"`, a named list mapping
-each conflicted function to the packages that export it (in search-path
-order). Has a print method.
+An S3 object of class `"vellumverse_conflicts"`, a named list with one
+entry per conflicted function: its `name`, the `pkgs` that export it (in
+search-path order), and `family`, `TRUE` when every one of those
+packages belongs to the vellum ecosystem. Has a print method.
+
+## Details
+
+Overlaps *within* the ecosystem (a vellumplot function masking a vellum
+function of the same name that does something different, such as
+`pdf_pages()`) are by design: they are summarised on a single line
+rather than listed as conflicts. Identical re-exports are not reported
+at all.
 
 ## Examples
 
 ``` r
 vellumverse_conflicts()
-#> ── Conflicts ──────────────────────────────────────── vellumverse_conflicts() ──
-#> ✖ vellumplot::linear_gradient masks vellum
-#> ✖ vellumplot::md              masks vellum
-#> ✖ vellumplot::pdf_pages       masks vellum
-#> ✖ vellumplot::radial_gradient masks vellum
-#> ✖ vellumplot::render_all      masks vellum
-#> ✖ vellumplot::sketch          masks vellum
-#> ✖ vellumplot::vl_pattern      masks vellum
+#> ℹ Within the family, vellumplot::pdf_pages(), vellumplot::render_all() mask vellum's versions (by design).
 ```

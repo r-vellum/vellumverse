@@ -86,22 +86,23 @@ when <code>vellumverse</code> is attached.</p>
 
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An S3 object of class <code>"vellumverse_conflicts"</code>, a named list
-mapping each conflicted function to the packages that export it (in
-search-path order). Has a print method.</p>
+    <p>An S3 object of class <code>"vellumverse_conflicts"</code>, a named list with
+one entry per conflicted function: its <code>name</code>, the <code>pkgs</code> that export it
+(in search-path order), and <code>family</code>, <code>TRUE</code> when every one of those
+packages belongs to the vellum ecosystem. Has a print method.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Overlaps <em>within</em> the ecosystem (a vellumplot function masking a vellum
+function of the same name that does something different, such as
+<code>pdf_pages()</code>) are by design: they are summarised on a single line rather
+than listed as conflicts. Identical re-exports are not reported at all.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">vellumverse_conflicts</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Conflicts</span> ──────────────────────────────────────── vellumverse_conflicts() ──</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">vellumplot</span>::linear_gradient masks <span style="color: #0000BB;">vellum</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">vellumplot</span>::md              masks <span style="color: #0000BB;">vellum</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">vellumplot</span>::pdf_pages       masks <span style="color: #0000BB;">vellum</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">vellumplot</span>::radial_gradient masks <span style="color: #0000BB;">vellum</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">vellumplot</span>::render_all      masks <span style="color: #0000BB;">vellum</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">vellumplot</span>::sketch          masks <span style="color: #0000BB;">vellum</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">vellumplot</span>::vl_pattern      masks <span style="color: #0000BB;">vellum</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Within the family, <span style="color: #0000BB;">vellumplot</span>::pdf_pages(), <span style="color: #0000BB;">vellumplot</span>::render_all() mask <span style="color: #0000BB;">vellum</span>'s versions (by design).</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

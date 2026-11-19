@@ -201,9 +201,9 @@ at the primitive level,
 [`style()`](https://r-vellum.github.io/vellum/reference/style.html) for
 a reusable named bundle of those parameters, `theme()` plus the
 `element_*()` family and the `theme_*()` presets at the grammar level,
-and `tooltip_style` and friends (which are CSS) once a scene becomes an
-interactive widget. Four layers, and the same question (“make this
-figure use one font”) still lands in more than one of them.
+and `tooltip_options(style =)` and friends (which are CSS) once a scene
+becomes an interactive widget. Four layers, and the same question (“make
+this figure use one font”) still lands in more than one of them.
 
 There is a defence, and it is worth separating from an excuse. The
 layers are at least ordered rather than parallel:
