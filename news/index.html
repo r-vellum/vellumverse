@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">vellumverse</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="vellumverse-development-version">vellumverse (development version)<a class="anchor" aria-label="anchor" href="#vellumverse-development-version"></a></h2>
-<ul><li>
+<h2 class="pkg-version" data-toc-text="0.3.8" id="vellumverse-038">vellumverse 0.3.8<a class="anchor" aria-label="anchor" href="#vellumverse-038"></a></h2>
+<ul><li>Bumped the pinned versions to the latest releases: vellum (&gt;= 0.8.1), vellumplot (&gt;= 0.13.0) and vellumwidget (&gt;= 0.11.0).
+<ul><li>vellum 0.8.1 writes smaller SVG and gives SVG ids that are stable across renders and unique between plots on one page.</li>
+<li>vellumplot 0.13.0 closes many ggplot2 parity gaps: histogram binning, <code>mark_freqpoly()</code>, <code>mark_summary(fun.data)</code>, horizontal box plots and violins, facet labellers, <code>scale_*_discrete(breaks, labels, drop)</code>, <code>oob</code>, and legends inside the panel. Several defaults now match ggplot2; see its NEWS under “Behaviour changes”.</li>
+<li>vellumwidget 0.11.0 groups <code>as_widget()</code> settings into option helpers (<code>tooltip_options()</code>, <code>export_options()</code>, <code>navigator_options()</code>, <code>render_options()</code>), reports zoom per panel, and fixes linking after a group change.</li>
+</ul></li>
+<li>
 <code><a href="https://r-vellum.github.io/vellumverse/">library(vellumverse)</a></code> no longer reports a block of conflicts inside the family. vellumplot now re-exports vellum’s <code><a href="https://r-vellum.github.io/vellum/reference/md.html" class="external-link">md()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/vl_pattern.html" class="external-link">vl_pattern()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/sketch.html" class="external-link">sketch()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/gradients.html" class="external-link">linear_gradient()</a></code> and <code><a href="https://r-vellum.github.io/vellum/reference/gradients.html" class="external-link">radial_gradient()</a></code> rather than wrapping them, so those are identical and not reported at all. The two that genuinely differ, vellumplot’s <code><a href="https://r-vellum.github.io/vellum/reference/pdf_pages.html" class="external-link">pdf_pages()</a></code> and <code><a href="https://r-vellum.github.io/vellum/reference/render_all.html" class="external-link">render_all()</a></code>, are summarised on one line. Conflicts with packages outside the family are listed as before. <code><a href="../reference/vellumverse_conflicts.html">vellumverse_conflicts()</a></code> entries gain a <code>family</code> flag (VV-2).</li>
 </ul></div>
     <div class="section level2">
