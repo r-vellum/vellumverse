@@ -52,3 +52,54 @@ test_that("without vellumverse.quiet the banner names the packages", {
   expect_message(.onAttach(NULL, "vellumverse"), "Attaching packages")
   expect_equal(attached, "vellum")
 })
+
+.fake_conflicts <- function(...) {
+  x <- list(...)
+  structure(
+    stats::setNames(x, vapply(x, function(c) c$name, character(1))),
+    class = "vellumverse_conflicts"
+  )
+}
+
+test_that("conflicts inside the family are summarised on one line", {
+  x <- .fake_conflicts(
+    list(name = "pdf_pages", pkgs = c("vellumplot", "vellum"), family = TRUE),
+    list(name = "render_all", pkgs = c("vellumplot", "vellum"), family = TRUE)
+  )
+  msg <- cli::ansi_strip(vellumverse_conflict_message(x))
+  expect_length(msg, 1L)
+  expect_match(msg, "Within the family")
+  expect_match(msg, "vellumplot::pdf_pages(), vellumplot::render_all()", fixed = TRUE)
+  expect_match(msg, "mask vellum's versions (by design)", fixed = TRUE)
+  expect_false(any(grepl("Conflicts", msg)))
+})
+
+test_that("a single family overlap reads in the singular", {
+  x <- .fake_conflicts(
+    list(name = "pdf_pages", pkgs = c("vellumplot", "vellum"), family = TRUE)
+  )
+  msg <- cli::ansi_strip(vellumverse_conflict_message(x))
+  expect_match(msg, "masks vellum's version (by design)", fixed = TRUE)
+})
+
+test_that("conflicts with other packages are still listed one per line", {
+  x <- .fake_conflicts(
+    list(name = "filter", pkgs = c("vellumplot", "stats"), family = FALSE),
+    list(name = "pdf_pages", pkgs = c("vellumplot", "vellum"), family = TRUE)
+  )
+  msg <- cli::ansi_strip(vellumverse_conflict_message(x))
+  expect_match(msg[[1]], "Conflicts")
+  expect_true(any(grepl("vellumplot::filter masks stats", msg, fixed = TRUE)))
+  expect_false(any(grepl("pdf_pages masks", msg, fixed = TRUE)))
+  expect_match(msg[[length(msg)]], "Within the family")
+})
+
+test_that("vellumverse_conflicts() flags family-only conflicts", {
+  x <- vellumverse_conflicts()
+  for (conflict in x) {
+    expect_identical(
+      conflict$family,
+      all(conflict$pkgs %in% vellumverse_packages())
+    )
+  }
+})

@@ -7,9 +7,10 @@
 vellumverse_conflicts()
 }
 \value{
-An S3 object of class \code{"vellumverse_conflicts"}, a named list
-mapping each conflicted function to the packages that export it (in
-search-path order). Has a print method.
+An S3 object of class \code{"vellumverse_conflicts"}, a named list with
+one entry per conflicted function: its \code{name}, the \code{pkgs} that export it
+(in search-path order), and \code{family}, \code{TRUE} when every one of those
+packages belongs to the vellum ecosystem. Has a print method.
 }
 \description{
 \code{vellumverse_conflicts()} lists every function exported by a core
@@ -17,6 +18,12 @@ vellum-ecosystem package that is masked by, or masks, a function of the
 same name attached elsewhere on the search path. It is the equivalent of
 \code{tidyverse::tidyverse_conflicts()}, and is also reported automatically
 when \code{vellumverse} is attached.
+}
+\details{
+Overlaps \emph{within} the ecosystem (a vellumplot function masking a vellum
+function of the same name that does something different, such as
+\code{pdf_pages()}) are by design: they are summarised on a single line rather
+than listed as conflicts. Identical re-exports are not reported at all.
 }
 \examples{
 vellumverse_conflicts()

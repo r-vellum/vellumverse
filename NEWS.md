@@ -1,5 +1,13 @@
 # vellumverse (development version)
 
+* `library(vellumverse)` no longer reports a block of conflicts inside the
+  family. vellumplot now re-exports vellum's `md()`, `vl_pattern()`,
+  `sketch()`, `linear_gradient()` and `radial_gradient()` rather than wrapping
+  them, so those are identical and not reported at all. The two that genuinely
+  differ, vellumplot's `pdf_pages()` and `render_all()`, are summarised on one
+  line. Conflicts with packages outside the family are listed as before.
+  `vellumverse_conflicts()` entries gain a `family` flag (VV-2).
+
 
 # vellumverse 0.3.7
 
