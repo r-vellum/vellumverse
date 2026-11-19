@@ -1,5 +1,17 @@
 # Changelog
 
+## vellumverse 0.3.9
+
+- Bumped the vellumplot pin to the latest release, vellumplot (\>=
+  0.14.0). vellumplot 0.14.0 adds ggplot2’s remaining common scale
+  constructors (manual shape/linetype/size/alpha, hue, grey, fermenter,
+  log10/sqrt/reverse and more), new marks (`mark_rect()`,
+  `mark_polygon()`, `mark_path()`, `mark_curve()`, `mark_spoke()`,
+  `mark_density_2d()`, `mark_quantile()`), `guide_axis()`, and
+  independent colour/size legends per facet panel via `resolve_scale()`.
+  A `color` given with a `fill` now outlines filled marks, as in
+  ggplot2; see its NEWS under “Behaviour changes”.
+
 ## vellumverse 0.3.8
 
 - Bumped the pinned versions to the latest releases: vellum (\>= 0.8.1),
