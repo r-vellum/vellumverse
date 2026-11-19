@@ -1,5 +1,17 @@
-# vellumverse (development version)
+# vellumverse 0.3.7
 
+* Bumped the pinned versions to the latest releases: vellum (>= 0.8.0),
+  vellumplot (>= 0.12.0) and vellumwidget (>= 0.10.0).
+  * vellum 0.8.0 has one breaking change: a bare number now means `"npc"`
+    in every constructor. `lines_grob()`, `polygon_grob()`,
+    `segments_grob()`, `path_grob()` and the curve and hexagon/sector size
+    arguments used `"native"`. Pass `default_units = "native"` for the old
+    behaviour. Inputs are now validated with clear errors.
+  * vellumplot 0.12.0 adds `select_interval()`, bivariate choropleths,
+    tapered mapped linewidth, `spec_diagnose()` and `rel()`. It also fixes
+    stacking, NA categories and facets, legend merging, and date breaks.
+  * vellumwidget 0.10.0 adds a data-value brush and re-ticks log, date and
+    discrete axes under zoom.
 
 # vellumverse 0.3.6
 
