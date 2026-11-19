@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">vellumverse</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.6.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="vellumverse-development-version">vellumverse (development version)<a class="anchor" aria-label="anchor" href="#vellumverse-development-version"></a></h2>
-</div>
+<h2 class="pkg-version" data-toc-text="0.3.7" id="vellumverse-037">vellumverse 0.3.7<a class="anchor" aria-label="anchor" href="#vellumverse-037"></a></h2>
+<ul><li>Bumped the pinned versions to the latest releases: vellum (&gt;= 0.8.0), vellumplot (&gt;= 0.12.0) and vellumwidget (&gt;= 0.10.0).
+<ul><li>vellum 0.8.0 has one breaking change: a bare number now means <code>"npc"</code> in every constructor. <code><a href="https://r-vellum.github.io/vellum/reference/grob.html" class="external-link">lines_grob()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/grob.html" class="external-link">polygon_grob()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/grob.html" class="external-link">segments_grob()</a></code>, <code><a href="https://r-vellum.github.io/vellum/reference/grob.html" class="external-link">path_grob()</a></code> and the curve and hexagon/sector size arguments used <code>"native"</code>. Pass <code>default_units = "native"</code> for the old behaviour. Inputs are now validated with clear errors.</li>
+<li>vellumplot 0.12.0 adds <code>select_interval()</code>, bivariate choropleths, tapered mapped linewidth, <code>spec_diagnose()</code> and <code>rel()</code>. It also fixes stacking, NA categories and facets, legend merging, and date breaks.</li>
+<li>vellumwidget 0.10.0 adds a data-value brush and re-ticks log, date and discrete axes under zoom.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.6" id="vellumverse-036">vellumverse 0.3.6<a class="anchor" aria-label="anchor" href="#vellumverse-036"></a></h2>
 <ul><li>Bumped the pinned versions to the latest releases: vellum (&gt;= 0.7.2), vellumplot (&gt;= 0.11.1) and vellumwidget (&gt;= 0.9.1). Every geometry query and the widget now pick what is actually drawn (a polygon’s hole is no longer a hit, offset and capped lines are picked where they are drawn), and PNG, SVG and PDF agree on dashes and pattern strokes.</li>
