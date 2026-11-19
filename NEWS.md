@@ -1,4 +1,18 @@
-# vellumverse (development version)
+# vellumverse 0.3.8
+
+* Bumped the pinned versions to the latest releases: vellum (>= 0.8.1),
+  vellumplot (>= 0.13.0) and vellumwidget (>= 0.11.0).
+  * vellum 0.8.1 writes smaller SVG and gives SVG ids that are stable across
+    renders and unique between plots on one page.
+  * vellumplot 0.13.0 closes many ggplot2 parity gaps: histogram binning,
+    `mark_freqpoly()`, `mark_summary(fun.data)`, horizontal box plots and
+    violins, facet labellers, `scale_*_discrete(breaks, labels, drop)`, `oob`,
+    and legends inside the panel. Several defaults now match ggplot2; see its
+    NEWS under "Behaviour changes".
+  * vellumwidget 0.11.0 groups `as_widget()` settings into option helpers
+    (`tooltip_options()`, `export_options()`, `navigator_options()`,
+    `render_options()`), reports zoom per panel, and fixes linking after a
+    group change.
 
 * `library(vellumverse)` no longer reports a block of conflicts inside the
   family. vellumplot now re-exports vellum's `md()`, `vl_pattern()`,
