@@ -1,6 +1,24 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.11
+
+- Bumped the pinned versions to the latest releases: vellum (\>=
+  0.10.0), vellumplot (\>= 0.15.1) and vellumwidget (\>= 0.13.0).
+  - vellum 0.10.0 can render a scene’s marks and furniture as separate
+    layers
+    ([`scene_svg()`](https://r-vellum.github.io/vellum/reference/scene_svg.html)/[`scene_png()`](https://r-vellum.github.io/vellum/reference/scene_png.html)
+    `layer =`, including paint order) and export the marks as a display
+    list
+    ([`scene_display_list()`](https://r-vellum.github.io/vellum/reference/scene_display_list.html)).
+    Large scatter plots rasterise much faster.
+  - vellumplot 0.15.1 compiles big plots faster and no longer keys
+    `annotate()` layers just because the plot declares a selection.
+  - vellumwidget 0.13.0 makes large raster plots fully interactive: axis
+    zoom, the navigator and linked zoom work, zooming draws exact marks,
+    and zoomed in far enough the marks become real SVG nodes.
+    Selections, `condition()` and `filter_by()` show at every zoom
+    level, and the payload is up to 5x smaller. A 200k-point widget
+    builds in about 1.6 s instead of 7 s.
 
 ## vellumverse 0.3.10
 
