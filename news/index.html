@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">vellumverse</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.11.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="vellumverse-development-version">vellumverse (development version)<a class="anchor" aria-label="anchor" href="#vellumverse-development-version"></a></h2>
-</div>
+<h2 class="pkg-version" data-toc-text="0.3.12" id="vellumverse-0312">vellumverse 0.3.12<a class="anchor" aria-label="anchor" href="#vellumverse-0312"></a></h2>
+<ul><li>Bumped the pinned versions to the latest releases: vellum (&gt;= 0.10.1), vellumplot (&gt;= 0.16.0) and vellumwidget (&gt;= 0.13.1).
+<ul><li>vellum 0.10.1 errors clearly on a missing or non-finite text size instead of measuring it as a huge negative width on Linux (0 on macOS).</li>
+<li>vellumplot 0.16.0 adds <code>element_geom()</code>: themes set the default colours of unmapped marks, so <code>theme_cyberpunk()</code> no longer draws black points on its dark panel. Legends in aligned compositions follow their guide or theme position, and per-panel legends are collected when they would squeeze the panels. Several defaults now match ggplot2 or changed on purpose; see its NEWS under “Behaviour changes”: dodging splits each x between the groups present there, discrete alpha/size/linewidth group a layer, and default element keys name the panel, layer and row.</li>
+<li>vellumwidget 0.13.1 ships the new default keys as compactly as plain row numbers.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.11" id="vellumverse-0311">vellumverse 0.3.11<a class="anchor" aria-label="anchor" href="#vellumverse-0311"></a></h2>
 <ul><li>Bumped the pinned versions to the latest releases: vellum (&gt;= 0.10.0), vellumplot (&gt;= 0.15.1) and vellumwidget (&gt;= 0.13.0).

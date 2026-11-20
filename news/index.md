@@ -1,6 +1,23 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.12
+
+- Bumped the pinned versions to the latest releases: vellum (\>=
+  0.10.1), vellumplot (\>= 0.16.0) and vellumwidget (\>= 0.13.1).
+  - vellum 0.10.1 errors clearly on a missing or non-finite text size
+    instead of measuring it as a huge negative width on Linux (0 on
+    macOS).
+  - vellumplot 0.16.0 adds `element_geom()`: themes set the default
+    colours of unmapped marks, so `theme_cyberpunk()` no longer draws
+    black points on its dark panel. Legends in aligned compositions
+    follow their guide or theme position, and per-panel legends are
+    collected when they would squeeze the panels. Several defaults now
+    match ggplot2 or changed on purpose; see its NEWS under “Behaviour
+    changes”: dodging splits each x between the groups present there,
+    discrete alpha/size/linewidth group a layer, and default element
+    keys name the panel, layer and row.
+  - vellumwidget 0.13.1 ships the new default keys as compactly as plain
+    row numbers.
 
 ## vellumverse 0.3.11
 
