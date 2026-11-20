@@ -1,4 +1,20 @@
-# vellumverse (development version)
+# vellumverse 0.3.10
+
+* Bumped the pinned versions to the latest releases: vellum (>= 0.9.0),
+  vellumplot (>= 0.15.0) and vellumwidget (>= 0.12.0).
+  * vellum 0.9.0 writes one SVG element per filled-and-outlined shape (about
+    half the size for scatter plots) and adds a cached spatial index with
+    `vl_brush()` and `vl_lasso()` for region queries; `vl_nearest()` is much
+    faster.
+  * vellumplot 0.15.0 gives `color` and `fill` separate scales and legends, as
+    in ggplot2, and works alongside an attached ggplot2 again. It adds
+    brush-driven linked zoom (`bind_scale()`, `select_interval(bind =
+    "scales")`), legends beside each facet panel (`guide_legend(position =
+    "panel")`) and `guide_bins()`, and groups layers by all their discrete
+    aesthetics. Several defaults changed; see its NEWS under "Behaviour
+    changes".
+  * vellumwidget 0.12.0 supports one-element points and linked zoom, and fixes
+    zoomed gridlines, brushed lines and the selection colour on dark plots.
 
 # vellumverse 0.3.9
 

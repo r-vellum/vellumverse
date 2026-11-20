@@ -1,6 +1,6 @@
 Package: vellumverse
 Title: Easily Install and Load the 'Vellum' Graphics Ecosystem
-Version: 0.3.9.9000
+Version: 0.3.10
 Authors@R:
     person("David", "Schoch", , "david.schoch@cynkra.com", role = c("aut", "cre"))
 Description: The 'vellum' ecosystem is a set of packages for drawing in R
@@ -19,11 +19,11 @@ Depends:
     R (>= 4.2)
 Imports:
     cli,
-    vellumwidget (>= 0.11.0),
-    vellumplot (>= 0.14.0),
+    vellumwidget (>= 0.12.0),
+    vellumplot (>= 0.15.0),
     stats,
     utils,
-    vellum (>= 0.8.1)
+    vellum (>= 0.9.0)
 Suggests:
     testthat (>= 3.0.0),
     withr
