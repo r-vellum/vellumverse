@@ -1,4 +1,17 @@
-# vellumverse (development version)
+# vellumverse 0.3.13
+
+* Bumped the pinned versions to the latest releases: vellum (>= 0.11.0),
+  vellumplot (>= 0.17.0) and vellumwidget (>= 0.14.0).
+  * vellum 0.11.0 adds display-list version 2 (gradients, path clips, opacity
+    groups) and a flagged-marks layer, so the widget can draw more marks
+    exactly when zoomed.
+  * vellumplot 0.17.0 follows ggplot2's default area fill, recolours more
+    defaults on dark themes, fixes faceted dodging, graph facets and
+    jitterdodge, and lightens the default density fill. See its NEWS for the
+    behaviour changes.
+  * vellumwidget 0.14.0 exports conditions, filters and dimming as shown,
+    keeps furniture constant-size under axis zoom, and draws gradients, clips
+    and flagged marks in the zoomed tiers.
 
 # vellumverse 0.3.12
 
