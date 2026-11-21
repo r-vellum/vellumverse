@@ -1,4 +1,18 @@
-# vellumverse (development version)
+# vellumverse 0.3.16
+
+* Bumped the pinned versions to the latest releases: vellum (>= 0.13.0),
+  vellumplot (>= 0.18.0) and vellumwidget (>= 0.16.0).
+  * vellumplot 0.18.0: legend keys take the layer alpha (filled, point and
+    line keys), faceted flow maps keep each panel's own edges, flow-map
+    branches are keyed for hover and selection, and two `condition()`s on
+    one selection in different layers no longer collide.
+  * vellumwidget 0.16.0: the browser payload is about half its former size
+    (compact coordinates, binary keys, more tooltip patterns), zoom is
+    capped at 100x by default (`render_options(max_zoom =)`), `max_marks`
+    defaults to 2e6, rotated text and axis labels keep their rotation under
+    axis zoom, and labels drawn from images keep their size when zoomed.
+  * vellum 0.13.0: compact display-list coordinates, blend groups isolate
+    in PDF output, and a blend inside a cached viewport renders correctly.
 
 # vellumverse 0.3.15
 
