@@ -1,6 +1,17 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.15
+
+- Bumped the pinned versions to the latest releases: vellum (\>=
+  0.12.0), vellumplot (\>= 0.17.1) and vellumwidget (\>= 0.15.0).
+  - Interactive builds are faster: a 200k-point widget builds in about 1
+    s (1.5 s before), a 1M-point one in about 4.5 s (8.4 s before), and
+    faceted plots gain the most.
+  - The 200k-point widget payload is less than half its former size (6.1
+    MB to 2.7 MB): element keys ship once and repeated or numbered
+    tooltips are compressed. Hover text is unchanged.
+  - Large clouds of filled circles render faster and closer to exact in
+    PNG output.
 
 ## vellumverse 0.3.14
 

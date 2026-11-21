@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">vellumverse</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.14.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="vellumverse-development-version">vellumverse (development version)<a class="anchor" aria-label="anchor" href="#vellumverse-development-version"></a></h2>
-</div>
+<h2 class="pkg-version" data-toc-text="0.3.15" id="vellumverse-0315">vellumverse 0.3.15<a class="anchor" aria-label="anchor" href="#vellumverse-0315"></a></h2>
+<ul><li>Bumped the pinned versions to the latest releases: vellum (&gt;= 0.12.0), vellumplot (&gt;= 0.17.1) and vellumwidget (&gt;= 0.15.0).
+<ul><li>Interactive builds are faster: a 200k-point widget builds in about 1 s (1.5 s before), a 1M-point one in about 4.5 s (8.4 s before), and faceted plots gain the most.</li>
+<li>The 200k-point widget payload is less than half its former size (6.1 MB to 2.7 MB): element keys ship once and repeated or numbered tooltips are compressed. Hover text is unchanged.</li>
+<li>Large clouds of filled circles render faster and closer to exact in PNG output.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.14" id="vellumverse-0314">vellumverse 0.3.14<a class="anchor" aria-label="anchor" href="#vellumverse-0314"></a></h2>
 <ul><li>Bumped the pinned versions to the latest patch releases: vellum (&gt;= 0.11.1) and vellumwidget (&gt;= 0.14.1). vellumplot stays at (&gt;= 0.17.0).
