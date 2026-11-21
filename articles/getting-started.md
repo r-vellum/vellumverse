@@ -24,10 +24,10 @@ on your search path:
 ``` r
 
 library(vellumverse)
-#> ── Attaching packages ─────────────────────────────── vellumverse 0.3.13.9000
+#> ── Attaching packages ──────────────────────────────────── vellumverse 0.3.14
 #> ──
-#> ✔ vellum 0.11.0.9000 ✔ vellumplot 0.17.0.9000
-#> ✔ vellumwidget 0.14.0.9000
+#> ✔ vellum 0.11.1.9000 ✔ vellumplot 0.17.0.9000
+#> ✔ vellumwidget 0.14.1.9000
 #> ℹ Within the family, vellumplot::pdf_pages(), vellumplot::render_all() mask vellum's versions (by design).
 ```
 

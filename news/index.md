@@ -1,6 +1,18 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.14
+
+- Bumped the pinned versions to the latest patch releases: vellum (\>=
+  0.11.1) and vellumwidget (\>= 0.14.1). vellumplot stays at (\>=
+  0.17.0).
+  - vellum 0.11.1 fixes
+    [`scene_svg()`](https://r-vellum.github.io/vellum/reference/scene_svg.html)
+    dropping blend modes, masks and layer effects inside panels, so a
+    layer `blend`, `clip_layer()` or layer effect now shows in
+    `plot_svg()` and the widget’s SVG mode.
+  - vellumwidget 0.14.1 lets filters, conditions and dimming reach marks
+    the display list can’t draw, and composites blend-mode marks in the
+    zoomed tiers.
 
 ## vellumverse 0.3.13
 
