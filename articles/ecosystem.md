@@ -7,7 +7,7 @@ Its job is to install and attach the three packages that make up the
 ``` r
 
 library(vellumverse)
-#> ── Attaching packages ──────────────────────────────────── vellumverse 0.3.15
+#> ── Attaching packages ─────────────────────────────── vellumverse 0.3.15.9000
 #> ──
 #> ✔ vellum 0.12.0.9000 ✔ vellumplot 0.17.1.9000
 #> ✔ vellumwidget 0.15.0.9000
