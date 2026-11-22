@@ -1,6 +1,20 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.17
+
+- Bumped the pinned versions to the latest releases: vellumplot (\>=
+  0.18.1) and vellumwidget (\>= 0.17.0); vellum stays at (\>= 0.13.0).
+  - vellumplot 0.18.1: a per-row `if_false` colour reaches the widget as
+    colours, condition tags no longer collide across composition cells,
+    and a contour-style line with a constant colour per series draws as
+    one path (about 100x fewer records on volcano contours).
+  - vellumwidget 0.17.0: selected marks draw above the rest of their
+    layer, a per-row `if_false` colours non-members, a constant
+    `if_false` on `alpha` dims them to that opacity, brush and lasso hit
+    constant-size marks where they are drawn, selection rings follow
+    zoom and stay inside their panel, raster payloads with lines and
+    polygons are up to 60% smaller, and a zoomed y axis moves its title
+    clear of longer labels.
 
 ## vellumverse 0.3.16
 
