@@ -1,6 +1,26 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.18
+
+- Bumped the pinned versions to the latest releases: vellum (\>=
+  0.14.0), vellumplot (\>= 0.19.0) and vellumwidget (\>= 0.18.0).
+  - vellum 0.14.0: tweens match marks by data key with enter/exit fades,
+    lines with different vertex counts morph, labels change per frame,
+    animated SVGs are namespaced and share their gradients and clip
+    paths (a five-bar colour bar animation drops from 2.9 MB to 0.9 MB),
+    exact fps, faster GIF encoding, and bars, tiles and boxes on a
+    reversed axis are drawn again.
+  - vellumplot 0.19.0: animation identity by data_id/group, frame
+    variables in labs() and mark_text(), transition_reveal() along any
+    variable, Date/POSIXct times, facets, start/end pauses and rewind,
+    anim_frame(), .apng output; unused factor levels are dropped from
+    legends, bars on a continuous x keep their end widths, date breaks
+    fit their labels, nudges follow coord_flip(), and effect underlays
+    keep their series.
+  - vellumwidget 0.18.0: play/pause and a scrubber for animations,
+    render_options(autoplay, loop), per-row alpha in conditions, shaped
+    fallback dots above max_marks, and keyboard focus kept on a raised
+    mark.
 
 ## vellumverse 0.3.17
 
