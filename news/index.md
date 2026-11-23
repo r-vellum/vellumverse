@@ -1,6 +1,16 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.20
+
+- Bumped the pinned vellumplot to (\>= 0.21.0); vellum (\>= 0.14.0) and
+  vellumwidget (\>= 0.19.0) are unchanged.
+  - vellumplot 0.21.0: all 26 numeric point shapes draw as in ggplot2
+    (open, solid and bordered styles, R’s per-symbol sizes, composite
+    glyphs for 7-14), legend keys take the layer’s point colour, size
+    and shape and line keys its ink, `mark_crossbar(width =)` is in data
+    units with a wider middle line, date axes judge each label pair by
+    its own widths and keep short labels when sparse, and mapping
+    `shape` to SVG paths warns.
 
 ## vellumverse 0.3.19
 

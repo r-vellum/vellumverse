@@ -7,9 +7,9 @@ Its job is to install and attach the three packages that make up the
 ``` r
 
 library(vellumverse)
-#> ── Attaching packages ─────────────────────────────── vellumverse 0.3.19.9000
+#> ── Attaching packages ──────────────────────────────────── vellumverse 0.3.20
 #> ──
-#> ✔ vellum 0.14.0.9000 ✔ vellumplot 0.20.0.9000
+#> ✔ vellum 0.14.0.9000 ✔ vellumplot 0.21.0.9000
 #> ✔ vellumwidget 0.19.0.9000
 #> ℹ Within the family, vellumplot::pdf_pages(), vellumplot::render_all() mask vellum's versions (by design).
 ```
