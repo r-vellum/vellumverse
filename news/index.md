@@ -1,6 +1,19 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.19
+
+- Bumped the pinned versions to the latest releases: vellumplot (\>=
+  0.20.0) and vellumwidget (\>= 0.19.0); vellum stays at (\>= 0.14.0).
+  - vellumplot 0.20.0: `mark_bar(width =)` and `mark_errorbar(width =)`
+    are in data units (error bars default to 0.9 of the band, as in
+    ggplot2), tiles and rasters keep their end cells, open and bordered
+    numeric point shapes draw as in ggplot2, `drop =` on size and alpha
+    scales, date breaks account for label angle, dodged rows and legend
+    width and keep at least two labels, edge-bundle legend keys are
+    lines, and flow-map tooltips name their destinations.
+  - vellumwidget 0.19.0: legends with two aesthetics ship up to 4x
+    smaller payloads, and hollow marks draw as outlines in the fallback
+    dots.
 
 ## vellumverse 0.3.18
 
