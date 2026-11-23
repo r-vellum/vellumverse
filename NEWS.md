@@ -1,4 +1,8 @@
-# vellumverse (development version)
+# vellumverse 0.3.21
+
+* Bumped the pinned vellumplot to (>= 0.21.1): point legend keys of plots
+  with tiny points no longer shrink below a readable minimum
+  (`theme(legend.key.point.min =)`).
 
 # vellumverse 0.3.20
 
