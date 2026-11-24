@@ -1,4 +1,8 @@
-# vellumverse (development version)
+# vellumverse 0.3.23
+
+* Bumped the pinned vellumwidget to (>= 0.20.0): big raster widgets draw
+  their zoomed-in marks, lines and polygons with WebGL2. vellumplot is pinned
+  to (>= 0.22.1); vellum (>= 0.15.0) is unchanged.
 
 # vellumverse 0.3.22
 
