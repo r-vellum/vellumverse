@@ -1,4 +1,7 @@
-# vellumverse (development version)
+# vellumverse 0.3.24
+
+* Requires vellum 0.16.0 (math labels: `tex()`, inline `$...$` in `md()`,
+  `plotmath()`), vellumplot 0.23.0 and vellumwidget 0.20.1.
 
 # vellumverse 0.3.23
 
