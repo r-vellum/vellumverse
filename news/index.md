@@ -1,6 +1,13 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.24
+
+- Requires vellum 0.16.0 (math labels:
+  [`tex()`](https://r-vellum.github.io/vellum/reference/tex.html),
+  inline `$...$` in
+  [`md()`](https://r-vellum.github.io/vellum/reference/md.html),
+  [`plotmath()`](https://r-vellum.github.io/vellum/reference/plotmath.html)),
+  vellumplot 0.23.0 and vellumwidget 0.20.1.
 
 ## vellumverse 0.3.23
 
