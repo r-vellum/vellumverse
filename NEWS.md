@@ -1,4 +1,10 @@
-# vellumverse (development version)
+# vellumverse 0.3.22
+
+* Bumped the pinned vellum to (>= 0.15.0), vellumplot to (>= 0.22.0) and
+  vellumwidget to (>= 0.19.1). vellumplot 0.22.0 has breaking changes:
+  a length-1 variable passed to a mark argument is a constant, `inset()`
+  honours `align_to` (default `"panel"`), and `theme_void()` has no plot
+  margin.
 
 # vellumverse 0.3.21
 
