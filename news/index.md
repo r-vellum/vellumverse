@@ -1,5 +1,7 @@
 # Changelog
 
+## vellumverse (development version)
+
 ## vellumverse 0.3.25
 
 - Requires vellum 0.17.0 (numeric font weights) and vellumplot 0.24.0
