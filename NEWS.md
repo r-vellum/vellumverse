@@ -1,4 +1,8 @@
-# vellumverse (development version)
+# vellumverse 0.3.25
+
+* Requires vellum 0.17.0 (numeric font weights) and vellumplot 0.24.0
+  (`theme_brand()`: plot themes from a brand.yml file, the format of Quarto's
+  `_brand.yml`). vellumwidget (>= 0.20.1) is unchanged.
 
 # vellumverse 0.3.24
 
