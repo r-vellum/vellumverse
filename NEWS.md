@@ -1,4 +1,12 @@
-# vellumverse (development version)
+# vellumverse 0.3.26
+
+* Requires vellumplot 0.25.0: text layout uses the theme's font, face and
+  weight everywhere it reserves space (legends, axis labels, strips, titles,
+  tags, mark labels), facet strip text is clipped to its strip (new
+  `theme(strip.clip =)` to turn that off), end tick labels get room when the
+  plot margin can't hold them, and `theme()` on an unthemed plot follows
+  `options(vellumplot.brand)` at draw time. vellum (>= 0.17.0) and
+  vellumwidget (>= 0.20.1) are unchanged.
 
 # vellumverse 0.3.25
 
