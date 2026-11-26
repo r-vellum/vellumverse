@@ -1,6 +1,16 @@
 # Changelog
 
-## vellumverse (development version)
+## vellumverse 0.3.27
+
+- Requires vellum 0.18.0 and vellumplot 0.25.1. vellum adds editable
+  PowerPoint output: `officer::ph_with()` for scenes and plots (via
+  [`as_dml()`](https://r-vellum.github.io/vellum/reference/as_dml.html)),
+  and `render(x, "deck.pptx")` /
+  [`pptx_pages()`](https://r-vellum.github.io/vellum/reference/pptx_pages.html)
+  without officer. It also fixes a crash where PDF output aborted R on a
+  missing point size. vellumplot drops rows with a missing `size` with a
+  warning, as ggplot2 does, and a continuous size legend no longer shows
+  an “NA” key. vellumwidget (\>= 0.20.1) is unchanged.
 
 ## vellumverse 0.3.26
 

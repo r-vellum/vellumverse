@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">vellumverse</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.26.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.27</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="vellumverse-development-version">vellumverse (development version)<a class="anchor" aria-label="anchor" href="#vellumverse-development-version"></a></h2>
-</div>
+<h2 class="pkg-version" data-toc-text="0.3.27" id="vellumverse-0327">vellumverse 0.3.27<a class="anchor" aria-label="anchor" href="#vellumverse-0327"></a></h2>
+<ul><li>Requires vellum 0.18.0 and vellumplot 0.25.1. vellum adds editable PowerPoint output: <code>officer::ph_with()</code> for scenes and plots (via <code><a href="https://r-vellum.github.io/vellum/reference/as_dml.html" class="external-link">as_dml()</a></code>), and <code>render(x, "deck.pptx")</code> / <code><a href="https://r-vellum.github.io/vellum/reference/pptx_pages.html" class="external-link">pptx_pages()</a></code> without officer. It also fixes a crash where PDF output aborted R on a missing point size. vellumplot drops rows with a missing <code>size</code> with a warning, as ggplot2 does, and a continuous size legend no longer shows an “NA” key. vellumwidget (&gt;= 0.20.1) is unchanged.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.26" id="vellumverse-0326">vellumverse 0.3.26<a class="anchor" aria-label="anchor" href="#vellumverse-0326"></a></h2>
 <ul><li>Requires vellumplot 0.25.0: text layout uses the theme’s font, face and weight everywhere it reserves space (legends, axis labels, strips, titles, tags, mark labels), facet strip text is clipped to its strip (new <code>theme(strip.clip =)</code> to turn that off), end tick labels get room when the plot margin can’t hold them, and <code>theme()</code> on an unthemed plot follows <code>options(vellumplot.brand)</code> at draw time. vellum (&gt;= 0.17.0) and vellumwidget (&gt;= 0.20.1) are unchanged.</li>
