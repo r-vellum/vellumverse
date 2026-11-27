@@ -20,7 +20,7 @@ Depends:
 Imports:
     cli,
     vellumwidget (>= 0.20.1),
-    vellumplot (>= 0.25.1),
+    vellumplot (>= 0.25.1.9000),
     stats,
     utils,
     vellum (>= 0.18.0)
