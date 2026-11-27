@@ -17,7 +17,8 @@
   (`transition_*()`, `animate()`, `anim_save()`, `hconcat()`, `vconcat()`,
   `concat(heights =)`, `inset(align_to =)`, `compose_annotation(tag_levels
   =)`), with notes on `vconcat()` heights, untitled unaligned compositions,
-  PowerPoint output and the ggplot2-style dropping of missing values (D-32).
+  PowerPoint output and the ggplot2-style dropping of missing values. Table
+  cells holding `|>` no longer show a stray backslash (D-32).
 * The README no longer shows a version-stamped attach banner, and the README
   and The vellum ecosystem list PPTX among vellum's outputs (D-33).
 * Performance gains "Interactive at scale" (vellumwidget's raster mode, its
