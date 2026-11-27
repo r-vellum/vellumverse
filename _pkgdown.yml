@@ -86,7 +86,7 @@ articles:
 - title: Using the ecosystem
   navbar: Using the ecosystem
   contents:
-  - articles/one-scene-three-outputs
+  - articles/one-scene-many-outputs
   - articles/performance
   - articles/extending-the-ecosystem
 - title: Background
@@ -94,6 +94,9 @@ articles:
   contents:
   - articles/grid-critique
   - articles/design-principles
+
+redirects:
+  - ["articles/one-scene-three-outputs.html", "articles/one-scene-many-outputs.html"]
 
 reference:
 - title: Attaching the ecosystem

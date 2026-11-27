@@ -35,8 +35,9 @@ equivalent is the one rendered.
 an ordinary pipeline, so the first argument of every verb is the plot.
 
 **2. No `aes()`.** Aesthetics are named arguments on the mark itself. A bare
-column name is mapped to data; a literal value is a constant. `color = hp`
-is a channel with a legend; `color = "red"` paints everything red.
+column name is mapped to data; a single value, literal or held in a variable,
+is a setting. `color = hp` is a channel with a legend; `color = "red"` paints
+everything red. `I()` forces a setting and `.env$x` a mapping.
 
 **3. `geom_*` becomes `mark_*`.** Same layers, different prefix.
 `geom_point()` is `mark_point()`, `geom_smooth()` is `mark_smooth()`, and so
@@ -52,7 +53,7 @@ specification and compiles it only when printed, saved, or made interactive.
 |---|---|
 | `ggplot(df, aes(x, y))` | `vplot(df)` then `mark_*(x = x, y = y)` |
 | `aes(color = z)` | `color = z` on the mark |
-| `+` | `\|>` |
+| `+` | <code>&#124;&gt;</code> |
 | `geom_point()` | `mark_point()` |
 | `geom_line()` / `geom_path()` | `mark_line()` |
 | `geom_col()` / `geom_bar()` | `mark_bar()` |
@@ -66,13 +67,47 @@ specification and compiles it only when printed, saved, or made interactive.
 | `scale_*_manual(values = )` | `scale_*_manual(values = )` |
 | `facet_wrap(~z)` | `facet_wrap(~z)` |
 | `facet_grid(a ~ b)` | `facet_grid(a ~ b)` |
+| `facet_wrap(~z, labeller = label_both)` | `facet_wrap(~z, labeller = label_both)` |
+| `labeller = label_parsed` / `label_wrap_gen(20)` | `labeller = label_parsed` / `label_wrap_gen(20)` |
+| `guides(x = guide_axis(angle = 45))` | `guides(x = guide_axis(angle = 45))` |
+| `labs(x = expression(alpha^2))` | `labs(x = plotmath("alpha^2"))`, or TeX with `tex()` |
+| `geom_text(parse = TRUE)` | `mark_text(parse = TRUE)` |
 | `coord_flip()` / `coord_polar()` | `coord_flip()` / `coord_polar()` |
 | `theme_minimal()` | `theme_minimal()` |
+| `element_text(face = "bold")` | `element_text(face = "bold")`, or a numeric `weight = 600` |
+| `theme(strip.clip = "off")` | `theme(strip.clip = "off")` |
 | `labs(title = )` | `labs(title = )` |
-| `ggsave("p.png")` | `render_plot(p, "p.png")` |
+| `ggsave("p.png")` | `render_plot(p, "p.png")` (also `.svg`, `.pdf`, `.pptx`) |
+
+Math labels take a plotmath *string* in `plotmath()` (or TeX in `tex()`, or
+`$...$` inside `md()`); an `expression()` passed to `labs()` is drawn as its
+source text, not typeset.
 
 Note that spelling: `vellumplot` uses American `color` as the primary aesthetic
 name (with `colour`/`fill` accepted where it makes sense).
+
+Animation (`gganimate`) and composition (`patchwork`) are built in:
+
+| gganimate / patchwork | vellumplot |
+|---|---|
+| `+ transition_states(s)` | <code>&#124;&gt; transition_states(s)</code> |
+| `+ transition_time(t)` / `+ transition_reveal(t)` | <code>&#124;&gt; transition_time(t)</code> / <code>&#124;&gt; transition_reveal(t)</code> |
+| `+ ease_aes("cubic-in-out")` | <code>&#124;&gt; ease_aes(&quot;cubic-in-out&quot;)</code> |
+| `animate(p, nframes = 100)` | `animate(p, nframes = 100)` |
+| `anim_save("a.gif", a)` | `anim_save("a.gif", a)` (also `.png`/`.apng`, `.svg`) |
+| <code>p1 &#124; p2</code> | `hconcat(p1, p2)` |
+| `p1 / p2` | `vconcat(p1, p2)` |
+| `p1 / p2 + plot_layout(heights = c(2, 1))` | `concat(p1, p2, ncol = 1, heights = c(2, 1))` |
+| `wrap_plots(plots, ncol = 2)` | `wrap_plots(plots, ncol = 2)` |
+| `p + inset_element(p2, 0.6, 0.6, 1, 1, align_to = "panel")` | `inset(p, p2, 0.6, 0.6, 1, 1, align_to = "panel")` |
+| `+ plot_annotation(title = , tag_levels = "A")` | <code>&#124;&gt; compose_annotation(title = , tag_levels = &quot;A&quot;)</code> |
+
+Plots don't combine with `|` and `/`; call the functions. `vconcat()` has no
+`heights` argument (and `hconcat()` no `widths`); for unequal rows use
+`concat(ncol = 1, heights = )`. A composition whose panels
+can't be aligned (one with a faceted, polar or map cell, a `design`, or
+insets) draws its `tag_levels` tags but not yet the figure `title`,
+`subtitle` and `caption` from `compose_annotation()`.
 
 ## Scatter with a colour scale
 
@@ -227,8 +262,11 @@ A few `ggplot2` habits do not carry over, on purpose:
 - `+` chaining and its operator methods are gone; everything is a function
   in a pipe.
 - Saving is `render_plot()`, not `ggsave()`, and one spec renders to PNG,
-  SVG, and PDF from the same object. See [one scene, three
-  outputs](one-scene-three-outputs.html).
+  SVG, PDF, and an editable PowerPoint slide (`.pptx`) from the same object.
+  See [one scene, many outputs](one-scene-many-outputs.html).
+- Rows with a missing position or size are dropped with one "Removed n rows
+  containing missing values" warning per layer, as in `ggplot2`, and a
+  continuous size legend shows no "NA" key.
 
 For the exhaustive list of marks, scales, coords, and themes, see the
 [vellumplot reference](https://r-vellum.github.io/vellumplot/).

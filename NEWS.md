@@ -1,5 +1,30 @@
 # vellumverse (development version)
 
+## Documentation
+
+* "One scene, three outputs" is now "One scene, many outputs"
+  (`articles/one-scene-many-outputs.html`; the old address redirects). It
+  gains "Output 4: editable slides": `render_plot(p, "x.pptx")`,
+  `vellum::pptx_pages()`, and `vellum::as_dml()` with `officer::ph_with()`,
+  linking vellum's PowerPoint article. Get started, Coming from ggplot2 and
+  Performance link to the new title (D-30).
+* Get started states the current mapping rule: a column or an expression is
+  mapped, a single value (literal or in a variable that is not a column) is a
+  setting, `I()` forces a setting and `.env$x` a mapping (D-31).
+* Coming from ggplot2 gains rows for labellers (`label_parsed`,
+  `label_wrap_gen()`), `guide_axis()`, plotmath labels, `element_text(weight
+  =)`, `theme(strip.clip =)`, and a gganimate and patchwork table
+  (`transition_*()`, `animate()`, `anim_save()`, `hconcat()`, `vconcat()`,
+  `concat(heights =)`, `inset(align_to =)`, `compose_annotation(tag_levels
+  =)`), with notes on `vconcat()` heights, untitled unaligned compositions,
+  PowerPoint output and the ggplot2-style dropping of missing values (D-32).
+* The README no longer shows a version-stamped attach banner, and the README
+  and The vellum ecosystem list PPTX among vellum's outputs (D-33).
+* Performance gains "Interactive at scale" (vellumwidget's raster mode, its
+  WebGL2 tier and `max_marks`, linking the big-data article) and notes on SVG
+  size and parallel GIF encoding; Design principles and The vellum ecosystem
+  mention the DrawingML (PowerPoint) backend (D-34).
+
 # vellumverse 0.3.27
 
 * Requires vellum 0.18.0 and vellumplot 0.25.1. vellum adds editable
