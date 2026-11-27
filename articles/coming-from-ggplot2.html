@@ -152,7 +152,9 @@
 <td>
 <code>geom_line()</code> / <code>geom_path()</code>
 </td>
-<td><code>mark_line()</code></td>
+<td>
+<code>mark_line()</code> / <code>mark_path()</code>
+</td>
 </tr>
 <tr class="even">
 <td>
@@ -189,26 +191,34 @@
 <td><code>mark_sf()</code></td>
 </tr>
 <tr class="odd">
+<td>
+<code>geom_hline(yintercept = 0)</code> / <code>geom_vline(xintercept = 0)</code>
+</td>
+<td>
+<code>mark_rule(y = 0)</code> / <code>mark_rule(x = 0)</code>
+</td>
+</tr>
+<tr class="even">
 <td><code>scale_color_continuous()</code></td>
 <td><code>scale_color_continuous()</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>scale_*_manual(values = )</code></td>
 <td><code>scale_*_manual(values = )</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>facet_wrap(~z)</code></td>
 <td><code>facet_wrap(~z)</code></td>
 </tr>
+<tr class="odd">
+<td><code>facet_grid(a ~ b)</code></td>
+<td><code>facet_grid(a ~ b)</code></td>
+</tr>
 <tr class="even">
-<td><code>facet_grid(a ~ b)</code></td>
-<td><code>facet_grid(a ~ b)</code></td>
+<td><code>facet_wrap(~z, labeller = label_both)</code></td>
+<td><code>facet_wrap(~z, labeller = label_both)</code></td>
 </tr>
 <tr class="odd">
-<td><code>facet_wrap(~z, labeller = label_both)</code></td>
-<td><code>facet_wrap(~z, labeller = label_both)</code></td>
-</tr>
-<tr class="even">
 <td>
 <code>labeller = label_parsed</code> / <code>label_wrap_gen(20)</code>
 </td>
@@ -216,54 +226,54 @@
 <code>labeller = label_parsed</code> / <code>label_wrap_gen(20)</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>guides(x = guide_axis(angle = 45))</code></td>
 <td><code>guides(x = guide_axis(angle = 45))</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>labs(x = expression(alpha^2))</code></td>
 <td>
-<code>labs(x = plotmath("alpha^2"))</code>, or TeX with <code>tex()</code>
+<code>labs(x = expression(alpha^2))</code>, <code>plotmath("alpha^2")</code>, or TeX with <code>tex()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>geom_text(parse = TRUE)</code></td>
 <td><code>mark_text(parse = TRUE)</code></td>
 </tr>
+<tr class="odd">
+<td>
+<code>coord_flip()</code> / <code>coord_polar()</code>
+</td>
+<td>
+<code>coord_flip()</code> / <code>coord_polar()</code>
+</td>
+</tr>
 <tr class="even">
-<td>
-<code>coord_flip()</code> / <code>coord_polar()</code>
-</td>
-<td>
-<code>coord_flip()</code> / <code>coord_polar()</code>
-</td>
+<td><code>theme_minimal()</code></td>
+<td><code>theme_minimal()</code></td>
 </tr>
 <tr class="odd">
-<td><code>theme_minimal()</code></td>
-<td><code>theme_minimal()</code></td>
-</tr>
-<tr class="even">
 <td><code>element_text(face = "bold")</code></td>
 <td>
 <code>element_text(face = "bold")</code>, or a numeric <code>weight = 600</code>
 </td>
 </tr>
+<tr class="even">
+<td><code>theme(strip.clip = "off")</code></td>
+<td><code>theme(strip.clip = "off")</code></td>
+</tr>
 <tr class="odd">
-<td><code>theme(strip.clip = "off")</code></td>
-<td><code>theme(strip.clip = "off")</code></td>
+<td><code>labs(title = )</code></td>
+<td><code>labs(title = )</code></td>
 </tr>
 <tr class="even">
-<td><code>labs(title = )</code></td>
-<td><code>labs(title = )</code></td>
-</tr>
-<tr class="odd">
 <td><code>ggsave("p.png")</code></td>
 <td>
 <code>render_plot(p, "p.png")</code> (also <code>.svg</code>, <code>.pdf</code>, <code>.pptx</code>)</td>
 </tr>
 </tbody>
 </table>
-<p>Math labels take a plotmath <em>string</em> in <code>plotmath()</code> (or TeX in <code>tex()</code>, or <code>$...$</code> inside <code>md()</code>); an <code><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression()</a></code> passed to <code>labs()</code> is drawn as its source text, not typeset.</p>
+<p><code>labs()</code> typesets an <code><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression()</a></code> (or a quoted call) as plotmath, as in <code>ggplot2</code>. <code>plotmath()</code> takes the same markup as a string, and TeX goes in <code>tex()</code> or between <code>$...$</code> inside <code>md()</code>.</p>
 <p>Note that spelling: <code>vellumplot</code> uses American <code>color</code> as the primary aesthetic name (with <code>colour</code>/<code>fill</code> accepted where it makes sense).</p>
 <p>Animation (<code>gganimate</code>) and composition (<code>patchwork</code>) are built in:</p>
 <table class="table caption-top">
@@ -311,23 +321,27 @@
 </tr>
 <tr class="even">
 <td><code>p1 / p2 + plot_layout(heights = c(2, 1))</code></td>
-<td><code>concat(p1, p2, ncol = 1, heights = c(2, 1))</code></td>
+<td><code>vconcat(p1, p2, heights = c(2, 1))</code></td>
 </tr>
 <tr class="odd">
+<td><code>(p1 | p2) + plot_layout(widths = c(2, 1))</code></td>
+<td><code>hconcat(p1, p2, widths = c(2, 1))</code></td>
+</tr>
+<tr class="even">
 <td><code>wrap_plots(plots, ncol = 2)</code></td>
 <td><code>wrap_plots(plots, ncol = 2)</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>p + inset_element(p2, 0.6, 0.6, 1, 1, align_to = "panel")</code></td>
 <td><code>inset(p, p2, 0.6, 0.6, 1, 1, align_to = "panel")</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>+ plot_annotation(title = , tag_levels = "A")</code></td>
 <td><code>|&gt; compose_annotation(title = , tag_levels = "A")</code></td>
 </tr>
 </tbody>
 </table>
-<p>Plots don’t combine with <code>|</code> and <code>/</code>; call the functions. <code>vconcat()</code> has no <code>heights</code> argument (and <code>hconcat()</code> no <code>widths</code>); for unequal rows use <code>concat(ncol = 1, heights = )</code>. A composition whose panels can’t be aligned (one with a faceted, polar or map cell, a <code>design</code>, or insets) draws its <code>tag_levels</code> tags but not yet the figure <code>title</code>, <code>subtitle</code> and <code>caption</code> from <code>compose_annotation()</code>.</p>
+<p>Plots don’t combine with <code>|</code> and <code>/</code>; call the functions. See <a href="#combining-plots">combining plots</a> below for an example.</p>
 </section><section class="level2"><h2 id="scatter-with-a-colour-scale">Scatter with a colour scale<a class="anchor" aria-label="anchor" href="#scatter-with-a-colour-scale"></a>
 </h2>
 <div class="quarto-layout-panel" data-layout-ncol="2">
@@ -429,12 +443,50 @@
 </div>
 </div>
 </div>
+</section><section class="level2"><h2 id="combining-plots">Combining plots<a class="anchor" aria-label="anchor" href="#combining-plots"></a>
+</h2>
+<p><code>vconcat()</code> stacks plots and <code>heights</code> sets their share of the figure, as <code>plot_layout(heights = )</code> does in <code>patchwork</code>. <code>compose_annotation()</code> adds a figure title and panel tags. Both cells map <code>color</code> to <code>factor(cyl)</code>, so their legends are collected into one. The top cell is faceted, so the cells can’t share one panel grid and each is laid out on its own; the title, tags and collected legend are still drawn around the whole figure.</p>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ggplot2 + patchwork</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">am</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">hp</span>, <span class="va">mpg</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span> <span class="op">+</span></span>
+<span>  <span class="fu">plot_layout</span><span class="op">(</span>heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">plot_annotation</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Weight, mileage and cylinders"</span>,</span>
+<span>                  tag_levels <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># vellumplot</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">vplot</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mark_point</span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">am</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">vplot</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mark_point</span><span class="op">(</span>x <span class="op">=</span> <span class="va">hp</span>, y <span class="op">=</span> <span class="va">mpg</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">vconcat</span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">compose_annotation</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Weight, mileage and cylinders"</span>,</span>
+<span>                     tag_levels <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewbox="0 0 576 768" role="img" aria-labelledby="vl8455648b-t vl8455648b-d"><title id="vl8455648b-t">Weight, mileage and cylinders</title>
+<desc id="vl8455648b-d">A composition of 2 plots arranged in a 2 by 1 grid.</desc><defs><clippath id="vl8455648b-c0" clippathunits="userSpaceOnUse"><path d="M69.35186767578125 101.57743072509766 L257.67043722958704 101.57743072509766 L257.67043722958704 453.6466017662176 L69.35186767578125 453.6466017662176 Z"></path></clippath><clippath id="vl8455648b-c1" clippathunits="userSpaceOnUse"><path d="M263.7176818847656 101.57743072509766 L452.0362514385714 101.57743072509766 L452.0362514385714 453.6466017662176 L263.7176818847656 453.6466017662176 Z"></path></clippath><clippath id="vl8455648b-c2" clippathunits="userSpaceOnUse"><path d="M69.35186767578125 77.01558685302734 L257.67043722958704 77.01558685302734 L257.67043722958704 101.57743068504834 L69.35186767578125 101.57743068504834 Z"></path></clippath><clippath id="vl8455648b-c3" clippathunits="userSpaceOnUse"><path d="M263.7176818847656 77.01558685302734 L452.0362514385714 77.01558685302734 L452.0362514385714 101.57743068504834 L263.7176818847656 101.57743068504834 Z"></path></clippath><clippath id="vl8455648b-c4" clippathunits="userSpaceOnUse"><path d="M69.35186767578125 566.431396484375 L452.036250877881 566.431396484375 L452.036250877881 699.9189839734389 L69.35186767578125 699.9189839734389 Z"></path></clippath></defs><rect width="576" height="768" fill="#ffffff" fill-opacity="1"></rect><text x="5.3442519685039365" y="16.1559219160105" transform="matrix(1 0 0 1 20.787401 20.787401)" fill="#1a1a1a" fill-opacity="1" font-family="sans-serif" font-size="18.666666666666668" text-anchor="start" dominant-baseline="central">Weight, mileage and cylinders</text><g data-vellum-panel="legend"><text x="0" y="12.033759842519684" transform="matrix(1 0 0 1 480.38272 369.90732)" fill="#000000" fill-opacity="1" font-family="sans-serif" font-size="13.333333333333334" text-anchor="start" dominant-baseline="central">factor(cyl)</text><circle cx="493.61" cy="400.17" r="7.56" fill="#2f4858"></circle><text x="0" y="10.20472440944882" transform="matrix(1 0 0 1 506.83942 389.9636)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="start" dominant-baseline="central">4</text><circle cx="493.61" cy="420.58" r="7.56" fill="#0072b2"></circle><text x="0" y="10.204724409448819" transform="matrix(1 0 0 1 506.83942 410.37305)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="start" dominant-baseline="central">6</text><circle cx="493.61" cy="440.99" r="7.56" fill="#009e73"></circle><text x="0" y="10.204724409448822" transform="matrix(1 0 0 1 506.83942 430.78247)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="start" dominant-baseline="central">8</text></g><text x="4.72823654855643" y="11.958169291338585" transform="matrix(1 0 0 1 0 53.099247)" fill="#1a1a1a" fill-opacity="1" font-family="sans-serif" font-size="16" text-anchor="start" dominant-baseline="central">A</text><g data-vellum-panel="plot"><g data-vellum-panel="plot-background"><g role="presentation"><path d="M0 77.02 L472.82 77.02 L472.82 521.73 L0 521.73 Z" fill="#ffffff"></path></g></g><g data-vellum-panel="panel-area"><g data-vellum-panel="cell-1-panel-1-1" clip-path="url(#vl8455648b-c0)"><g data-vellum-pan="cell-1-panel-1-1"><path d="M69.35 101.58 L257.67 101.58 L257.67 453.65 L69.35 453.65 Z" fill="#ebebeb"></path><g role="grid"><path d="M77.34 453.65 L77.34 101.58 M121.12 453.65 L121.12 101.58 M164.89 453.65 L164.89 101.58 M208.66 453.65 L208.66 101.58 M252.44 453.65 L252.44 101.58" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M69.35 409.04 L257.67 409.04 M69.35 340.94 L257.67 340.94 M69.35 272.85 L257.67 272.85 M69.35 204.75 L257.67 204.75 M69.35 136.65 L257.67 136.65" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M99.23 453.65 L99.23 101.58 M143 453.65 L143 101.58 M186.78 453.65 L186.78 101.58 M230.55 453.65 L230.55 101.58" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M69.35 374.99 L257.67 374.99 M69.35 306.89 L257.67 306.89 M69.35 238.8 L257.67 238.8 M69.35 170.7 L257.67 170.7" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="presentation"><path d="M99.23 453.65 L99.23 447.98 M143 453.65 L143 447.98 M186.78 453.65 L186.78 447.98 M230.55 453.65 L230.55 447.98" fill="none" stroke="#333333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="presentation"><path d="M69.35 374.99 L75.02 374.99 M69.35 306.89 L75.02 306.89 M69.35 238.8 L75.02 238.8 M69.35 170.7 L75.02 170.7" fill="none" stroke="#333333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g data-vellum-id="layer-1-point-g1" role="presentation"><circle cx="152.41" cy="287.83" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="163.14" cy="332.77" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="162.26" cy="317.79" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="162.26" cy="336.86" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle></g><g data-vellum-id="layer-1-point-g2" role="presentation"><circle cx="162.26" cy="324.6" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="167.95" cy="384.53" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="189.84" cy="355.93" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="174.96" cy="343.67" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="177.15" cy="372.27" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="241.49" cy="437.64" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="249.11" cy="437.64" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="245.65" cy="379.08" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="165.77" cy="368.18" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="162.04" cy="372.27" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="179.77" cy="398.15" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="179.99" cy="317.79" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle></g><g data-vellum-id="layer-1-point-g3" role="presentation"><circle cx="151.32" cy="246.97" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="149.57" cy="268.76" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="119.58" cy="286.46" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle></g></g></g><g data-vellum-panel="cell-1-panel-1-2" clip-path="url(#vl8455648b-c1)"><g data-vellum-pan="cell-1-panel-1-2"><path d="M263.72 101.58 L452.04 101.58 L452.04 453.65 L263.72 453.65 Z" fill="#ebebeb"></path><g role="grid"><path d="M271.71 453.65 L271.71 101.58 M315.48 453.65 L315.48 101.58 M359.26 453.65 L359.26 101.58 M403.03 453.65 L403.03 101.58 M446.8 453.65 L446.8 101.58" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M263.72 409.04 L452.04 409.04 M263.72 340.94 L452.04 340.94 M263.72 272.85 L452.04 272.85 M263.72 204.75 L452.04 204.75 M263.72 136.65 L452.04 136.65" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M293.6 453.65 L293.6 101.58 M337.37 453.65 L337.37 101.58 M381.14 453.65 L381.14 101.58 M424.92 453.65 L424.92 101.58" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M263.72 374.99 L452.04 374.99 M263.72 306.89 L452.04 306.89 M263.72 238.8 L452.04 238.8 M263.72 170.7 L452.04 170.7" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="presentation"><path d="M293.6 453.65 L293.6 447.98 M337.37 453.65 L337.37 447.98 M381.14 453.65 L381.14 447.98 M424.92 453.65 L424.92 447.98" fill="none" stroke="#333333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="presentation"><path d="M263.72 374.99 L269.39 374.99 M263.72 306.89 L269.39 306.89 M263.72 238.8 L269.39 238.8 M263.72 170.7 L269.39 170.7" fill="none" stroke="#333333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g data-vellum-id="layer-1-point-g4" role="presentation"><circle cx="320.74" cy="293.27" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="331.9" cy="293.27" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="327.3" cy="310.98" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle></g><g data-vellum-id="layer-1-point-g5" role="presentation"><circle cx="307.6" cy="268.76" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="302.35" cy="138.01" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="276.74" cy="165.25" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="286.37" cy="117.58" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="290.75" cy="207.47" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="299.72" cy="225.18" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="272.28" cy="165.25" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="327.74" cy="287.83" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle></g><g data-vellum-id="layer-1-point-g6" role="presentation"><circle cx="344.81" cy="364.1" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="362.32" cy="374.99" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle></g></g></g><g data-vellum-panel="axis-y-2"><text x="25.162204724409442" y="273.41542006384844" transform="matrix(1 0 0 1 43.14124 101.57743)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">15</text><text x="25.162204724409442" y="205.3169343692411" transform="matrix(1 0 0 1 43.14124 101.57743)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">20</text><text x="25.162204724409442" y="137.21844867463375" transform="matrix(1 0 0 1 43.14124 101.57743)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">25</text><text x="25.162204724409442" y="69.1199629800264" transform="matrix(1 0 0 1 43.14124 101.57743)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">30</text></g><g data-vellum-panel="axis-x-3"><text x="29.87769685710471" y="4.489163385826778" transform="matrix(1 0 0 1 69.35187 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">2</text><text x="73.65133520902721" y="4.489163385826778" transform="matrix(1 0 0 1 69.35187 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">3</text><text x="117.42497356094971" y="4.489163385826778" transform="matrix(1 0 0 1 69.35187 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">4</text><text x="161.1986119128722" y="4.489163385826778" transform="matrix(1 0 0 1 69.35187 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">5</text></g><g data-vellum-panel="axis-x-5"><text x="29.87769685710471" y="4.489163385826778" transform="matrix(1 0 0 1 263.71768 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">2</text><text x="73.65133520902721" y="4.489163385826778" transform="matrix(1 0 0 1 263.71768 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">3</text><text x="117.42497356094971" y="4.489163385826778" transform="matrix(1 0 0 1 263.71768 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">4</text><text x="161.1986119128722" y="4.489163385826778" transform="matrix(1 0 0 1 263.71768 453.6466)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">5</text></g><g data-vellum-panel="strip-1-1"><path d="M69.35 77.02 L257.67 77.02 L257.67 101.58 L69.35 101.58 Z" fill="#d9d9d9"></path><g clip-path="url(#vl8455648b-c2)"><text x="94.1592847769029" y="12.280921916010499" transform="matrix(1 0 0 1 69.35187 77.01559)" fill="#1a1a1a" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="central">0</text></g></g><g data-vellum-panel="strip-1-2"><path d="M263.72 77.02 L452.04 77.02 L452.04 101.58 L263.72 101.58 Z" fill="#d9d9d9"></path><g clip-path="url(#vl8455648b-c3)"><text x="94.1592847769029" y="12.280921916010499" transform="matrix(1 0 0 1 263.71768 77.01559)" fill="#1a1a1a" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="central">1</text></g></g><g data-vellum-panel="axis-title-y"><text x="11.176919291338585" y="176.03458552055997" transform="matrix(1 0 0 1 20.787401 101.57743) rotate(-90 11.176919291338585 176.03458552055997)" fill="#000000" fill-opacity="1" font-family="sans-serif" font-size="14.666666666666666" text-anchor="middle" dominant-baseline="central">mpg</text></g><g data-vellum-panel="axis-title-x"><text x="191.34219160104988" y="11.176919291338578" transform="matrix(1 0 0 1 69.35187 478.5864)" fill="#000000" fill-opacity="1" font-family="sans-serif" font-size="14.666666666666666" text-anchor="middle" dominant-baseline="central">wt</text></g></g></g><text x="4.72823654855643" y="11.958169291338578" transform="matrix(1 0 0 1 0 521.72766)" fill="#1a1a1a" fill-opacity="1" font-family="sans-serif" font-size="16" text-anchor="start" dominant-baseline="central">B</text><g data-vellum-panel="plot"><g data-vellum-panel="plot-background"><g role="presentation"><path d="M0 545.64 L472.82 545.64 L472.82 768 L0 768 Z" fill="#ffffff"></path></g></g><g data-vellum-panel="panel-area"><g data-vellum-panel="cell-2-panel-1-1" clip-path="url(#vl8455648b-c4)"><g data-vellum-pan="cell-2-panel-1-1"><path d="M69.35 566.43 L452.04 566.43 L452.04 699.92 L69.35 699.92 Z" fill="#ebebeb"></path><g role="grid"><path d="M115.02 699.92 L115.02 566.43 M176.49 699.92 L176.49 566.43 M237.95 699.92 L237.95 566.43 M299.42 699.92 L299.42 566.43 M360.88 699.92 L360.88 566.43 M422.35 699.92 L422.35 566.43" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M69.35 683.01 L452.04 683.01 M69.35 657.19 L452.04 657.19 M69.35 631.37 L452.04 631.37 M69.35 605.55 L452.04 605.55 M69.35 579.73 L452.04 579.73" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M145.75 699.92 L145.75 566.43 M207.22 699.92 L207.22 566.43 M268.68 699.92 L268.68 566.43 M330.15 699.92 L330.15 566.43 M391.62 699.92 L391.62 566.43" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="grid"><path d="M69.35 670.1 L452.04 670.1 M69.35 644.28 L452.04 644.28 M69.35 618.46 L452.04 618.46 M69.35 592.64 L452.04 592.64" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="presentation"><path d="M145.75 699.92 L145.75 694.25 M207.22 699.92 L207.22 694.25 M268.68 699.92 L268.68 694.25 M330.15 699.92 L330.15 694.25 M391.62 699.92 L391.62 694.25" fill="none" stroke="#333333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g role="presentation"><path d="M69.35 670.1 L75.02 670.1 M69.35 644.28 L75.02 644.28 M69.35 618.46 L75.02 618.46 M69.35 592.64 L75.02 592.64" fill="none" stroke="#333333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path></g><g data-vellum-id="layer-1-point-g7" role="presentation"><circle cx="158.05" cy="639.11" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="158.05" cy="639.11" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="158.05" cy="637.05" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="151.9" cy="654.09" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="174.03" cy="648.41" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="174.03" cy="655.64" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle><circle cx="237.95" cy="645.83" r="3.78" fill="#0072b2" stroke="#0072b2" stroke-width="1"></circle></g><g data-vellum-id="layer-1-point-g8" role="presentation"><circle cx="137.15" cy="629.82" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="99.04" cy="621.56" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="139.61" cy="629.82" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="103.96" cy="580.24" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="86.75" cy="590.57" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="102.73" cy="572.5" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="142.07" cy="636.53" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="103.96" cy="606.58" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="134.69" cy="613.29" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="161.73" cy="590.57" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle><circle cx="156.82" cy="637.05" r="3.78" fill="#2f4858" stroke="#2f4858" stroke-width="1"></circle></g><g data-vellum-id="layer-1-point-g9" role="presentation"><circle cx="237.95" cy="650.99" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="324" cy="673.71" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="244.1" cy="662.87" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="244.1" cy="658.22" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="244.1" cy="669.06" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="274.83" cy="693.85" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="287.12" cy="693.85" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="305.56" cy="671.65" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="207.22" cy="667.52" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="207.22" cy="669.06" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="324" cy="678.88" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="237.95" cy="648.41" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="347.36" cy="665.97" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle><circle cx="434.64" cy="670.1" r="3.78" fill="#009e73" stroke="#009e73" stroke-width="1"></circle></g></g></g><g data-vellum-panel="axis-y-1"><text x="25.162204724409442" y="103.66589241171982" transform="matrix(1 0 0 1 43.14124 566.4314)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">15</text><text x="25.162204724409442" y="77.8462429941059" transform="matrix(1 0 0 1 43.14124 566.4314)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">20</text><text x="25.162204724409442" y="52.026593576492004" transform="matrix(1 0 0 1 43.14124 566.4314)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">25</text><text x="25.162204724409442" y="26.206944158878102" transform="matrix(1 0 0 1 43.14124 566.4314)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="end" dominant-baseline="central">30</text></g><g data-vellum-panel="axis-x-3"><text x="76.4016524767443" y="4.4891633858267745" transform="matrix(1 0 0 1 69.35187 699.919)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">100</text><text x="137.86718142022323" y="4.4891633858267745" transform="matrix(1 0 0 1 69.35187 699.919)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">150</text><text x="199.33271036370218" y="4.4891633858267745" transform="matrix(1 0 0 1 69.35187 699.919)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">200</text><text x="260.7982393071811" y="4.4891633858267745" transform="matrix(1 0 0 1 69.35187 699.919)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">250</text><text x="322.26376825066" y="4.4891633858267745" transform="matrix(1 0 0 1 69.35187 699.919)" fill="#333333" fill-opacity="1" font-family="sans-serif" font-size="12" text-anchor="middle" dominant-baseline="text-before-edge">300</text></g><g data-vellum-panel="axis-title-y"><text x="11.176919291338585" y="66.74379374453194" transform="matrix(1 0 0 1 20.787401 566.4314) rotate(-90 11.176919291338585 66.74379374453194)" fill="#000000" fill-opacity="1" font-family="sans-serif" font-size="14.666666666666666" text-anchor="middle" dominant-baseline="central">mpg</text></g><g data-vellum-panel="axis-title-x"><text x="191.34219160104988" y="11.176919291338578" transform="matrix(1 0 0 1 69.35187 724.85876)" fill="#000000" fill-opacity="1" font-family="sans-serif" font-size="14.666666666666666" text-anchor="middle" dominant-baseline="central">hp</text></g></g></g></svg>
+</div>
+</div>
 </section><section class="level2"><h2 id="what-you-gain">What you gain<a class="anchor" aria-label="anchor" href="#what-you-gain"></a>
 </h2>
 <p>Two things fall out of the spec-first design.</p>
 <p><strong>Inspect a plot before drawing it.</strong> Because the plot is data, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> prints its structure. <code>ggplot2</code> has a <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method as well, so the difference is not the function but how far it goes: because <code>vellum</code> measures text and solves layout without a device, the compiled spec can also report where every element lands before anything renders.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">vplot</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mark_point</span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>, color <span class="op">=</span> <span class="va">hp</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -445,7 +497,7 @@
 </div>
 <p><strong>Make it interactive without a second plot.</strong> The same spec, handed to <code>as_widget()</code>, becomes an HTML widget, and the interactive channels (<code>tooltip</code>, <code>data_id</code>) are just more mark arguments. <code>ggiraph</code> and <code>plotly</code> get you to a client-side widget from <code>ggplot2</code> too; the difference is that there are no <code>*_interactive()</code> twins of the marks to swap in, and the widget renders the same compiled scene as the static figure rather than redrawing the plot in another engine:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>wt <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, mpg <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">vplot</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -460,7 +512,7 @@
 <li>
 <code>+</code> chaining and its operator methods are gone; everything is a function in a pipe.</li>
 <li>Saving is <code>render_plot()</code>, not <code>ggsave()</code>, and one spec renders to PNG, SVG, PDF, and an editable PowerPoint slide (<code>.pptx</code>) from the same object. See <a href="one-scene-many-outputs.html">one scene, many outputs</a>.</li>
-<li>Rows with a missing position or size are dropped with one “Removed n rows containing missing values” warning per layer, as in <code>ggplot2</code>, and a continuous size legend shows no “NA” key.</li>
+<li>Rows with a missing position or size are dropped with one “Removed n rows containing missing values” warning per layer, as in <code>ggplot2</code>, and a continuous size legend shows no “NA” key. An area or ribbon leaves a gap at a missing value and counts it in that warning. A line also breaks at a missing value rather than joining across it, but doesn’t count it in the warning yet.</li>
 </ul>
 <p>For the exhaustive list of marks, scales, coords, and themes, see the <a href="https://r-vellum.github.io/vellumplot/" class="external-link">vellumplot reference</a>.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">

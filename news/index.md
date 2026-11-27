@@ -4,6 +4,19 @@
 
 ### Documentation
 
+- Coming from ggplot2 catches up with vellumplot’s composition and label
+  fixes. The patchwork table maps `plot_layout(heights =)` to
+  `vconcat(heights =)` and `plot_layout(widths =)` to
+  `hconcat(widths =)`, and the notes saying neither exists and that
+  unaligned compositions draw no figure title are gone. A new “Combining
+  plots” section renders a `vconcat(heights =)` with a faceted cell, a
+  figure title and tags. It also says that `labs()` typesets
+  [`expression()`](https://rdrr.io/r/base/expression.html) labels, maps
+  `geom_hline()`/`geom_vline()` to `mark_rule(y =)`/`mark_rule(x =)` and
+  `geom_path()` to `mark_path()`, and notes that areas and ribbons leave
+  a gap at a missing value. vellumverse now requires vellumplot
+  0.25.1.9000, for `vconcat(heights =)` and titles in unaligned
+  compositions (D-37).
 - “One scene, three outputs” is now “One scene, many outputs”
   (`articles/one-scene-many-outputs.html`; the old address redirects).
   It gains “Output 4: editable slides”: `render_plot(p, "x.pptx")`,
@@ -21,11 +34,10 @@
   `label_wrap_gen()`), `guide_axis()`, plotmath labels,
   `element_text(weight =)`, `theme(strip.clip =)`, and a gganimate and
   patchwork table (`transition_*()`, `animate()`, `anim_save()`,
-  `hconcat()`, `vconcat()`, `concat(heights =)`, `inset(align_to =)`,
-  `compose_annotation(tag_levels =)`), with notes on `vconcat()`
-  heights, untitled unaligned compositions, PowerPoint output and the
-  ggplot2-style dropping of missing values. Table cells holding `|>` no
-  longer show a stray backslash (D-32).
+  `hconcat()`, `vconcat()`, `inset(align_to =)`,
+  `compose_annotation(tag_levels =)`), with notes on PowerPoint output
+  and the ggplot2-style dropping of missing values. Table cells holding
+  `|>` no longer show a stray backslash (D-32).
 - The README no longer shows a version-stamped attach banner, and the
   README and The vellum ecosystem list PPTX among vellum’s outputs
   (D-33).
