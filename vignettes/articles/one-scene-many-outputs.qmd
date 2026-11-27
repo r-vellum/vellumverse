@@ -64,6 +64,12 @@ summary(p)
 #>
 #> ── layers
 #> • mark_point(x = wt, y = mpg, color = mpg)
+#>
+#> ── scales
+#> • color: continuous
+#>
+#> ── labels
+#> • title: Fuel economy
 ```
 
 Notice that `tooltip` and `data_id` are already on the mark. They mean

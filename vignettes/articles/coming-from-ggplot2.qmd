@@ -35,8 +35,8 @@ equivalent is the one rendered.
 an ordinary pipeline, so the first argument of every verb is the plot.
 
 **2. No `aes()`.** Aesthetics are named arguments on the mark itself. A bare
-column name is mapped to data; a single value, literal or held in a variable,
-is a setting. `color = hp` is a channel with a legend; `color = "red"` paints
+column name is mapped to data; a single value, literal or held in a variable
+that is not a column, is a setting. `color = hp` is a channel with a legend; `color = "red"` paints
 everything red. `I()` forces a setting and `.env$x` a mapping.
 
 **3. `geom_*` becomes `mark_*`.** Same layers, different prefix.
