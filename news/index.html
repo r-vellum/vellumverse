@@ -34,7 +34,7 @@
     <li><a class="dropdown-item" href="../articles/coming-from-ggplot2.html">Coming from ggplot2</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using the ecosystem</h6></li>
-    <li><a class="dropdown-item" href="../articles/one-scene-three-outputs.html">One scene, three outputs</a></li>
+    <li><a class="dropdown-item" href="../articles/one-scene-many-outputs.html">One scene, many outputs</a></li>
     <li><a class="dropdown-item" href="../articles/performance.html">Performance and big data</a></li>
     <li><a class="dropdown-item" href="../articles/extending-the-ecosystem.html">Extending the ecosystem</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -64,6 +64,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="vellumverse-development-version">vellumverse (development version)<a class="anchor" aria-label="anchor" href="#vellumverse-development-version"></a></h2>
+<div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li>“One scene, three outputs” is now “One scene, many outputs” (<code>articles/one-scene-many-outputs.html</code>; the old address redirects). It gains “Output 4: editable slides”: <code>render_plot(p, "x.pptx")</code>, <code><a href="https://r-vellum.github.io/vellum/reference/pptx_pages.html" class="external-link">vellum::pptx_pages()</a></code>, and <code><a href="https://r-vellum.github.io/vellum/reference/as_dml.html" class="external-link">vellum::as_dml()</a></code> with <code>officer::ph_with()</code>, linking vellum’s PowerPoint article. Get started, Coming from ggplot2 and Performance link to the new title (D-30).</li>
+<li>Get started states the current mapping rule: a column or an expression is mapped, a single value (literal or in a variable that is not a column) is a setting, <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> forces a setting and <code>.env$x</code> a mapping (D-31).</li>
+<li>Coming from ggplot2 gains rows for labellers (<code>label_parsed</code>, <code>label_wrap_gen()</code>), <code>guide_axis()</code>, plotmath labels, <code>element_text(weight =)</code>, <code>theme(strip.clip =)</code>, and a gganimate and patchwork table (<code>transition_*()</code>, <code>animate()</code>, <code>anim_save()</code>, <code>hconcat()</code>, <code>vconcat()</code>, <code>concat(heights =)</code>, <code>inset(align_to =)</code>, <code>compose_annotation(tag_levels =)</code>), with notes on <code>vconcat()</code> heights, untitled unaligned compositions, PowerPoint output and the ggplot2-style dropping of missing values. Table cells holding <code>|&gt;</code> no longer show a stray backslash (D-32).</li>
+<li>The README no longer shows a version-stamped attach banner, and the README and The vellum ecosystem list PPTX among vellum’s outputs (D-33).</li>
+<li>Performance gains “Interactive at scale” (vellumwidget’s raster mode, its WebGL2 tier and <code>max_marks</code>, linking the big-data article) and notes on SVG size and parallel GIF encoding; Design principles and The vellum ecosystem mention the DrawingML (PowerPoint) backend (D-34).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.27" id="vellumverse-0327">vellumverse 0.3.27<a class="anchor" aria-label="anchor" href="#vellumverse-0327"></a></h2>

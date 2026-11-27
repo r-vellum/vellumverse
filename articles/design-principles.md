@@ -209,13 +209,15 @@ trustworthy.
 ## One scene, many backends, and visible degradation
 
 Rendering is a visitor over the resolved scene behind a single trait, so
-PNG, SVG, and PDF share one walk over the same tree:
+PNG, SVG, PDF, and PowerPoint (a DrawingML backend writing editable
+shapes) share one walk over the same tree:
 
 ``` r
 
-render(scene, "plot.png")   # raster
-render(scene, "plot.svg")   # vector
-render(scene, "plot.pdf")   # vector
+render(scene, "plot.png")    # raster
+render(scene, "plot.svg")    # vector
+render(scene, "plot.pdf")    # vector
+render(scene, "plot.pptx")   # editable PowerPoint shapes
 ```
 
 The critique notes that device differences leak into the result.
@@ -223,10 +225,11 @@ The critique notes that device differences leak into the result.
 vector format differ), but it adopts a principle for them: where a
 backend *cannot* honour something, the render raises one warning naming
 the gap, rather than silently producing different output. Unsupported
-features fail visibly. A few intrinsic fast-path trade-offs (marker
-sprite snapping at high densities, a quantised glyph-bitmap cache) are
-documented rather than warned, because they are deliberate speed trades,
-not failures.
+features fail visibly: DrawingML has no masks or blurs, for example, so
+the PowerPoint backend draws such a region as a picture and the warning
+says so. A few intrinsic fast-path trade-offs (marker sprite snapping at
+high densities, a quantised glyph-bitmap cache) are documented rather
+than warned, because they are deliberate speed trades, not failures.
 
 ## Performance is part of the model
 

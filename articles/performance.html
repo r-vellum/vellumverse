@@ -66,7 +66,7 @@
     <li><a class="dropdown-item" href="../articles/coming-from-ggplot2.html">Coming from ggplot2</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using the ecosystem</h6></li>
-    <li><a class="dropdown-item" href="../articles/one-scene-three-outputs.html">One scene, three outputs</a></li>
+    <li><a class="dropdown-item" href="../articles/one-scene-many-outputs.html">One scene, many outputs</a></li>
     <li><a class="dropdown-item" href="../articles/performance.html">Performance and big data</a></li>
     <li><a class="dropdown-item" href="../articles/extending-the-ecosystem.html">Extending the ecosystem</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -183,14 +183,33 @@
 </section><section class="level2"><h2 id="when-to-reach-for-it">When to reach for it<a class="anchor" aria-label="anchor" href="#when-to-reach-for-it"></a>
 </h2>
 <p>The rule of thumb is the pixel count. If your scatter has more points than the plot has pixels, tens of thousands and up, overplotting means most marks are invisible anyway, and <code><a href="https://r-vellum.github.io/vellum/reference/datashade.html" class="external-link">datashade()</a></code> shows the density they were hiding while rendering in constant time. Below that, a plain <code>mark_point()</code> is fine and keeps every point individually addressable (which matters for interactivity; a datashaded image is one raster, not a thousand hoverable points).</p>
+</section><section class="level2"><h2 id="interactive-at-scale">Interactive at scale<a class="anchor" aria-label="anchor" href="#interactive-at-scale"></a>
+</h2>
+<p>Datashading gives up the individual points. When you need them, hoverable and selectable in a browser, <code>vellumwidget</code> keeps them without putting one SVG node per point on the page. Above <code>raster_threshold</code> keyed marks (20,000 by default), <code>as_widget()</code> switches to <em>raster mode</em>:</p>
+<ul>
+<li>The chrome (axes, gridlines, titles, legend, text) stays real SVG, so axes re-tick as you zoom.</li>
+<li>The marks arrive as one image, rendered by <code>vellum</code>, plus a compact index of every mark’s key and box. Hover, click, brush and lasso hit-test against the index, so they work with no per-point DOM.</li>
+<li>Alongside it ships vellum’s <em>display list</em>: each mark’s exact geometry and paint, in paint order. Zoom in and the marks in view are redrawn exactly from it rather than magnified. A list of 50,000 marks or more is drawn with WebGL2 where the browser supports it (a million points redraw in about 10 ms); gradients, dashed strokes and grouped marks stay on the 2D canvas. Zoom in far enough (fewer than 3,000 marks in view) and those marks become real SVG nodes again.</li>
+</ul>
+<p>The display list is shipped for up to <code>max_marks</code> marks (2 million by default, about 6 MB per million points). With the display list (up to <code>max_marks</code>), conditions, <code>filter_by()</code>, legend hiding and crosstalk filters show at every zoom; above it they show only once zoomed into the detail tier. Above <code>max_marks</code> the widget falls back to the image plus a bounding-box index, and the plot usually reads better as a density anyway, with <code>mark_datashade()</code> or <code>mark_hex()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">as_widget</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="co"># raster mode above 20,000 keyed marks</span></span>
+<span></span>
+<span><span class="co"># move the switch, or ship a bigger display list</span></span>
+<span><span class="fu">as_widget</span><span class="op">(</span><span class="va">p</span>, render <span class="op">=</span> <span class="fu">render_options</span><span class="op">(</span>raster_threshold <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">as_widget</span><span class="op">(</span><span class="va">p</span>, render <span class="op">=</span> <span class="fu">render_options</span><span class="op">(</span>max_marks <span class="op">=</span> <span class="fl">5e6</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>vellumwidget’s <a href="https://r-vellum.github.io/vellumwidget/articles/big-data.html" class="external-link">big-data article</a> describes the tiers, their settings and their fallbacks in full.</p>
 </section><section class="level2"><h2 id="choosing-an-output-format-at-scale">Choosing an output format at scale<a class="anchor" aria-label="anchor" href="#choosing-an-output-format-at-scale"></a>
 </h2>
-<p>The format you render to interacts with data size. A raster target (<code>.png</code>) is a fixed-size grid of pixels regardless of how much data went into it. A vector target (<code>.svg</code>, <code>.pdf</code>) stores every mark as an element, so a half-million-point scatter produces a half-million-element file. For large data, prefer raster output, or datashade first so that even the vector output is a single embedded image. See <a href="one-scene-three-outputs.html">one scene, three outputs</a> for how the same spec reaches each format.</p>
+<p>The format you render to interacts with data size. A raster target (<code>.png</code>) is a fixed-size grid of pixels regardless of how much data went into it. A vector target (<code>.svg</code>, <code>.pdf</code>) stores every mark as an element, so a half-million-point scatter produces a half-million-element file, and a <code>.pptx</code> slide holds one shape per mark. For large data, prefer raster output, or datashade first so that even the vector output is a single embedded image.</p>
+<p>The SVG writer keeps each element small: a circular point is a <code>&lt;circle&gt;</code>, a filled, outlined shape is one element rather than two, transforms are baked into the coordinates, and coordinates are rounded to 0.01 px, so a 5,000-point keyed scatter is about half a megabyte. Animations encode their GIF frames in parallel (palette quantisation and dithering run on the worker threads that rasterise each frame), so a 150-frame, 1200 × 800 GIF takes a few seconds rather than most of a minute; APNG is faster still. See <a href="one-scene-many-outputs.html">one scene, many outputs</a> for how the same spec reaches each format.</p>
 </section><section class="level2"><h2 id="diagnosing-a-slow-or-heavy-scene">Diagnosing a slow or heavy scene<a class="anchor" aria-label="anchor" href="#diagnosing-a-slow-or-heavy-scene"></a>
 </h2>
 <p><code>vellum</code> ships a couple of tools for when a plot is larger or slower than you expect:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/why_size.html" class="external-link">why_size</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"panel"</span><span class="op">)</span>    <span class="co"># a named node's resolved size, and what determined it</span></span>
 <span><span class="fu"><a href="https://r-vellum.github.io/vellum/reference/vl_clear_render_cache.html" class="external-link">vl_clear_render_cache</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># drop cached compile/raster state</span></span></code></pre></div>
 </div>
@@ -203,6 +222,7 @@
 <code><a href="https://r-vellum.github.io/vellum/reference/datashade.html" class="external-link">datashade()</a></code> / <code>mark_datashade()</code> render arbitrarily many points in time proportional to the image size, by aggregating to a density raster before drawing.</li>
 <li>
 <code>how</code> and <code>colors</code> shape how density reads; <code>weight</code> gives weighted densities.</li>
+<li>In a widget, raster mode keeps up to <code>max_marks</code> points (2 million by default) hoverable, with an exact WebGL2 or canvas redraw as you zoom.</li>
 <li>For large data, prefer raster output or datashade before going to vector.</li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

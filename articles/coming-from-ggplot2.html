@@ -66,7 +66,7 @@
     <li><a class="dropdown-item" href="../articles/coming-from-ggplot2.html">Coming from ggplot2</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using the ecosystem</h6></li>
-    <li><a class="dropdown-item" href="../articles/one-scene-three-outputs.html">One scene, three outputs</a></li>
+    <li><a class="dropdown-item" href="../articles/one-scene-many-outputs.html">One scene, many outputs</a></li>
     <li><a class="dropdown-item" href="../articles/performance.html">Performance and big data</a></li>
     <li><a class="dropdown-item" href="../articles/extending-the-ecosystem.html">Extending the ecosystem</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -114,12 +114,16 @@
 <section class="level2"><h2 id="the-four-differences">The four differences<a class="anchor" aria-label="anchor" href="#the-four-differences"></a>
 </h2>
 <p><strong>1. <code>|&gt;</code>, not <code>+</code>.</strong> Layers are joined with the base pipe. A <code>vellumplot</code> plot is an ordinary pipeline, so the first argument of every verb is the plot.</p>
-<p><strong>2. No <code>aes()</code>.</strong> Aesthetics are named arguments on the mark itself. A bare column name is mapped to data; a literal value is a constant. <code>color = hp</code> is a channel with a legend; <code>color = "red"</code> paints everything red.</p>
+<p><strong>2. No <code>aes()</code>.</strong> Aesthetics are named arguments on the mark itself. A bare column name is mapped to data; a single value, literal or held in a variable that is not a column, is a setting. <code>color = hp</code> is a channel with a legend; <code>color = "red"</code> paints everything red. <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> forces a setting and <code>.env$x</code> a mapping.</p>
 <p><strong>3. <code>geom_*</code> becomes <code>mark_*</code>.</strong> Same layers, different prefix. <code>geom_point()</code> is <code>mark_point()</code>, <code>geom_smooth()</code> is <code>mark_smooth()</code>, and so on.</p>
 <p><strong>4. A plot is a spec, not a picture.</strong> <code>vellumplot</code> builds an inspectable specification and compiles it only when printed, saved, or made interactive. <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> shows you the spec without drawing it.</p>
 </section><section class="level2"><h2 id="translation-table">Translation table<a class="anchor" aria-label="anchor" href="#translation-table"></a>
 </h2>
 <table class="table caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead><tr class="header">
 <th>ggplot2</th>
 <th>vellumplot</th>
@@ -138,7 +142,7 @@
 </tr>
 <tr class="odd">
 <td><code>+</code></td>
-<td><code>\|&gt;</code></td>
+<td><code>|&gt;</code></td>
 </tr>
 <tr class="even">
 <td><code>geom_point()</code></td>
@@ -201,28 +205,129 @@
 <td><code>facet_grid(a ~ b)</code></td>
 </tr>
 <tr class="odd">
-<td>
-<code>coord_flip()</code> / <code>coord_polar()</code>
-</td>
-<td>
-<code>coord_flip()</code> / <code>coord_polar()</code>
-</td>
+<td><code>facet_wrap(~z, labeller = label_both)</code></td>
+<td><code>facet_wrap(~z, labeller = label_both)</code></td>
 </tr>
 <tr class="even">
-<td><code>theme_minimal()</code></td>
-<td><code>theme_minimal()</code></td>
+<td>
+<code>labeller = label_parsed</code> / <code>label_wrap_gen(20)</code>
+</td>
+<td>
+<code>labeller = label_parsed</code> / <code>label_wrap_gen(20)</code>
+</td>
 </tr>
 <tr class="odd">
+<td><code>guides(x = guide_axis(angle = 45))</code></td>
+<td><code>guides(x = guide_axis(angle = 45))</code></td>
+</tr>
+<tr class="even">
+<td><code>labs(x = expression(alpha^2))</code></td>
+<td>
+<code>labs(x = plotmath("alpha^2"))</code>, or TeX with <code>tex()</code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>geom_text(parse = TRUE)</code></td>
+<td><code>mark_text(parse = TRUE)</code></td>
+</tr>
+<tr class="even">
+<td>
+<code>coord_flip()</code> / <code>coord_polar()</code>
+</td>
+<td>
+<code>coord_flip()</code> / <code>coord_polar()</code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>theme_minimal()</code></td>
+<td><code>theme_minimal()</code></td>
+</tr>
+<tr class="even">
+<td><code>element_text(face = "bold")</code></td>
+<td>
+<code>element_text(face = "bold")</code>, or a numeric <code>weight = 600</code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>theme(strip.clip = "off")</code></td>
+<td><code>theme(strip.clip = "off")</code></td>
+</tr>
+<tr class="even">
 <td><code>labs(title = )</code></td>
 <td><code>labs(title = )</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>ggsave("p.png")</code></td>
-<td><code>render_plot(p, "p.png")</code></td>
+<td>
+<code>render_plot(p, "p.png")</code> (also <code>.svg</code>, <code>.pdf</code>, <code>.pptx</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>Math labels take a plotmath <em>string</em> in <code>plotmath()</code> (or TeX in <code>tex()</code>, or <code>$...$</code> inside <code>md()</code>); an <code><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression()</a></code> passed to <code>labs()</code> is drawn as its source text, not typeset.</p>
 <p>Note that spelling: <code>vellumplot</code> uses American <code>color</code> as the primary aesthetic name (with <code>colour</code>/<code>fill</code> accepted where it makes sense).</p>
+<p>Animation (<code>gganimate</code>) and composition (<code>patchwork</code>) are built in:</p>
+<table class="table caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>gganimate / patchwork</th>
+<th>vellumplot</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>+ transition_states(s)</code></td>
+<td><code>|&gt; transition_states(s)</code></td>
+</tr>
+<tr class="even">
+<td>
+<code>+ transition_time(t)</code> / <code>+ transition_reveal(t)</code>
+</td>
+<td>
+<code>|&gt; transition_time(t)</code> / <code>|&gt; transition_reveal(t)</code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>+ ease_aes("cubic-in-out")</code></td>
+<td><code>|&gt; ease_aes("cubic-in-out")</code></td>
+</tr>
+<tr class="even">
+<td><code>animate(p, nframes = 100)</code></td>
+<td><code>animate(p, nframes = 100)</code></td>
+</tr>
+<tr class="odd">
+<td><code>anim_save("a.gif", a)</code></td>
+<td>
+<code>anim_save("a.gif", a)</code> (also <code>.png</code>/<code>.apng</code>, <code>.svg</code>)</td>
+</tr>
+<tr class="even">
+<td><code>p1 | p2</code></td>
+<td><code>hconcat(p1, p2)</code></td>
+</tr>
+<tr class="odd">
+<td><code>p1 / p2</code></td>
+<td><code>vconcat(p1, p2)</code></td>
+</tr>
+<tr class="even">
+<td><code>p1 / p2 + plot_layout(heights = c(2, 1))</code></td>
+<td><code>concat(p1, p2, ncol = 1, heights = c(2, 1))</code></td>
+</tr>
+<tr class="odd">
+<td><code>wrap_plots(plots, ncol = 2)</code></td>
+<td><code>wrap_plots(plots, ncol = 2)</code></td>
+</tr>
+<tr class="even">
+<td><code>p + inset_element(p2, 0.6, 0.6, 1, 1, align_to = "panel")</code></td>
+<td><code>inset(p, p2, 0.6, 0.6, 1, 1, align_to = "panel")</code></td>
+</tr>
+<tr class="odd">
+<td><code>+ plot_annotation(title = , tag_levels = "A")</code></td>
+<td><code>|&gt; compose_annotation(title = , tag_levels = "A")</code></td>
+</tr>
+</tbody>
+</table>
+<p>Plots don’t combine with <code>|</code> and <code>/</code>; call the functions. <code>vconcat()</code> has no <code>heights</code> argument (and <code>hconcat()</code> no <code>widths</code>); for unequal rows use <code>concat(ncol = 1, heights = )</code>. A composition whose panels can’t be aligned (one with a faceted, polar or map cell, a <code>design</code>, or insets) draws its <code>tag_levels</code> tags but not yet the figure <code>title</code>, <code>subtitle</code> and <code>caption</code> from <code>compose_annotation()</code>.</p>
 </section><section class="level2"><h2 id="scatter-with-a-colour-scale">Scatter with a colour scale<a class="anchor" aria-label="anchor" href="#scatter-with-a-colour-scale"></a>
 </h2>
 <div class="quarto-layout-panel" data-layout-ncol="2">
@@ -354,7 +459,8 @@
 <li>There is no global <code>aes()</code> shared across layers; each mark states its own encodings. This is more verbose for multi-layer plots but removes the inheritance rules you have to keep in your head.</li>
 <li>
 <code>+</code> chaining and its operator methods are gone; everything is a function in a pipe.</li>
-<li>Saving is <code>render_plot()</code>, not <code>ggsave()</code>, and one spec renders to PNG, SVG, and PDF from the same object. See <a href="one-scene-three-outputs.html">one scene, three outputs</a>.</li>
+<li>Saving is <code>render_plot()</code>, not <code>ggsave()</code>, and one spec renders to PNG, SVG, PDF, and an editable PowerPoint slide (<code>.pptx</code>) from the same object. See <a href="one-scene-many-outputs.html">one scene, many outputs</a>.</li>
+<li>Rows with a missing position or size are dropped with one “Removed n rows containing missing values” warning per layer, as in <code>ggplot2</code>, and a continuous size legend shows no “NA” key.</li>
 </ul>
 <p>For the exhaustive list of marks, scales, coords, and themes, see the <a href="https://r-vellum.github.io/vellumplot/" class="external-link">vellumplot reference</a>.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">

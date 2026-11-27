@@ -23,19 +23,19 @@
 
 ### Using the ecosystem
 
-- [One scene, three
-  outputs](https://r-vellum.github.io/vellumverse/articles/one-scene-three-outputs.md):
+- [One scene, many
+  outputs](https://r-vellum.github.io/vellumverse/articles/one-scene-many-outputs.md):
 
   The ecosystem’s central move: a plot is compiled once into a vellum
-  scene, then rendered to raster, to vector, or to an interactive widget
-  from the same object.
+  scene, then rendered to raster, to vector, to editable PowerPoint
+  slides, or to an interactive widget from the same object.
 
 - [Performance and big
   data](https://r-vellum.github.io/vellumverse/articles/performance.md):
 
-  What the compile-once design does and does not buy you, and how
-  datashade draws millions of points by aggregating before it draws
-  anything.
+  What the compile-once design does and does not buy you, how datashade
+  draws millions of points by aggregating before it draws anything, and
+  how a widget keeps a million points hoverable.
 
 - [Extending the
   ecosystem](https://r-vellum.github.io/vellumverse/articles/extending-the-ecosystem.md):

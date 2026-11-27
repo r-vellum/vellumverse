@@ -68,7 +68,7 @@
     <li><a class="dropdown-item" href="articles/coming-from-ggplot2.html">Coming from ggplot2</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using the ecosystem</h6></li>
-    <li><a class="dropdown-item" href="articles/one-scene-three-outputs.html">One scene, three outputs</a></li>
+    <li><a class="dropdown-item" href="articles/one-scene-many-outputs.html">One scene, many outputs</a></li>
     <li><a class="dropdown-item" href="articles/performance.html">Performance and big data</a></li>
     <li><a class="dropdown-item" href="articles/extending-the-ecosystem.html">Extending the ecosystem</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -118,7 +118,7 @@
 <tbody>
 <tr>
 <td><a href="https://github.com/r-vellum/vellum" class="external-link"><strong>vellum</strong></a></td>
-<td>low-level graphics backend, a Rust scene graph, unit/layout engine, and PNG/SVG/PDF renderer</td>
+<td>low-level graphics backend, a Rust scene graph, unit/layout engine, and PNG/SVG/PDF/PPTX renderer (PowerPoint as editable shapes)</td>
 <td><code>grid</code></td>
 </tr>
 <tr>
@@ -136,7 +136,7 @@
 </tbody>
 </table>
 <p><code>vellum</code> is the parchment, <code>vellumplot</code> is the pen, and <code>vellumwidget</code> is the annotation revealed on the page.</p>
-<p>The three share one seam, and it is what makes them worth using together. <code>vellum</code> measures text and solves layout without a device, so a compiled scene can report where every element landed: <code>scene_model()</code> gives one row per drawn element with its data key and resolved device-pixel box. <code>vellumplot</code> compiles a plot spec into such a scene, and <code>vellumwidget</code> hosts that same scene in a browser, reading the table instead of re-drawing anything. So one specification yields a static figure, a vector file, and an interactive widget that cannot disagree about geometry, because there is a single solved layout behind all three.</p>
+<p>The three share one seam, and it is what makes them worth using together. <code>vellum</code> measures text and solves layout without a device, so a compiled scene can report where every element landed: <code>scene_model()</code> gives one row per drawn element with its data key and resolved device-pixel box. <code>vellumplot</code> compiles a plot spec into such a scene, and <code>vellumwidget</code> hosts that same scene in a browser, reading the table instead of re-drawing anything. So one specification yields a static figure, a vector file, an editable PowerPoint slide, and an interactive widget that cannot disagree about geometry, because there is a single solved layout behind all of them.</p>
 <p>For the longer argument, see <a href="https://r-vellum.github.io/vellumverse/articles/grid-critique.html">a critical appraisal of grid</a> and <a href="https://r-vellum.github.io/vellumverse/articles/design-principles.html">vellum’s design principles</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -150,10 +150,8 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-vellum.github.io/vellumverse/">vellumverse</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; ── Attaching packages ──────────────────────────────────── vellumverse 0.1.0 ──</span></span>
-<span><span class="co">#&gt; ✔ vellum 0.1.0   ✔ vellumplot 0.1.0   ✔ vellumwidget 0.1.0</span></span></code></pre></div>
-<p>That single call attaches all three core packages, so you can go from a data frame to an interactive plot in one pipeline:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-vellum.github.io/vellumverse/">vellumverse</a></span><span class="op">)</span></span></code></pre></div>
+<p>That single call attaches all three core packages and prints a short banner listing each one with its installed version (a development version is shown in red). From there you can go from a data frame to an interactive plot in one pipeline:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-vellum.github.io/vellumverse/">vellumverse</a></span><span class="op">)</span></span>
 <span></span>

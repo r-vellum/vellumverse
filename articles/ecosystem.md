@@ -24,7 +24,7 @@ The parchment, the pen, and the annotation each have a name:
 
 | layer | package | what it is | the tidyverse analogue |
 |----|----|----|----|
-| backend | **vellum** | a scene graph, unit/layout engine, and PNG/SVG/PDF renderer that also reports the geometry it resolved | `grid` |
+| backend | **vellum** | a scene graph, unit/layout engine, and PNG/SVG/PDF/PPTX renderer that also reports the geometry it resolved | `grid` |
 | grammar | **vellumplot** | a pipe-first grammar of graphics that *compiles* a plot spec into a vellum scene | `ggplot2` |
 | interaction | **vellumwidget** | turns a vellum scene into a self-contained interactive HTML widget | `htmlwidgets` |
 
@@ -39,8 +39,9 @@ stack.
 `vellum` is the foundation. You describe a scene with a small
 declarative API and render it. Because it measures text and solves
 layout in process rather than asking a device, one solved scene draws to
-raster or vector with the same geometry — and, once solved, it can tell
-you that geometry:
+raster, to vector, or (through its DrawingML backend) to a PowerPoint
+slide of editable shapes with the same geometry — and, once solved, it
+can tell you that geometry:
 [`scene_model()`](https://r-vellum.github.io/vellum/reference/scene_model.html)
 returns a row per drawn element with its data key and device-pixel box,
 and
@@ -119,7 +120,8 @@ layers agreeing on one contract.
 - [vellum](https://r-vellum.github.io/vellum/): grobs, units, viewports,
   the paint model,
   [`datashade()`](https://r-vellum.github.io/vellum/reference/datashade.html),
-  and grid interop.
+  grid interop, and [editable PowerPoint
+  output](https://r-vellum.github.io/vellum/articles/powerpoint.html).
 - [vellumplot](https://r-vellum.github.io/vellumplot/): the full mark,
   scale, facet, coord, and theme reference.
 - [vellumwidget](https://r-vellum.github.io/vellumwidget/): interaction

@@ -133,15 +133,67 @@ Below that, a plain `mark_point()` is fine and keeps every point
 individually addressable (which matters for interactivity; a datashaded
 image is one raster, not a thousand hoverable points).
 
+## Interactive at scale
+
+Datashading gives up the individual points. When you need them,
+hoverable and selectable in a browser, `vellumwidget` keeps them without
+putting one SVG node per point on the page. Above `raster_threshold`
+keyed marks (20,000 by default), `as_widget()` switches to *raster
+mode*:
+
+- The chrome (axes, gridlines, titles, legend, text) stays real SVG, so
+  axes re-tick as you zoom.
+- The marks arrive as one image, rendered by `vellum`, plus a compact
+  index of every mark’s key and box. Hover, click, brush and lasso
+  hit-test against the index, so they work with no per-point DOM.
+- Alongside it ships vellum’s *display list*: each mark’s exact geometry
+  and paint, in paint order. Zoom in and the marks in view are redrawn
+  exactly from it rather than magnified. A list of 50,000 marks or more
+  is drawn with WebGL2 where the browser supports it (a million points
+  redraw in about 10 ms); gradients, dashed strokes and grouped marks
+  stay on the 2D canvas. Zoom in far enough (fewer than 3,000 marks in
+  view) and those marks become real SVG nodes again.
+
+The display list is shipped for up to `max_marks` marks (2 million by
+default, about 6 MB per million points). With the display list (up to
+`max_marks`), conditions, `filter_by()`, legend hiding and crosstalk
+filters show at every zoom; above it they show only once zoomed into the
+detail tier. Above `max_marks` the widget falls back to the image plus a
+bounding-box index, and the plot usually reads better as a density
+anyway, with `mark_datashade()` or `mark_hex()`.
+
+``` r
+
+as_widget(p) # raster mode above 20,000 keyed marks
+
+# move the switch, or ship a bigger display list
+as_widget(p, render = render_options(raster_threshold = 50000))
+as_widget(p, render = render_options(max_marks = 5e6))
+```
+
+vellumwidget’s [big-data
+article](https://r-vellum.github.io/vellumwidget/articles/big-data.html)
+describes the tiers, their settings and their fallbacks in full.
+
 ## Choosing an output format at scale
 
 The format you render to interacts with data size. A raster target
 (`.png`) is a fixed-size grid of pixels regardless of how much data went
 into it. A vector target (`.svg`, `.pdf`) stores every mark as an
 element, so a half-million-point scatter produces a half-million-element
-file. For large data, prefer raster output, or datashade first so that
-even the vector output is a single embedded image. See [one scene, three
-outputs](https://r-vellum.github.io/vellumverse/articles/one-scene-three-outputs.md)
+file, and a `.pptx` slide holds one shape per mark. For large data,
+prefer raster output, or datashade first so that even the vector output
+is a single embedded image.
+
+The SVG writer keeps each element small: a circular point is a
+`<circle>`, a filled, outlined shape is one element rather than two,
+transforms are baked into the coordinates, and coordinates are rounded
+to 0.01 px, so a 5,000-point keyed scatter is about half a megabyte.
+Animations encode their GIF frames in parallel (palette quantisation and
+dithering run on the worker threads that rasterise each frame), so a
+150-frame, 1200 × 800 GIF takes a few seconds rather than most of a
+minute; APNG is faster still. See [one scene, many
+outputs](https://r-vellum.github.io/vellumverse/articles/one-scene-many-outputs.md)
 for how the same spec reaches each format.
 
 ## Diagnosing a slow or heavy scene
@@ -170,5 +222,7 @@ viewport can cache its rendered content with
   before drawing.
 - `how` and `colors` shape how density reads; `weight` gives weighted
   densities.
+- In a widget, raster mode keeps up to `max_marks` points (2 million by
+  default) hoverable, with an exact WebGL2 or canvas redraw as you zoom.
 - For large data, prefer raster output or datashade before going to
   vector.
