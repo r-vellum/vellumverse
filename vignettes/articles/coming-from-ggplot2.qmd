@@ -63,6 +63,7 @@ specification and compiles it only when printed, saved, or made interactive.
 | `geom_tile()` / `geom_raster()` | `mark_tile()` / `mark_raster()` |
 | `geom_hex()` | `mark_hex()` |
 | `geom_sf()` | `mark_sf()` |
+| `geom_hline(yintercept = 0)` / `geom_vline(xintercept = 0)` | `mark_rule(y = 0)` / `mark_rule(x = 0)` |
 | `scale_color_continuous()` | `scale_color_continuous()` |
 | `scale_*_manual(values = )` | `scale_*_manual(values = )` |
 | `facet_wrap(~z)` | `facet_wrap(~z)` |
@@ -70,7 +71,7 @@ specification and compiles it only when printed, saved, or made interactive.
 | `facet_wrap(~z, labeller = label_both)` | `facet_wrap(~z, labeller = label_both)` |
 | `labeller = label_parsed` / `label_wrap_gen(20)` | `labeller = label_parsed` / `label_wrap_gen(20)` |
 | `guides(x = guide_axis(angle = 45))` | `guides(x = guide_axis(angle = 45))` |
-| `labs(x = expression(alpha^2))` | `labs(x = plotmath("alpha^2"))`, or TeX with `tex()` |
+| `labs(x = expression(alpha^2))` | `labs(x = expression(alpha^2))`, `plotmath("alpha^2")`, or TeX with `tex()` |
 | `geom_text(parse = TRUE)` | `mark_text(parse = TRUE)` |
 | `coord_flip()` / `coord_polar()` | `coord_flip()` / `coord_polar()` |
 | `theme_minimal()` | `theme_minimal()` |
@@ -79,9 +80,9 @@ specification and compiles it only when printed, saved, or made interactive.
 | `labs(title = )` | `labs(title = )` |
 | `ggsave("p.png")` | `render_plot(p, "p.png")` (also `.svg`, `.pdf`, `.pptx`) |
 
-Math labels take a plotmath *string* in `plotmath()` (or TeX in `tex()`, or
-`$...$` inside `md()`); an `expression()` passed to `labs()` is drawn as its
-source text, not typeset.
+`labs()` typesets an `expression()` (or a quoted call) as plotmath, as in
+`ggplot2`. `plotmath()` takes the same markup as a string, and TeX goes in
+`tex()` or between `$...$` inside `md()`.
 
 Note that spelling: `vellumplot` uses American `color` as the primary aesthetic
 name (with `colour`/`fill` accepted where it makes sense).
@@ -97,17 +98,14 @@ Animation (`gganimate`) and composition (`patchwork`) are built in:
 | `anim_save("a.gif", a)` | `anim_save("a.gif", a)` (also `.png`/`.apng`, `.svg`) |
 | <code>p1 &#124; p2</code> | `hconcat(p1, p2)` |
 | `p1 / p2` | `vconcat(p1, p2)` |
-| `p1 / p2 + plot_layout(heights = c(2, 1))` | `concat(p1, p2, ncol = 1, heights = c(2, 1))` |
+| `p1 / p2 + plot_layout(heights = c(2, 1))` | `vconcat(p1, p2, heights = c(2, 1))` |
+| <code>(p1 &#124; p2) + plot_layout(widths = c(2, 1))</code> | `hconcat(p1, p2, widths = c(2, 1))` |
 | `wrap_plots(plots, ncol = 2)` | `wrap_plots(plots, ncol = 2)` |
 | `p + inset_element(p2, 0.6, 0.6, 1, 1, align_to = "panel")` | `inset(p, p2, 0.6, 0.6, 1, 1, align_to = "panel")` |
 | `+ plot_annotation(title = , tag_levels = "A")` | <code>&#124;&gt; compose_annotation(title = , tag_levels = &quot;A&quot;)</code> |
 
-Plots don't combine with `|` and `/`; call the functions. `vconcat()` has no
-`heights` argument (and `hconcat()` no `widths`); for unequal rows use
-`concat(ncol = 1, heights = )`. A composition whose panels
-can't be aligned (one with a faceted, polar or map cell, a `design`, or
-insets) draws its `tag_levels` tags but not yet the figure `title`,
-`subtitle` and `caption` from `compose_annotation()`.
+Plots don't combine with `|` and `/`; call the functions. See
+[combining plots](#combining-plots) below for an example.
 
 ## Scatter with a colour scale
 
@@ -214,6 +212,53 @@ vplot(mpg) |>
 ```
 :::
 
+## Combining plots
+
+`vconcat()` stacks plots and `heights` sets their share of the figure, as
+`plot_layout(heights = )` does in `patchwork`. `compose_annotation()` adds a
+figure title and panel tags. The top cell here is faceted, so its panels
+can't line up with the bar chart's; each cell then gets its own layout, and
+the title, tags and collected legend are drawn around them all the same.
+
+::: {layout-ncol=2}
+```r
+# ggplot2 + patchwork
+p1 <- ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point() +
+  facet_wrap(~am)
+p2 <- ggplot(mtcars, aes(factor(cyl), fill = factor(cyl))) +
+  geom_bar()
+p1 / p2 +
+  plot_layout(heights = c(2, 1), guides = "collect") +
+  plot_annotation(title = "Weight, mileage and cylinders",
+                  tag_levels = "A")
+```
+
+```r
+# vellumplot
+p1 <- vplot(mtcars) |>
+  mark_point(x = wt, y = mpg, color = factor(cyl)) |>
+  facet_wrap(~am)
+p2 <- vplot(mtcars) |>
+  mark_bar(x = factor(cyl), fill = factor(cyl))
+vconcat(p1, p2, heights = c(2, 1)) |>
+  compose_annotation(title = "Weight, mileage and cylinders",
+                     tag_levels = "A")
+```
+:::
+
+```{r compose}
+#| echo: false
+p1 <- vplot(mtcars) |>
+  mark_point(x = wt, y = mpg, color = factor(cyl)) |>
+  facet_wrap(~am)
+p2 <- vplot(mtcars) |>
+  mark_bar(x = factor(cyl), fill = factor(cyl))
+vconcat(p1, p2, heights = c(2, 1)) |>
+  compose_annotation(title = "Weight, mileage and cylinders",
+                     tag_levels = "A")
+```
+
 ## What you gain
 
 Two things fall out of the spec-first design.
@@ -266,7 +311,8 @@ A few `ggplot2` habits do not carry over, on purpose:
   See [one scene, many outputs](one-scene-many-outputs.html).
 - Rows with a missing position or size are dropped with one "Removed n rows
   containing missing values" warning per layer, as in `ggplot2`, and a
-  continuous size legend shows no "NA" key.
+  continuous size legend shows no "NA" key. A line, area or ribbon leaves a
+  gap at a missing value rather than joining across it.
 
 For the exhaustive list of marks, scales, coords, and themes, see the
 [vellumplot reference](https://r-vellum.github.io/vellumplot/).
