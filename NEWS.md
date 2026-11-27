@@ -9,8 +9,10 @@
   figure title are gone. A new "Combining plots" section renders a
   `vconcat(heights =)` with a faceted cell, a figure title and tags. It also
   says that `labs()` typesets `expression()` labels, maps
-  `geom_hline()`/`geom_vline()` to `mark_rule(y =)`/`mark_rule(x =)`, and
-  notes that lines, areas and ribbons leave a gap at a missing value (D-37).
+  `geom_hline()`/`geom_vline()` to `mark_rule(y =)`/`mark_rule(x =)` and
+  `geom_path()` to `mark_path()`, and notes that areas and ribbons leave a
+  gap at a missing value. vellumverse now requires vellumplot 0.25.1.9000,
+  for `vconcat(heights =)` and titles in unaligned compositions (D-37).
 * "One scene, three outputs" is now "One scene, many outputs"
   (`articles/one-scene-many-outputs.html`; the old address redirects). It
   gains "Output 4: editable slides": `render_plot(p, "x.pptx")`,

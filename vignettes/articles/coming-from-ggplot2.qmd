@@ -55,7 +55,7 @@ specification and compiles it only when printed, saved, or made interactive.
 | `aes(color = z)` | `color = z` on the mark |
 | `+` | <code>&#124;&gt;</code> |
 | `geom_point()` | `mark_point()` |
-| `geom_line()` / `geom_path()` | `mark_line()` |
+| `geom_line()` / `geom_path()` | `mark_line()` / `mark_path()` |
 | `geom_col()` / `geom_bar()` | `mark_bar()` |
 | `geom_smooth()` | `mark_smooth()` |
 | `geom_histogram()` | `mark_histogram()` |
@@ -216,9 +216,10 @@ vplot(mpg) |>
 
 `vconcat()` stacks plots and `heights` sets their share of the figure, as
 `plot_layout(heights = )` does in `patchwork`. `compose_annotation()` adds a
-figure title and panel tags. The top cell here is faceted, so its panels
-can't line up with the bar chart's; each cell then gets its own layout, and
-the title, tags and collected legend are drawn around them all the same.
+figure title and panel tags. Both cells map `color` to `factor(cyl)`, so
+their legends are collected into one. The top cell is faceted, so the cells
+can't share one panel grid and each is laid out on its own; the title, tags
+and collected legend are still drawn around the whole figure.
 
 ::: {layout-ncol=2}
 ```r
@@ -226,8 +227,8 @@ the title, tags and collected legend are drawn around them all the same.
 p1 <- ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
   geom_point() +
   facet_wrap(~am)
-p2 <- ggplot(mtcars, aes(factor(cyl), fill = factor(cyl))) +
-  geom_bar()
+p2 <- ggplot(mtcars, aes(hp, mpg, color = factor(cyl))) +
+  geom_point()
 p1 / p2 +
   plot_layout(heights = c(2, 1), guides = "collect") +
   plot_annotation(title = "Weight, mileage and cylinders",
@@ -240,7 +241,7 @@ p1 <- vplot(mtcars) |>
   mark_point(x = wt, y = mpg, color = factor(cyl)) |>
   facet_wrap(~am)
 p2 <- vplot(mtcars) |>
-  mark_bar(x = factor(cyl), fill = factor(cyl))
+  mark_point(x = hp, y = mpg, color = factor(cyl))
 vconcat(p1, p2, heights = c(2, 1)) |>
   compose_annotation(title = "Weight, mileage and cylinders",
                      tag_levels = "A")
@@ -253,7 +254,7 @@ p1 <- vplot(mtcars) |>
   mark_point(x = wt, y = mpg, color = factor(cyl)) |>
   facet_wrap(~am)
 p2 <- vplot(mtcars) |>
-  mark_bar(x = factor(cyl), fill = factor(cyl))
+  mark_point(x = hp, y = mpg, color = factor(cyl))
 vconcat(p1, p2, heights = c(2, 1)) |>
   compose_annotation(title = "Weight, mileage and cylinders",
                      tag_levels = "A")
@@ -311,8 +312,10 @@ A few `ggplot2` habits do not carry over, on purpose:
   See [one scene, many outputs](one-scene-many-outputs.html).
 - Rows with a missing position or size are dropped with one "Removed n rows
   containing missing values" warning per layer, as in `ggplot2`, and a
-  continuous size legend shows no "NA" key. A line, area or ribbon leaves a
-  gap at a missing value rather than joining across it.
+  continuous size legend shows no "NA" key. An area or ribbon leaves a gap at
+  a missing value and counts it in that warning. A line also breaks at a
+  missing value rather than joining across it, but doesn't count it in the
+  warning yet.
 
 For the exhaustive list of marks, scales, coords, and themes, see the
 [vellumplot reference](https://r-vellum.github.io/vellumplot/).
