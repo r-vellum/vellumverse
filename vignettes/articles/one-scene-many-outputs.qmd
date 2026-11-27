@@ -1,9 +1,9 @@
 ---
-title: "One scene, three outputs"
+title: "One scene, many outputs"
 description: >
   The ecosystem's central move: a plot is compiled once into a vellum scene,
-  then rendered to raster, to vector, or to an interactive widget from the
-  same object.
+  then rendered to raster, to vector, to editable PowerPoint slides, or to an
+  interactive widget from the same object.
 ---
 
 ```{r}
@@ -24,7 +24,8 @@ if (have_all) suppressMessages(library(vellumverse))
 
 Most plotting workflows re-specify the plot for each destination: one code
 path for the PNG in a report, another for the vector figure a journal wants,
-a third library entirely if the plot needs to be interactive on the web. The
+a third library entirely if the plot needs to be interactive on the web, and
+a screenshot pasted into the slide deck. The
 vellum ecosystem is built so that the *specification* and the *destination*
 are separate concerns. You describe the plot once; where it ends up is a
 choice made at the end.
@@ -35,12 +36,12 @@ A `vellumplot` plot is a spec. It is compiled into a `vellum` scene (a concrete,
 laid-out tree of drawing primitives) through a single generic,
 `as_vellum_scene()`. Everything downstream consumes that scene:
 
-- `vellum`'s `render()` writes the scene to a file, choosing raster or vector
-  from the extension.
+- `vellum`'s `render()` writes the scene to a file, choosing raster, vector or
+  PowerPoint from the extension.
 - `vellumwidget`'s `as_widget()` turns the same scene into an HTML widget.
 
 Both call `as_vellum_scene()` under the hood. That one seam is why the same
-object can go three places without being rewritten.
+object can go to every destination below without being rewritten.
 
 ## Build the spec once
 
@@ -63,6 +64,12 @@ summary(p)
 #>
 #> ── layers
 #> • mark_point(x = wt, y = mpg, color = mpg)
+#>
+#> ── scales
+#> • color: continuous
+#>
+#> ── labels
+#> • title: Fuel economy
 ```
 
 Notice that `tooltip` and `data_id` are already on the mark. They mean
@@ -117,25 +124,70 @@ The `tooltip` and `data_id` you declared back in the spec are what the widget
 reads. Three layers agreeing on one contract: `vellumplot` declares the channels,
 `vellum` carries them through the scene, `vellumwidget` acts on them.
 
+## Output 4: editable slides
+
+Give `render_plot()` a `.pptx` path and it writes a one-slide PowerPoint file
+at the plot's size. The slide holds **editable shapes**, not a picture: every
+point, bar and line is a DrawingML shape, every plain-text label is a text box
+you can retype, and each panel is a named group you can ungroup, recolour or
+move. No other package is needed.
+
+```{r}
+#| eval: false
+render_plot(p, "fuel.pptx")
+```
+
+`vellum::pptx_pages()` writes several plots (or scenes) as the slides of one
+deck, also without officer:
+
+```{r}
+#| eval: false
+p2 <- vplot(df) |> mark_histogram(x = mpg, bins = 10)
+vellum::pptx_pages(list(p, p2), "fuel-deck.pptx")
+```
+
+To place a plot on a slide of a deck you build with
+[officer](https://davidgohel.github.io/officer/), wrap it in `vellum::as_dml()`
+and hand it to `officer::ph_with()`. The plot is laid out again at the size of
+the placeholder, so its text keeps its point size and nothing is stretched:
+
+```{r}
+#| eval: false
+doc <- officer::read_pptx()
+doc <- officer::add_slide(doc, layout = "Title and Content")
+doc <- officer::ph_with(doc, "Fuel economy",
+                        location = officer::ph_location_type("title"))
+doc <- officer::ph_with(doc, vellum::as_dml(p),
+                        location = officer::ph_location_type("body"))
+print(doc, target = "fuel-officer.pptx")
+```
+
+The slide comes from the same solved layout as the PNG and the SVG, so it is
+the same plot again. Where DrawingML cannot express something (a mask, a blend
+mode, a blur), that part is drawn as a picture and the render says so in a
+warning. See vellum's [PowerPoint
+article](https://r-vellum.github.io/vellum/articles/powerpoint.html) for what
+stays a shape, how fonts are handled, and the alt text a slide carries.
+
 ## Why this matters
 
 The payoff is more than fewer keystrokes. Because there is one spec and one
 compiled scene:
 
-- **The outputs cannot drift.** A raster figure and its interactive
-  counterpart are guaranteed to show the same plot, because they *are* the
-  same scene.
+- **The outputs cannot drift.** A raster figure, its slide and its
+  interactive counterpart are guaranteed to show the same plot, because they
+  *are* the same scene.
 - **The decision is deferred.** You can write analysis code that returns a
   spec and let the calling context (a Quarto chunk, a Shiny app, a batch
   job writing PDFs) decide how to realise it.
 - **Bare `vellum` scenes get the same treatment.** `as_widget()` and
   `render()` accept a hand-built `vellum` scene too, so a bespoke visual made
-  with grobs travels the same three roads as a grammar plot.
+  with grobs travels the same roads as a grammar plot.
 
 ## Going lower: a bare vellum scene
 
-The same three-way rendering exists one layer down, without the grammar. A
-`vellum` scene renders to all three formats directly:
+The same rendering exists one layer down, without the grammar. A `vellum`
+scene goes to every destination directly:
 
 ```{r}
 #| eval: false
@@ -145,6 +197,7 @@ s <- vl_scene(4, 3) |>
 render(s, "out.png")   # raster   (tiny-skia)
 render(s, "out.svg")   # vector   (hand-rolled SVG)
 render(s, "out.pdf")   # vector   (krilla)
+render(s, "out.pptx")  # slide    (DrawingML shapes)
 as_widget(s)           # interactive widget
 ```
 
@@ -157,3 +210,5 @@ destinations are the same.
 - [The vellum ecosystem](ecosystem.html): the layers and how they connect.
 - [Performance and big data](performance.html): what compiling once buys you
   when the data is large.
+- [Editable PowerPoint output](https://r-vellum.github.io/vellum/articles/powerpoint.html):
+  the DrawingML backend in depth.

@@ -14,7 +14,7 @@ science. Its packages carry a shared metaphor:
 
 | package | role | analogy |
 |----|----|----|
-| [**vellum**](https://github.com/r-vellum/vellum) | low-level graphics backend, a Rust scene graph, unit/layout engine, and PNG/SVG/PDF renderer | `grid` |
+| [**vellum**](https://github.com/r-vellum/vellum) | low-level graphics backend, a Rust scene graph, unit/layout engine, and PNG/SVG/PDF/PPTX renderer (PowerPoint as editable shapes) | `grid` |
 | [**vellumplot**](https://github.com/r-vellum/vellumplot) | pipe-first grammar of graphics that compiles a plot spec into a vellum scene | `ggplot2` |
 | [**vellumwidget**](https://github.com/r-vellum/vellumwidget) | client-side interactive HTML widgets for the scenes they produce | `plotly`/`htmlwidgets` |
 
@@ -28,9 +28,9 @@ gives one row per drawn element with its data key and resolved
 device-pixel box. `vellumplot` compiles a plot spec into such a scene,
 and `vellumwidget` hosts that same scene in a browser, reading the table
 instead of re-drawing anything. So one specification yields a static
-figure, a vector file, and an interactive widget that cannot disagree
-about geometry, because there is a single solved layout behind all
-three.
+figure, a vector file, an editable PowerPoint slide, and an interactive
+widget that cannot disagree about geometry, because there is a single
+solved layout behind all of them.
 
 For the longer argument, see [a critical appraisal of
 grid](https://r-vellum.github.io/vellumverse/articles/grid-critique.html)
@@ -51,12 +51,12 @@ pak::pak("r-vellum/vellumverse")
 
 ``` r
 library(vellumverse)
-#> ── Attaching packages ──────────────────────────────────── vellumverse 0.1.0 ──
-#> ✔ vellum 0.1.0   ✔ vellumplot 0.1.0   ✔ vellumwidget 0.1.0
 ```
 
-That single call attaches all three core packages, so you can go from a
-data frame to an interactive plot in one pipeline:
+That single call attaches all three core packages and prints a short
+banner listing each one with its installed version (a development
+version is shown in red). From there you can go from a data frame to an
+interactive plot in one pipeline:
 
 ``` r
 library(vellumverse)
