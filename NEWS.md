@@ -2,6 +2,10 @@
 
 ## Documentation
 
+* Coming from ggplot2 now says lines, paths and steps count a missing value
+  in the "Removed n rows containing missing values" warning, as areas and
+  ribbons do, since vellumplot counts their gap rows (VP-170). The note that
+  lines didn't warn yet is gone (D-38).
 * Coming from ggplot2 catches up with vellumplot's composition and label
   fixes. The patchwork table maps `plot_layout(heights =)` to
   `vconcat(heights =)` and `plot_layout(widths =)` to `hconcat(widths =)`,

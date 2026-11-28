@@ -312,10 +312,9 @@ A few `ggplot2` habits do not carry over, on purpose:
   See [one scene, many outputs](one-scene-many-outputs.html).
 - Rows with a missing position or size are dropped with one "Removed n rows
   containing missing values" warning per layer, as in `ggplot2`, and a
-  continuous size legend shows no "NA" key. An area or ribbon leaves a gap at
-  a missing value and counts it in that warning. A line also breaks at a
-  missing value rather than joining across it, but doesn't count it in the
-  warning yet.
+  continuous size legend shows no "NA" key. A line, path, step, area or
+  ribbon leaves a gap at a missing value rather than joining across it, and
+  counts that row in the same warning.
 
 For the exhaustive list of marks, scales, coords, and themes, see the
 [vellumplot reference](https://r-vellum.github.io/vellumplot/).
